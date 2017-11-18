@@ -4,7 +4,8 @@
 <b>Szerver:</b><br>
 A szerver mappában 2 futtatható fájl található; egy server.py és a serverlib.py.<br>
 A server.py-t kell futtatni, hogy elinduljon a szerver.<br>
-Használat:  ```
+Használat:  
+```
 python server.py <port száma>
  ```
 A szerver nem csak LAN hálózatokon működik.<br>
