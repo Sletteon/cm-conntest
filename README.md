@@ -1,6 +1,7 @@
 <!Doctype html>
-#conntest
 <b>Szerver-kliens kapcsolatteszt</b><br>
+<a href ="http://docs.phonegap.com/en/2.1.0/">Régi PhoneGap dokumentáció</a>
+<a href = "http://docs.phonegap.com/">Új PhoneGap dokumentáció</a>
 <b>Szerver:</b><br>
 A szerver mappában 2 futtatható fájl található; egy server.py és a serverlib.py.<br>
 A server.py-t kell futtatni, hogy elinduljon a szerver.<br>
