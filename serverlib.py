@@ -102,10 +102,10 @@ class PyWSock:
     def handle_client (self, client, addr):
         self.handshake(client)
         try:
-            while 1:            
-                data = self.recv_data(client)
-                print("received [%s]" % (data,))
-                self.broadcast_resp(data)
+             while 1:            
+                 data = self.recv_data(client)
+                 print("[%s]" % (data,))
+                 self.broadcast_resp(data)
         except Exception as e:
             print("Exception %s" % (str(e)))
         print('Client closed: ' + str(addr))
@@ -118,7 +118,7 @@ class PyWSock:
         s = socket.socket()
         s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         s.bind(('', port))
-        s.listen(5)
+        s.listen(100)
         while(1):
             print ('Waiting for connection...')
             conn, addr = s.accept()
