@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # importok
-import socket, hashlib, base64, threading, sys
+import socket, hashlib, base64, threading, sys, time
 # hasznos cumó: https://stackoverflow.com/questions/18240358/html5-websocket-connecting-to-python
 
 # Használat:
@@ -114,12 +114,13 @@ class PyWSock:
                 data = self.recv_data(client)
                 print("<+> Kapott parancs: %s" % (data,))
                 self.broadcast_resp(data)
-        # vmiért ha egy böngészőlapon többszőr csatlakozok, 
-        # és egyszerre megszakítom a kapcsolatot, assertion errort kapok,
-        # de szerencsére a futó kliens szála úgyis megszűnik létezni, 
-        # tehát nem egy nagy probláma
-        except AssertionError:
+                time.sleep(0.1)
+        # egy kliens lekapcsolódásakor mindig egy assertion erroral zaklat minket,
+        # de nem történik kernelpánik, nincs semmi nagy baj
+        # tehát ezzel csak elcsitítjuk egy kicsit
             print("<!> Assertion hiba")
+        except AssertionError:
+            pass
         except Exception as e:
             print("<!> Egyéb hiba: %s" % (str(e)))
         print('{-} Kliens lecsatlakozott: ' + str(addr))
@@ -141,3 +142,4 @@ class PyWSock:
             self.LOCK.acquire()
             self.clients.append(conn)
             self.LOCK.release()
+            time.sleep(0.1)
