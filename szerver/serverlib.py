@@ -14,7 +14,13 @@ import socket, hashlib, base64, threading, sys
 #     Adatok kiíratása (broadcast):
 #     ws.broadcast_resp("valami") # "valami" elküldése mindenkinek
 #
-
+# Jelek:
+#     <+> : Renben lezajlott a megadott funkció/parancs
+#     <-> : Semmi extra
+#     <!> : Kisebb hiba (csak 1 szál áll le, ami újraindul)
+#     <<!>> : Végzetes hiba
+#     {+} : Kliens csatlakozott
+#     {-} : Kliens lecsatlakozott
 
 class PyWSock:
     MAGIC = '258EAFA5-E914-47DA-95CA-C5AB0DC85B11'
@@ -33,21 +39,23 @@ class PyWSock:
     # adatok befogadásához egy methódus
     def recv_data (self, client):
 
+        # a networking legfélelmetesebb része, ezt én egy picit sem értem
+        # ez akadályoz meg minket, hogy interaktív kommunikációt folytassunk
+
+
         # as a simple server, we expect to receive:
         #    - all data at one go and one frame
         #    - one frame at a time
         #    - text protocol
         #    - no ping pong messages
-
         data = bytearray(client.recv(512))
         if(len(data) < 6):
-            raise Exception("Error reading data")
+            raise Exception("<<!>> Adatolvasás hiba")
         # FIN bit must be set to indicate end of frame
         assert(0x1 == (0xFF & data[0]) >> 7)
         # data must be a text frame
         # 0x8 (close connection) is handled with assertion failure
         assert(0x1 == (0xF & data[0]))
-
         # assert that data is masked
         assert(0x1 == (0xFF & data[1]) >> 7)
         datalen = (0x7F & data[1])
@@ -59,7 +67,8 @@ class PyWSock:
             unmasked_data = [masked_data[i] ^ mask_key[i%4] for i in range(len(masked_data))]
             str_data = str(bytearray(unmasked_data))
         return str_data
-
+        # broadcast = mindenkinek üzenetet kiküldeni
+        # lényegében egy tuningolt client.send
     def broadcast_resp(self, data):
         # 1st byte: fin bit set. text frame bits set.
         # 2nd byte: no mask. length set in 1 byte. 
@@ -67,15 +76,14 @@ class PyWSock:
         # append the data bytes
         for d in bytearray(data):
             resp.append(d)
-
         self.LOCK.acquire()
         for client in self.clients:
             try:
                 client.send(resp)
             except:
-                print("error sending to a client")
+                print("<!> Broadcast hiba")
         self.LOCK.release()
-
+    # formázás
     def parse_headers (self, data):
         headers = {}
         lines = data.splitlines()
@@ -85,30 +93,36 @@ class PyWSock:
                 headers[parts[0]] = parts[1]
         headers['code'] = lines[len(lines) - 1]
         return headers
-
-    def handshake (self, client):
-        print('Handshaking...')
+    # handshakelés, ne írja ki a választ, csak annyit, hogy sikeres volt-e
+    # egyrészt a http követeli meg a handshaket, de még a kapcsolat tesztelésére is jó
+    def handshake (self, client, addrh):
+        print('<-> Handshake:' + str(addrh))
         data = client.recv(2048)
         headers = self.parse_headers(data)
-        print('Got headers:')
-        for k, v in headers.iteritems():
-            print k, ':', v
-
+        print('<+> Handshake sikeres')
+        #for k, v in headers.iteritems():
+        #    print k, ':', v
         key = headers['Sec-WebSocket-Key']
         resp_data = self.HSHAKE_RESP % ((base64.b64encode(hashlib.sha1(key+self.MAGIC).digest()),))
-        print('Response: [%s]' % (resp_data,))
+        #print('[%s]' % (resp_data,))
         return client.send(resp_data)
-
+    # mit csináljon a kliensekkel (egyenként)
     def handle_client (self, client, addr):
-        self.handshake(client)
+        self.handshake(client, addr)
         try:
-             while 1:            
-                 data = self.recv_data(client)
-                 print("[%s]" % (data,))
-                 self.broadcast_resp(data)
+            while 1:            
+                data = self.recv_data(client)
+                print("<+> Kapott parancs: %s" % (data,))
+                self.broadcast_resp(data)
+        # vmiért ha egy böngészőlapon többszőr csatlakozok, 
+        # és egyszerre megszakítom a kapcsolatot, assertion errort kapok,
+        # de szerencsére a futó kliens szála úgyis megszűnik létezni, 
+        # tehát nem egy nagy probláma
+        except AssertionError:
+            print("<!> Assertion hiba")
         except Exception as e:
-            print("Exception %s" % (str(e)))
-        print('Client closed: ' + str(addr))
+            print("<!> Egyéb hiba: %s" % (str(e)))
+        print('{-} Kliens lecsatlakozott: ' + str(addr))
         self.LOCK.acquire()
         self.clients.remove(client)
         self.LOCK.release()
@@ -118,11 +132,11 @@ class PyWSock:
         s = socket.socket()
         s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         s.bind(('', port))
-        s.listen(100)
+        s.listen(50)
+        print ('<+> Szerver online')
         while(1):
-            print ('Waiting for connection...')
             conn, addr = s.accept()
-            print ('Connection from: ' + str(addr))
+            print ('{+} Kliens csatlakozott: ' + str(addr))
             threading.Thread(target = self.handle_client, args = (conn, addr)).start()
             self.LOCK.acquire()
             self.clients.append(conn)
