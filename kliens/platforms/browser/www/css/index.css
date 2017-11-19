@@ -129,8 +129,7 @@ h1 {
     background-color: #4CAF50;
     color: white;
 }               
-
-.respDiv {
-    background-color: #E0FFFF;
-    width: 50%;
+.ServerResp {
+    background-color: Lavender;
+    max-width: 50%
 }
