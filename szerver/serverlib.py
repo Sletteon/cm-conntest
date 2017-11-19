@@ -15,7 +15,7 @@ import socket, hashlib, base64, threading, sys
 #     ws.broadcast_resp("valami") # "valami" elküldése mindenkinek
 #
 # Jelek:
-#     <+> : Renben lezajlott a megadott funkció/parancs
+#     <+> : Rendben lezajlott a megadott funkció/parancs
 #     <-> : Semmi extra
 #     <!> : Kisebb hiba (csak 1 szál áll le, ami újraindul)
 #     <<!>> : Végzetes hiba
