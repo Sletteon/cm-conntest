@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from serverlib import PyWSock
+from libserver import PyWSock
 import sys
 try:
     if len(sys.argv) != 2:
