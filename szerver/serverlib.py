@@ -50,7 +50,7 @@ class PyWSock:
         #    - no ping pong messages
         data = bytearray(client.recv(512))
         if(len(data) < 6):
-            raise Exception("<<!>> Adatolvasás hiba")
+            raise Exception("Adatolvasás hiba")
         # FIN bit must be set to indicate end of frame
         assert(0x1 == (0xFF & data[0]) >> 7)
         # data must be a text frame
