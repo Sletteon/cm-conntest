@@ -3,6 +3,15 @@ document.getElementById("connButton").onclick = function(){
     // kérje el változókba az IP-t és a portot
     IPaddress = document.getElementById("IP").value;
     Port = document.getElementById("Port").value;
+    // nap illetve a hét lekérése
+    var h = document.getElementById("het");
+    var het = h.options[h.selectedIndex].value;
+
+    var n = document.getElementById("nap");
+    var nap = n.options[n.selectedIndex].value;
+    // tantárgy, anyag
+    var tant = document.getElementById("tantargy").value;
+    var anyag = document.getElementById("anyag").value;
     // rakja össze az IP-t és a portot egy link formájában
     wsURL = "ws://" + IPaddress + ":" + Port + "/";
     // csináljon egy connection objektumot, és nyissa meg az előzőleg összedobott linkkel
@@ -14,7 +23,7 @@ document.getElementById("connButton").onclick = function(){
        // FONTOS: a szerver csak egyszerre fogad el adatot, így valamivel kell majd elválasztani a küldendő dolgokat
        // az lenne jó, ha minden küldendő adat után mindig külön kapcsolódik, ugyanis
        // 1. offline elérhetőség 2. máshogy nagyon bonyolult lenne
-       connection.send(uname + ';');
+       connection.send(uname + ';' + het + ';' + nap + ';' + tant + ';' + anyag + ';');
    };
     // ha vmi hibát kaptunk (még nem fordult elő), írja ki a consoleba
     connection.onerror = function (error) {
@@ -23,8 +32,8 @@ document.getElementById("connButton").onclick = function(){
     // ha kaptunk vmit a szervertől, írja ki a logba és írja ki a gomb alatt elhelyezett p tagbe
     connection.onmessage = function (e) {
         console.log('Szerver: ' + e.data);
-        document.getElementById("socket").after(e.data);
-	// $("socket").append("<b>Appended text</b>");
+        // document.getElementById("socket").after(e.data);
+	document.getElementById("socket").innerHTML = e.data;
     };
 };
 window.onload = function(){

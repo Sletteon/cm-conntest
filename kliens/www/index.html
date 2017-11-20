@@ -12,11 +12,24 @@
         <body>
         <center>
                 <h1>csatlakozz a python szerverre</h1>
-                IP-cím: <input type="text" id="IP">
-                Port: <input type="number" id="Port">
-                <br>
-                <button  class="button button1" id="connButton">Csatlakozás</button>
-                <!-- <button class="button button1">Green</button> -->
+                <input type="text" id="IP" placeholder="localhost">
+                <input type="number" id="Port" placeholder="5000">
+		<br><br>
+		<select name="melyik_het" id="het">
+			<option value="E">Ez a hét</option>
+			<option value="J">Jövő hét</option>
+		</select>
+		<select name="nap" id="nap">
+			<option value="H">Hétfő</option>
+			<option value="K">Kedd</option>
+			<option value="S">Szerda</option>
+			<option value="C">Csütörtök</option>
+			<option value="P">Péntek</option>
+		</select>
+		<input type="text" id="tantargy" placeholder="Tantárgy">
+		<input type="text" id="anyag" placeholder="Anyag">
+		<br>
+                <button  class="button button1" id="connButton">Parancs küldése</button>
                 <!-- ide fog megjelenni a szerver válasza -->
                 <div id="socket" class="ServerResp"></div>
         </center>
