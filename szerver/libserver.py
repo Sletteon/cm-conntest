@@ -19,8 +19,6 @@ import socket, hashlib, base64, threading, sys, time
 #     <-> : Semmi extra
 #     <!> : Kisebb hiba (csak 1 szál áll le, ami újraindul)
 #     <<!>> : Végzetes hiba
-#     {+} : Kliens csatlakozott
-#     {-} : Kliens lecsatlakozott
 
 class PyWSock:
     MAGIC = '258EAFA5-E914-47DA-95CA-C5AB0DC85B11'
@@ -96,10 +94,10 @@ class PyWSock:
     # handshakelés, ne írja ki a választ, csak annyit, hogy sikeres volt-e
     # egyrészt a http követeli meg a handshaket, de még a kapcsolat tesztelésére is jó
     def handshake (self, client, addrh):
-        print('<-> Handshake: ' + addrh[0])
+        # print('<-> Handshake: ' + addrh[0])
         data = client.recv(2048)
         headers = self.parse_headers(data)
-        print('<+> Handshake sikeres')
+        # print('<+> Handshake sikeres')
         key = headers['Sec-WebSocket-Key']
         resp_data = self.HSHAKE_RESP % ((base64.b64encode(hashlib.sha1(key+self.MAGIC).digest()),))
         #print('[%s]' % (resp_data,))
@@ -109,13 +107,24 @@ class PyWSock:
         self.handshake(client, addr)
         try:
             while 1:            
+                # Adat elkapása
                 data = self.recv_data(client)
-                print("<+> " + addr[0] + " ]==> %s" % (data,))
+                print("Parancs: %s" % (data,))
                 self.broadcast_resp(data)
+                splitdata = data.split(';')
+                print ('Felhasználónév: ' + splitdata[0])
+                if splitdata[1] == 'E':
+                    print ('Hét: Ez a hét')
+                if splitdata[1] == 'J':
+                    print ('Hét: Jövő hét')
+                print ('Nap: ' + splitdata[2])
+                print ('Tantárgy: ' + splitdata[3])
+                print ('Anyag: ' + splitdata[4])
                 time.sleep(0.1)
         except:
             pass
-        print('{-} Kliens lekapcsolódott: ' + addr[0])
+        # print('{-} Kliens lekapcsolódott: ' + addr[0])
+        print ('======')
         self.LOCK.acquire()
         self.clients.remove(client)
         self.LOCK.release()
@@ -129,7 +138,8 @@ class PyWSock:
         print ('<+> Szerver online')
         while(1):
             conn, addr = s.accept()
-            print ('{+} Kliens csatlakozott: ' + addr[0])
+            # print ('{+} Kliens csatlakozott: ' + addr[0])
+            print ('===' + addr[0] + '===')
             threading.Thread(target = self.handle_client, args = (conn, addr)).start()
             self.LOCK.acquire()
             self.clients.append(conn)
