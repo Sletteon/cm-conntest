@@ -7,9 +7,11 @@
 A szerver mappában 2 futtatható fájl található; egy server.py és a serverlib.py.<br>
 A server.py-t kell futtatni, hogy elinduljon a szerver.<br>
 Használat:  
+
 ```
 python server.py <port száma>
  ```
+
 A szerver nem csak LAN hálózatokon működik.<br>
 A szerver egyenlőre elfogadja a kliens csatlakozását, handshake történik, amit a kliens nevének kiírása követ.<br>
 Egy csatlakozásnál csak egyszer fogadhat adatot a szerver, így ezt kicselezve, majd minden rögzített változásnál egy új kapcsolat jön létre.<br>
