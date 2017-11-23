@@ -12,11 +12,16 @@ document.getElementById("connButton").onclick = function(){
     // tantárgy, anyag
     var tant = document.getElementById("tantargy").value;
     var anyag = document.getElementById("anyag").value;
+    try {
     // rakja össze az IP-t és a portot egy link formájában
     wsURL = "ws://" + IPaddress + ":" + Port + "/";
     // csináljon egy connection objektumot, és nyissa meg az előzőleg összedobott linkkel
     var connection = new WebSocket(wsURL);
-    // ha sikeres volt a csatlakozás (beleértve a handshake, amit az http protokoll erőszakol ránk), futtassa le ezt az anonim 
+    // ha sikeres volt a csatlakozás (beleértve a handshake, amit az http protokoll erőszakol ránk), futtassa le ezt az anonim
+    }
+   catch (err){
+   alert('Hiba:' + err)
+   } 
     // funkciót
     connection.onopen = function () { 
        var uname = window.localStorage.getItem("uname"); 
