@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # importok
-import socket, hashlib, base64, threading, sys, time
+import socket, hashlib, base64, threading, sys, time, os
 # hasznos cumó: https://stackoverflow.com/questions/18240358/html5-websocket-connecting-to-python
 
 # Használat:
@@ -112,7 +112,7 @@ class PyWSock:
         # handshake
         self.handshake(client, addr)
         # nyissa meg az E.db fájlt, írás-olvasás joggal
-        efile = open("E_debug/E.db","r+w")
+        efile = open("E_debug/E.db","a+")
         try:
             while 1:            
                 # Adat elkapása
@@ -148,13 +148,13 @@ class PyWSock:
                     # ha valaki le szeretné kérni ennek a hétnek az anyagát, küldje is el
                     if splitdata[2] == 'E':
                         print('Hét: Ez a hét')
-                        # küldje el a fájl tartalmát sztringbe konvertálva
-                        # elképzelhető, hogy a konvertálás nem kötelező
-                        self.broadcast_resp(str(efiletart))
+                        # küldje el a fájl tartalmát sztringbe konvertálva, szépítve
+                        efiletartstr = " ".join(str(x) for x in efiletart)
+                        self.broadcast_resp(efiletartstr)
                         # írja ki nekünk, mit küldött el
                         print('-- E_debug/E.db --')
                         print(str(efiletart))
-                        print('--   --')
+                        print('----')
                     # jövő hét anyaga
                     if splitdata[2] == 'J':
                         print('Hét: Jövő hét')
@@ -164,17 +164,17 @@ class PyWSock:
                 time.sleep(0.1)
         except Exception as e:
             # ha valami hiba történt, írja ki
-            #print(e)
+            print(e)
             pass
         # print('{-} Kliens lekapcsolódott: ' + addr[0])
-        print ('---' + addr[0] + '---')
+        print ('---' + addr[0] + '---\n')
         self.LOCK.acquire()
         self.clients.remove(client)
         self.LOCK.release()
         client.close()
 
     def start_server (self, port):
-        efile = open("E_debug/E.db","r+w")
+        efile = open("E_debug/E.db","a+")
         # fájl tartalmának törlése
         # törlésre kerül, ha felhasználók kezébe adjuk
         efile.truncate()
