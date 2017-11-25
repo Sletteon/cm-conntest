@@ -109,7 +109,9 @@ class PyWSock:
             while 1:            
                 # Adat elkapása
                 data = self.recv_data(client)
-                print("Parancs: %s" % (data,))
+                print("Parancs: " + data)
+                efile = open("E_debug/E.db","r+w")
+                efile.write(data)
                 self.broadcast_resp(data)
                 splitdata = data.split(';')
                 print ('Felhasználónév: ' + splitdata[0])
@@ -120,8 +122,10 @@ class PyWSock:
                 print ('Nap: ' + splitdata[2])
                 print ('Tantárgy: ' + splitdata[3])
                 print ('Anyag: ' + splitdata[4])
+                efile.close()
                 time.sleep(0.1)
-        except:
+        except Exception as e:
+            print(e)
             pass
         # print('{-} Kliens lekapcsolódott: ' + addr[0])
         print ('======')
