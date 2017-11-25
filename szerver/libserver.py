@@ -105,23 +105,39 @@ class PyWSock:
     # mit csináljon a kliensekkel (egyenként)
     def handle_client (self, client, addr):
         self.handshake(client, addr)
+        efile = open("E_debug/E.db","r+w")
         try:
             while 1:            
                 # Adat elkapása
                 data = self.recv_data(client)
                 print("Parancs: " + data)
-                efile = open("E_debug/E.db","r+w")
-                efile.write(data)
+                efiletart = efile.readlines()
                 self.broadcast_resp(data)
                 splitdata = data.split(';')
                 print ('Felhasználónév: ' + splitdata[0])
-                if splitdata[1] == 'E':
-                    print ('Hét: Ez a hét')
-                if splitdata[1] == 'J':
-                    print ('Hét: Jövő hét')
-                print ('Nap: ' + splitdata[2])
-                print ('Tantárgy: ' + splitdata[3])
-                print ('Anyag: ' + splitdata[4])
+                if splitdata[1] == 'set':
+                    print("Beállítás")
+                    if splitdata[2] == 'E':
+                        print ('Hét: Ez a hét')
+                    if splitdata[2] == 'J':
+                        print ('Hét: Jövő hét')
+                    print ('Nap: ' + splitdata[3])
+                    print ('Tantárgy: ' + splitdata[4])
+                    print ('Anyag: ' + splitdata[5])
+                    efile.write(data + '\n')
+                else:
+                    print("Lekérés")
+                    if splitdata[2] == 'E':
+                        print('Hét: Ez a hét')
+                        self.broadcast_resp(str(efiletart))
+                        print('--')
+                        print(str(efiletart))
+                        print('--')
+                    if splitdata[2] == 'J':
+                        print('Hét: Jövő hét')
+                        
+                    
+                    
                 efile.close()
                 time.sleep(0.1)
         except Exception as e:
@@ -135,6 +151,11 @@ class PyWSock:
         client.close()
 
     def start_server (self, port):
+        efile = open("E_debug/E.db","r+w")
+        # fájl tartalmának törlése
+        # törlésre kerül, ha felhasználók kezébe adjuk
+        efile.truncate()
+        efile.close()
         s = socket.socket()
         s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         s.bind(('', port))
