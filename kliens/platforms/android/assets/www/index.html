@@ -12,7 +12,7 @@
         <body>
         <center>
                 <h1>csatlakozz a python szerverre</h1>
-                <input type="text" id="IP" placeholder="IP-cím">
+                <input type="text" id="IP" placeholder="IP-cím" value="localhost">
                 <input type="number" id="Port" value="5000" >
 		<br><br>
 		<select name="melyik_het" id="het">
@@ -30,6 +30,7 @@
 		<input type="text" id="anyag" placeholder="Anyag">
 		<br>
                 <button  class="button button1" id="connButton">Parancs küldése</button>
+		<button class="button button1" id="getButton">Heti anyag lekérése</button>
                 <!-- ide fog megjelenni a szerver válasza -->
                 <div id="socket" class="ServerResp"></div>
         </center>

@@ -38,7 +38,8 @@ class PyWSock:
     def recv_data (self, client):
 
         # a networking legfélelmetesebb része, ezt én egy picit sem értem
-        # ez akadályoz meg minket, hogy interaktív kommunikációt folytassunk
+        # ez akadályoz meg minket, hogy interaktív kommunikációt folytassunk,
+        # de én nem is sajnálom
 
 
         # as a simple server, we expect to receive:
@@ -65,6 +66,7 @@ class PyWSock:
             unmasked_data = [masked_data[i] ^ mask_key[i%4] for i in range(len(masked_data))]
             str_data = str(bytearray(unmasked_data))
         return str_data
+
         # broadcast = mindenkinek üzenetet kiküldeni
         # lényegében egy tuningolt client.send
     def broadcast_resp(self, data):
@@ -81,6 +83,7 @@ class PyWSock:
             except:
                 print("<!> Broadcast hiba")
         self.LOCK.release()
+    
     # formázás
     def parse_headers (self, data):
         headers = {}
@@ -91,6 +94,7 @@ class PyWSock:
                 headers[parts[0]] = parts[1]
         headers['code'] = lines[len(lines) - 1]
         return headers
+
     # handshakelés, ne írja ki a választ, csak annyit, hogy sikeres volt-e
     # egyrészt a http követeli meg a handshaket, de még a kapcsolat tesztelésére is jó
     def handshake (self, client, addrh):
@@ -102,19 +106,33 @@ class PyWSock:
         resp_data = self.HSHAKE_RESP % ((base64.b64encode(hashlib.sha1(key+self.MAGIC).digest()),))
         #print('[%s]' % (resp_data,))
         return client.send(resp_data)
+
     # mit csináljon a kliensekkel (egyenként)
     def handle_client (self, client, addr):
+        # handshake
         self.handshake(client, addr)
+        # nyissa meg az E.db fájlt, írás-olvasás joggal
         efile = open("E_debug/E.db","r+w")
         try:
             while 1:            
                 # Adat elkapása
                 data = self.recv_data(client)
                 print("Parancs: " + data)
+                # hozza létre az efiletart változót,
+                # és mindig frissítse, így mindenki a legfrissebb
+                # változatot kapja
+                # efiletart: [e]z a hét [file]-jának [tart]alma
                 efiletart = efile.readlines()
-                self.broadcast_resp(data)
+                # ha kapott egy parancsot, elsősorban írja ki azt
+                # nem szükséges, talán hátráltathat is.
+                # ki kéne törölni
+                #self.broadcast_resp(data)
+                # a parancsok stringek, pontosvesszővel elválasztva,
+                # itt kerülnek szétbontásra, egy splitdata listába
                 splitdata = data.split(';')
+                # mindig írja ki a kapott adattól, kitől kaptuk azt
                 print ('Felhasználónév: ' + splitdata[0])
+                # ha valaki küldött egy set parancsot
                 if splitdata[1] == 'set':
                     print("Beállítás")
                     if splitdata[2] == 'E':
@@ -127,24 +145,29 @@ class PyWSock:
                     efile.write(data + '\n')
                 else:
                     print("Lekérés")
+                    # ha valaki le szeretné kérni ennek a hétnek az anyagát, küldje is el
                     if splitdata[2] == 'E':
                         print('Hét: Ez a hét')
+                        # küldje el a fájl tartalmát sztringbe konvertálva
+                        # elképzelhető, hogy a konvertálás nem kötelező
                         self.broadcast_resp(str(efiletart))
-                        print('--')
+                        # írja ki nekünk, mit küldött el
+                        print('-- E_debug/E.db --')
                         print(str(efiletart))
-                        print('--')
+                        print('--   --')
+                    # jövő hét anyaga
                     if splitdata[2] == 'J':
                         print('Hét: Jövő hét')
-                        
-                    
-                    
+                # szabályszerűen zárja le a fáljt
                 efile.close()
+                # ne egye meg a CPU-t
                 time.sleep(0.1)
         except Exception as e:
-            print(e)
+            # ha valami hiba történt, írja ki
+            #print(e)
             pass
         # print('{-} Kliens lekapcsolódott: ' + addr[0])
-        print ('======')
+        print ('---' + addr[0] + '---')
         self.LOCK.acquire()
         self.clients.remove(client)
         self.LOCK.release()
@@ -156,16 +179,24 @@ class PyWSock:
         # törlésre kerül, ha felhasználók kezébe adjuk
         efile.truncate()
         efile.close()
+        # socket cuccok
         s = socket.socket()
         s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         s.bind(('', port))
+        # maximum 50 kapcsolatot fogadjon el
+        # lehetne sokkal kevesebb is, mert a kapcsolat nem keep-alive,
+        # a kliensek kevés idő erejéig kapcsolódnak a szerverhez
         s.listen(50)
         print ('<+> Szerver online')
         while(1):
+            # fogadjon el minden beérkező kapcsolatot
             conn, addr = s.accept()
-            # print ('{+} Kliens csatlakozott: ' + addr[0])
-            print ('===' + addr[0] + '===')
+            # írja ki szépen a kliensek IP-címét, 
+            # jó sok plusszal, hogy látszódjon, ki kapcsolódott
+            print ('+++' + addr[0] + '+++')
             threading.Thread(target = self.handle_client, args = (conn, addr)).start()
+            # threading cuccok, kliensek objektumát írja a 
+            # kliens lista végére.
             self.LOCK.acquire()
             self.clients.append(conn)
             self.LOCK.release()
