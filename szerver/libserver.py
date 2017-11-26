@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # importok
-import socket, hashlib, base64, threading, sys, time, os
+import socket, hashlib, base64, threading, sys, time
 # hasznos cumó: https://stackoverflow.com/questions/18240358/html5-websocket-connecting-to-python
 
 # Használat:
@@ -12,7 +12,7 @@ import socket, hashlib, base64, threading, sys, time, os
 #     ws.recv_data(<kliensek>)
 #     
 #     #Adatok kiíratása mindenkivel(broadcast):
-#     ws.broadcast_resp("valami") # "valami" elküldése mindenkinek
+#     ws.broadcast("valami") # "valami" elküldése mindenkinek
 #
 # Jelek:
 #     <+> : Rendben lezajlott a megadott funkció/parancs
@@ -22,6 +22,7 @@ import socket, hashlib, base64, threading, sys, time, os
 
 class PyWSock:
     MAGIC = '258EAFA5-E914-47DA-95CA-C5AB0DC85B11'
+
     # ha rossz a handshake válasz, nem működik a kapcsolat,
     # nem kéne ezt megváltoztatni, mert eleve elég átláthatatlan
     HSHAKE_RESP = "HTTP/1.1 101 Switching Protocols\r\n" + \
@@ -29,12 +30,13 @@ class PyWSock:
                 "Connection: Upgrade\r\n" + \
                 "Sec-WebSocket-Accept: %s\r\n" + \
                 "\r\n"
+
     LOCK = threading.Lock()
 
     # kliens lista deklarálása
     clients = []
 
-    # adatok befogadásához egy methódus
+    # adatok befogadásához egy metódus
     def recv_data (self, client):
 
         # a networking legfélelmetesebb része, ezt én egy picit sem értem
@@ -69,7 +71,7 @@ class PyWSock:
 
         # broadcast = mindenkinek üzenetet kiküldeni
         # lényegében egy tuningolt client.send
-    def broadcast_resp(self, data):
+    def broadcast(self, data):
         # 1st byte: fin bit set. text frame bits set.
         # 2nd byte: no mask. length set in 1 byte. 
         resp = bytearray([0b10000001, len(data)])
@@ -114,6 +116,7 @@ class PyWSock:
         # nyissa meg az E.db fájlt, írás-olvasás joggal
         efile = open("debug/E.ssv","a+")
         jfile = open("debug/J.ssv","a+")
+
         try:
             while 1:            
                 # Adat elkapása
@@ -125,62 +128,81 @@ class PyWSock:
                 # efiletart: [e]z a hét [file]-jának [tart]alma
                 efiletart = efile.readlines()
                 jfiletart = jfile.readlines()
+
                 # ha kapott egy parancsot, elsősorban írja ki azt
                 # nem szükséges, talán hátráltathat is.
                 # ki kéne törölni
-                #self.broadcast_resp(data)
+                #self.broadcast(data)
                 # a parancsok stringek, pontosvesszővel elválasztva,
                 # itt kerülnek szétbontásra, egy splitdata listába
                 splitdata = data.split(';')
                 # mindig írja ki a kapott adattól, kitől kaptuk azt
                 print ('Felhasználónév: ' + splitdata[0])
+
                 # ha valaki küldött egy set parancsot
                 if splitdata[1] == 'set':
+
                     print("Beállítás")
+
                     if splitdata[2] == 'E':
-                        print ('Hét: Ez a hét')
-                        efile.write(data + '\n')
+                        self.ment(efile, data)
                     else:
                         if splitdata[2] == 'J':
-                            print ('Hét: Jövő hét')
-                            jfile.write(data + '\n')
+                           self.ment(jfile, data)
+                    
                     print ('Nap: ' + splitdata[3])
                     print ('Tantárgy: ' + splitdata[4])
                     print ('Anyag: ' + splitdata[5])
                     
                 else:
+
                     print("Lekérés")
                     # ha valaki le szeretné kérni ennek a hétnek az anyagát, küldje is el
                     if splitdata[2] == 'E':
                         print('Hét: Ez a hét')
-                        # küldje el a fájl tartalmát sztringbe konvertálva, szépítve
-                        efiletartstr = " ".join(str(x) for x in efiletart)
-                        self.broadcast_resp(efiletartstr)
-                        # írja ki nekünk, mit küldött el
-                        print('-- E_debug/E.db --')
-                        print(efiletartstr)
-                        print('----')
+                        self.szepitveBeolvas(efiletart)
+
                     # jövő hét anyaga, ugyanaz, mint az e heti
                     if splitdata[2] == 'J':
                         print('Hét: Jövő hét')
-                        jfiletartstr = " ".join(str(x) for x in jfiletart)
-                        self.broadcast_resp(jfiletartstr)
-                        print('-- debug/J.ssv --')
-                        print(jfiletartstr)
-                        print('----')
+                        self.szepitveBeolvas(jfiletart)
                 # szabályszerűen zárja le a fáljt
                 efile.close()
                 # ne egye meg a CPU-t
                 time.sleep(0.1)
+
         except Exception as e:
             # ha valami hiba történt, írja ki
-            print(e)
+            # debughoz hasznos, de gyakran kiírja, 
+            # hogy adatolvasási hiba,
+            # és mindig beilleszt egy kéretlen newlinet, 
+            # hacsak nem ír ki valamit
+            #print(e)
+            # ha nem írunk ki semmit, ne történjen semmi
+            # ha tényleg nincs szükségünk az elöbbi printre,
+            # ki lehet a try-t törölni
             pass
+        # mindenesetben, ha kiléptünk a while loopból,
+        # 100% hogy egy kliens lecsatlakozott, írja ki, hogy ki
         print ('---' + addr[0] + '---\n')
+        # threading, amihez megint csak keveset értek
         self.LOCK.acquire()
         self.clients.remove(client)
         self.LOCK.release()
         client.close()
+    
+    # listát sztringekbe konvertálja, és így olvassa be a klienseknek
+    def szepitveBeolvas(self, xfiletart):
+        xfiletartstr = " ".join(str(x) for x in xfiletart)
+        self.broadcast(xfiletartstr)
+        print('----')
+        print(xfiletartstr)
+        print('---')
+    # csak elmenti a megadott fájlba a megadott adatot,
+    # mivel kétszer kellett ugyanazt írnom, gondoltam,
+    # talán egyszerübben fut, ha külön metódusba írom
+    def ment(self, xfile, data):
+                xfile.write(data + '\n')
     
     # fájlok tartalmának törlése, ha nincs meg a fájl,
     # hozza létre azt.

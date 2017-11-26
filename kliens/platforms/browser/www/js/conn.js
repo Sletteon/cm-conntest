@@ -11,7 +11,6 @@ window.onload = function(){
             window.localStorage.setItem("uname", uname);
         }
 }
-
 function conn(message, set) {
     // kérje el változókba az IP-t és a portot
     var IPaddress = document.getElementById("IP").value;
@@ -36,9 +35,11 @@ function conn(message, set) {
         // ellenben, ha hamis, gettel küldje el
 	   if (set){
 	    connection.send(uname + ';set;' + het + ';' + message);
-            connection.close()
+            connection.close();
 	   }else{
                 connection.send(uname + ';get;' + het + ';');
+		// ha bezárjuk a kapcsolatot, csak 1 parancsot kapunk vissza
+		// connection.close();
 	   }
        };
         // ha vmi hibát kaptunk, írja ki a consoleba
