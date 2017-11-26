@@ -10,6 +10,8 @@ window.onload = function(){
             // állítsa be a uname változót a uname kulcshoz
             window.localStorage.setItem("uname", uname);
         }
+
+        document.getElementById("unameDel").style.cursor = "pointer";
 }
 function conn(message, set) {
     // kérje el változókba az IP-t és a portot
@@ -77,3 +79,9 @@ document.getElementById("connButton").onclick = function(){
     document.getElementById("socket").innerHTML = conn(mess,true);
     
 };
+// ha a gombok alatti szövegre kattintanak, törölje a felhasználónevet,
+// és frissítse az oldalt
+document.getElementById("unameDel").onclick = function(){
+    window.localStorage.removeItem("uname");
+    location.reload(false);
+}
