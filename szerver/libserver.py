@@ -112,7 +112,8 @@ class PyWSock:
         # handshake
         self.handshake(client, addr)
         # nyissa meg az E.db fájlt, írás-olvasás joggal
-        efile = open("E_debug/E.db","a+")
+        efile = open("debug/E.ssv","a+")
+        jfile = open("debug/J.ssv","a+")
         try:
             while 1:            
                 # Adat elkapása
@@ -123,6 +124,7 @@ class PyWSock:
                 # változatot kapja
                 # efiletart: [e]z a hét [file]-jának [tart]alma
                 efiletart = efile.readlines()
+                jfiletart = jfile.readlines()
                 # ha kapott egy parancsot, elsősorban írja ki azt
                 # nem szükséges, talán hátráltathat is.
                 # ki kéne törölni
@@ -137,12 +139,16 @@ class PyWSock:
                     print("Beállítás")
                     if splitdata[2] == 'E':
                         print ('Hét: Ez a hét')
-                    if splitdata[2] == 'J':
-                        print ('Hét: Jövő hét')
+                        efile.write(data + '\n')
+                    else:
+                        if splitdata[2] == 'J':
+                            print ('Hét: Jövő hét')
+                            jfile.write(data + '\n')
+                    
                     print ('Nap: ' + splitdata[3])
                     print ('Tantárgy: ' + splitdata[4])
                     print ('Anyag: ' + splitdata[5])
-                    efile.write(data + '\n')
+                    
                 else:
                     print("Lekérés")
                     # ha valaki le szeretné kérni ennek a hétnek az anyagát, küldje is el
@@ -153,11 +159,16 @@ class PyWSock:
                         self.broadcast_resp(efiletartstr)
                         # írja ki nekünk, mit küldött el
                         print('-- E_debug/E.db --')
-                        print(str(efiletart))
+                        print(efiletartstr)
                         print('----')
                     # jövő hét anyaga
                     if splitdata[2] == 'J':
                         print('Hét: Jövő hét')
+                        jfiletartstr = " ".join(str(x) for x in jfiletart)
+                        self.broadcast_resp(jfiletartstr)
+                        print('-- debug/J.ssv --')
+                        print(jfiletartstr)
+                        print('----')
                 # szabályszerűen zárja le a fáljt
                 efile.close()
                 # ne egye meg a CPU-t
@@ -166,19 +177,25 @@ class PyWSock:
             # ha valami hiba történt, írja ki
             print(e)
             pass
-        # print('{-} Kliens lekapcsolódott: ' + addr[0])
         print ('---' + addr[0] + '---\n')
         self.LOCK.acquire()
         self.clients.remove(client)
         self.LOCK.release()
         client.close()
-
-    def start_server (self, port):
-        efile = open("E_debug/E.db","a+")
+    
+    def filetrunc(self):
+        efile = open("debug/E.ssv","a+")
         # fájl tartalmának törlése
         # törlésre kerül, ha felhasználók kezébe adjuk
         efile.truncate()
         efile.close()
+
+        jfile = open("debug/J.ssv", "a+")
+        jfile.truncate()
+        jfile.close()
+
+    def start_server (self, port):
+        self.filetrunc()
         # socket cuccok
         s = socket.socket()
         s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
