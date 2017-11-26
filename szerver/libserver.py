@@ -4,14 +4,14 @@ import socket, hashlib, base64, threading, sys, time, os
 # hasznos cumó: https://stackoverflow.com/questions/18240358/html5-websocket-connecting-to-python
 
 # Használat:
-#     Indítás:
+#     #Indítás:
 #     ws = PyWSock() # objektum létrehozása ws néven
 #     ws.start_server(int(sys.argv[1])) # szerver indítása, port az legyen az első flag python <ezafájl.py> <portszám>
 #
-#     Adatok fogadása:
+#     #Adatok fogadása:
 #     ws.recv_data(<kliensek>)
 #     
-#     Adatok kiíratása (broadcast):
+#     #Adatok kiíratása mindenkivel(broadcast):
 #     ws.broadcast_resp("valami") # "valami" elküldése mindenkinek
 #
 # Jelek:
@@ -144,7 +144,6 @@ class PyWSock:
                         if splitdata[2] == 'J':
                             print ('Hét: Jövő hét')
                             jfile.write(data + '\n')
-                    
                     print ('Nap: ' + splitdata[3])
                     print ('Tantárgy: ' + splitdata[4])
                     print ('Anyag: ' + splitdata[5])
@@ -161,7 +160,7 @@ class PyWSock:
                         print('-- E_debug/E.db --')
                         print(efiletartstr)
                         print('----')
-                    # jövő hét anyaga
+                    # jövő hét anyaga, ugyanaz, mint az e heti
                     if splitdata[2] == 'J':
                         print('Hét: Jövő hét')
                         jfiletartstr = " ".join(str(x) for x in jfiletart)
@@ -183,10 +182,11 @@ class PyWSock:
         self.LOCK.release()
         client.close()
     
+    # fájlok tartalmának törlése, ha nincs meg a fájl,
+    # hozza létre azt.
+    # Ha felhasználóknak adjuk, TÖRÖLNI KELL
     def filetrunc(self):
         efile = open("debug/E.ssv","a+")
-        # fájl tartalmának törlése
-        # törlésre kerül, ha felhasználók kezébe adjuk
         efile.truncate()
         efile.close()
 
