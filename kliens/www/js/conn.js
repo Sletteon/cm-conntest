@@ -51,9 +51,10 @@ function conn(message, set) {
         };
         // ha kaptunk vmit a szervertől, írja ki a logba és írja ki a gombok alatti p tagbe
         connection.onmessage = function (e) {
+	    var gotList = [];
             console.log('Szerver: ' + e.data);
-    	    document.getElementById("socket").innerHTML = e.data;
-            connection.close()
+	    gotList.push(e.data);
+    	    document.getElementById("socket").innerHTML = gotList;
         };
     return uname + ';set;' + het + ';' + message;
 }

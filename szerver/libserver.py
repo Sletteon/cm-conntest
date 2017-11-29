@@ -82,8 +82,8 @@ class PyWSock:
         for client in self.clients:
             try:
                 client.send(resp)
-            except:
-                print("<!> Broadcast hiba")
+            except Exception as e:
+                print("<!> Broadcast hiba:" + e)
         self.LOCK.release()
     
     # formázás
@@ -160,7 +160,19 @@ class PyWSock:
                     # ha valaki le szeretné kérni ennek a hétnek az anyagát, küldje is el
                     if splitdata[2] == 'E':
                         print('Hét: Ez a hét')
-                        self.szepitveBeolvas(efiletart)
+                        if len(efiletart) >= 3 and len(efiletart) <= 7:
+                            listOfEfiletart = self.listaszaggato(efiletart)
+                            self.szepitveBeolvas(efiletart[0:3])
+                            self.szepitveBeolvas(efiletart[3:7])
+                        if len(efiletart) > 8 and len(efiletart) >= 11:
+                            self.szepitveBeolvas(efiletart[0:3])
+                            self.szepitveBeolvas(efiletart[4:8])
+                            self.szepitveBeolvas(efiletart[9:13])
+                        if len(efiletart) == 1:
+                            self.szepitveBeolvas(efiletart)
+
+                        #self.listaKetteosztvaElkuld(efiletart, 0, 3)
+                        #self.listaKetteosztvaElkuld(efiletart, 4, 7)
 
                     # jövő hét anyaga, ugyanaz, mint az e heti
                     if splitdata[2] == 'J':
@@ -177,7 +189,7 @@ class PyWSock:
             # hogy adatolvasási hiba,
             # és mindig beilleszt egy kéretlen newlinet, 
             # hacsak nem ír ki valamit
-            #print(e)
+            print(e)
             # ha nem írunk ki semmit, ne történjen semmi
             # ha tényleg nincs szükségünk az elöbbi printre,
             # ki lehet a try-t törölni
@@ -193,11 +205,11 @@ class PyWSock:
     
     # listát sztringekbe konvertálja, és így olvassa be a klienseknek
     def szepitveBeolvas(self, xfiletart):
-        xfiletartstr = " ".join(str(x) for x in xfiletart)
+        xfiletartstr = "".join(str(x) for x in xfiletart)
         self.broadcast(xfiletartstr)
-        print('----')
+        # print('----')
         print(xfiletartstr)
-        print('---')
+        # print('---')
     # csak elmenti a megadott fájlba a megadott adatot,
     # mivel kétszer kellett ugyanazt írnom, gondoltam,
     # talán egyszerübben fut, ha külön metódusba írom
@@ -215,6 +227,14 @@ class PyWSock:
         jfile = open("debug/J.ssv", "a+")
         jfile.truncate()
         jfile.close()
+
+    def listaszaggato(self, x):
+        return [x[i:i+3] for i in range(0, len(x), 3)]
+
+    def listaKetteosztvaElkuld(self, lista,  minLength, maxLength):
+        if len(lista) >= minLength and len(lista) <= maxLength:
+            self.szepitveBeolvas(lista[minLength:maxLength])
+                                    
 
     def start_server (self, port):
         self.filetrunc()
