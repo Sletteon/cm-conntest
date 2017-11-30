@@ -160,14 +160,13 @@ class PyWSock:
                     # ha valaki le szeretné kérni ennek a hétnek az anyagát, küldje is el
                     if splitdata[2] == 'E':
                         print('Hét: Ez a hét')
-                        if len(efiletart) >= 3 and len(efiletart) <= 7:
+                        if len(efiletart) >= 3:
                             listOfEfiletart = self.listaszaggato(efiletart)
                             self.szepitveBeolvas(efiletart[0:3])
-                            self.szepitveBeolvas(efiletart[3:7])
-                        if len(efiletart) > 8 and len(efiletart) >= 11:
-                            self.szepitveBeolvas(efiletart[0:3])
-                            self.szepitveBeolvas(efiletart[4:8])
-                            self.szepitveBeolvas(efiletart[9:13])
+                            self.szepitveBeolvas(efiletart[3:6])
+                            self.szepitveBeolvas(efiletart[6:9])
+                            self.szepitveBeolvas(efiletart[9:12])
+                            self.szepitveBeolvas(efiletart[12:15])
                         if len(efiletart) == 1:
                             self.szepitveBeolvas(efiletart)
 

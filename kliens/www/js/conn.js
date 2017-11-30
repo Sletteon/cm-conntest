@@ -75,7 +75,6 @@ document.getElementById("connButton").onclick = function(){
     var mess = nap + ';' + tant + ';' + anyag + ';'
     // végül hívja meg a conn funkciót az előbb összeállított stringgel,
     // és most be szeretnénk írni vmi a szerverre
-    // conn(mess,true);
 
     document.getElementById("socket").innerHTML = conn(mess,true);
     
