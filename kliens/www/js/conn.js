@@ -12,6 +12,12 @@ window.onload = function(){
         }
 
         document.getElementById("unameDel").style.cursor = "pointer";
+	document.getElementById("connState").style.color = "white"
+
+}
+function sleepFor( sleepDuration ){
+	    var now = new Date().getTime();
+	        while(new Date().getTime() < now + sleepDuration){ /* do nothing */ } 
 }
 function conn(message, set) {
     // kérje el változókba az IP-t és a portot
@@ -31,6 +37,20 @@ function conn(message, set) {
         catch (err){
        alert('Hiba:' + err)
     } 
+	setInterval(function(){
+		
+	if(connection.readyState === connection.CLOSED){
+		document.getElementById("connState").style.backgroundColor = "red";
+		document.getElementById("connState").innerHTML = "Offline"; 
+	}
+
+	if(connection.readyState === connection.OPEN){
+		document.getElementById("connState").style.backgroundColor = "LimeGreen";
+		document.getElementById("connState").innerHTML = "Online";
+	
+	}
+	}, 3000);
+
         // ha kapcsolat létesült
         connection.onopen = function () { 
         // ha a set boolean igaz, küldje el a message paramétert set-tel
