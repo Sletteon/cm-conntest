@@ -160,25 +160,11 @@ class PyWSock:
                     # ha valaki le szeretné kérni ennek a hétnek az anyagát, küldje is el
                     if splitdata[2] == 'E':
                         print('Hét: Ez a hét')
-                        if len(efiletart) >= 3:
-                            listOfEfiletart = self.listaszaggato(efiletart)
-                            x = 0
-                            y = 3
-                            self.szepitveBeolvas(efiletart[x:y])
-                            for i in range(len(efiletart) - 3):
-                                x += 3
-                                y += 3
-                                self.szepitveBeolvas(efiletart[x:y])
-                        if len(efiletart) == 1:
-                            self.szepitveBeolvas(efiletart)
-
-                        #self.listaKetteosztvaElkuld(efiletart, 0, 3)
-                        #self.listaKetteosztvaElkuld(efiletart, 4, 7)
-
+                        self.listaTobbreOsztvaElkuld(efiletart)
                     # jövő hét anyaga, ugyanaz, mint az e heti
                     if splitdata[2] == 'J':
                         print('Hét: Jövő hét')
-                        self.szepitveBeolvas(jfiletart)
+                        self.listaTobbreOsztvaElkuld(jfiletart)
                 # szabályszerűen zárja le a fáljt
                 efile.close()
                 # ne egye meg a CPU-t
@@ -208,12 +194,11 @@ class PyWSock:
     def szepitveBeolvas(self, xfiletart):
         xfiletartstr = "".join(str(x) for x in xfiletart)
 
-        if xfiletartstr.replace(" ","") == "":
-            pass
-        self.broadcast(xfiletartstr)
-        # print('----')
-        print(xfiletartstr)
-        # print('---')
+        if xfiletartstr.replace(" ","") != "":
+            self.broadcast(xfiletartstr)
+            # print('----')
+            print(xfiletartstr)
+            # print('---')
     # csak elmenti a megadott fájlba a megadott adatot,
     # mivel kétszer kellett ugyanazt írnom, gondoltam,
     # talán egyszerübben fut, ha külön metódusba írom
@@ -235,10 +220,17 @@ class PyWSock:
     def listaszaggato(self, x):
         return [x[i:i+3] for i in range(0, len(x), 3)]
 
-    def listaKetteosztvaElkuld(self, lista,  minLength, maxLength):
-        if len(lista) >= minLength and len(lista) <= maxLength:
-            self.szepitveBeolvas(lista[minLength:maxLength])
-                                    
+    def listaTobbreOsztvaElkuld(self, lista):
+                        if len(lista) >= 3:
+                            x = 0
+                            y = 3
+                            self.szepitveBeolvas(lista[x:y])
+                            for i in range(len(lista) - 3):
+                                x += 3
+                                y += 3
+                                self.szepitveBeolvas(lista[x:y])
+                        if len(lista) == 1:
+                            self.szepitveBeolvas(lista)            
 
     def start_server (self, port):
         self.filetrunc()
