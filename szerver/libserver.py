@@ -162,11 +162,13 @@ class PyWSock:
                         print('Hét: Ez a hét')
                         if len(efiletart) >= 3:
                             listOfEfiletart = self.listaszaggato(efiletart)
-                            self.szepitveBeolvas(efiletart[0:3])
-                            self.szepitveBeolvas(efiletart[3:6])
-                            self.szepitveBeolvas(efiletart[6:9])
-                            self.szepitveBeolvas(efiletart[9:12])
-                            self.szepitveBeolvas(efiletart[12:15])
+                            x = 0
+                            y = 3
+                            self.szepitveBeolvas(efiletart[x:y])
+                            for i in range(len(efiletart) - 3):
+                                x += 3
+                                y += 3
+                                self.szepitveBeolvas(efiletart[x:y])
                         if len(efiletart) == 1:
                             self.szepitveBeolvas(efiletart)
 
@@ -205,6 +207,9 @@ class PyWSock:
     # listát sztringekbe konvertálja, és így olvassa be a klienseknek
     def szepitveBeolvas(self, xfiletart):
         xfiletartstr = "".join(str(x) for x in xfiletart)
+
+        if xfiletartstr.replace(" ","") == "":
+            pass
         self.broadcast(xfiletartstr)
         # print('----')
         print(xfiletartstr)
