@@ -37,18 +37,20 @@ function conn(message, set) {
         catch (err){
        alert('Hiba:' + err)
     } 
+	// 3mp-ként nézze meg, van-e kapcsolat
 	setInterval(function(){
-		
-	if(connection.readyState === connection.CLOSED){
-		document.getElementById("connState").style.backgroundColor = "red";
-		document.getElementById("connState").innerHTML = "Offline"; 
-	}
-
-	if(connection.readyState === connection.OPEN){
-		document.getElementById("connState").style.backgroundColor = "LimeGreen";
-		document.getElementById("connState").innerHTML = "Online";
+		// ha nincs, a h1 alatti p tag legyen piros, és írja ki h offline
+		if(connection.readyState === connection.CLOSED){
+			document.getElementById("connState").style.backgroundColor = "red";
+			document.getElementById("connState").innerHTML = "Offline"; 
+		} else {
+			// ha van, legyen az zöld, és írja ki h online
+			if(connection.readyState === connection.OPEN){
+				document.getElementById("connState").style.backgroundColor = "LimeGreen";
+				document.getElementById("connState").innerHTML = "Online";
 	
-	}
+			}
+		}
 	}, 3000);
 
         // ha kapcsolat létesült
