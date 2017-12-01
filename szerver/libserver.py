@@ -19,6 +19,12 @@ import socket, hashlib, base64, threading, sys, time
 #     <-> : Semmi extra
 #     <!> : Kisebb hiba (csak 1 szál áll le, ami újraindul)
 #     <<!>> : Végzetes hiba
+#     ++++<IP-cím>++++ : IP-című kliens csatlakozott
+#     ----<IP-cím>---- : IP-című kliens lekapcsolódott
+#     
+#
+#
+#
 
 class PyWSock:
     MAGIC = '258EAFA5-E914-47DA-95CA-C5AB0DC85B11'
@@ -37,13 +43,8 @@ class PyWSock:
     clients = []
 
     # adatok befogadásához egy metódus
+    # na ezt a methódust nem értem
     def recv_data (self, client):
-
-        # a networking legfélelmetesebb része, ezt én egy picit sem értem
-        # ez akadályoz meg minket, hogy interaktív kommunikációt folytassunk,
-        # de én nem is sajnálom
-
-
         # as a simple server, we expect to receive:
         #    - all data at one go and one frame
         #    - one frame at a time
@@ -155,7 +156,6 @@ class PyWSock:
                     print ('Anyag: ' + splitdata[5])
                     
                 else:
-
                     print("Lekérés")
                     # ha valaki le szeretné kérni ennek a hétnek az anyagát, küldje is el
                     if splitdata[2] == 'E':
@@ -192,8 +192,9 @@ class PyWSock:
     
     # listát sztringekbe konvertálja, és így olvassa be a klienseknek
     def szepitveBeolvas(self, xfiletart):
+        # létrehoz egy stringet az xfiletart listábol
+        # ha szóköz nélküli adat nem üres, küldje el
         xfiletartstr = "".join(str(x) for x in xfiletart)
-
         if xfiletartstr.replace(" ","") != "":
             self.broadcast(xfiletartstr)
             # print('----')
@@ -216,10 +217,7 @@ class PyWSock:
         jfile = open("debug/J.ssv", "a+")
         jfile.truncate()
         jfile.close()
-
-    def listaszaggato(self, x):
-        return [x[i:i+3] for i in range(0, len(x), 3)]
-
+    # 3-asával elküldi a parancsokat (szépítve)
     def listaTobbreOsztvaElkuld(self, lista):
                         if len(lista) >= 3:
                             x = 0
@@ -231,7 +229,8 @@ class PyWSock:
                                 self.szepitveBeolvas(lista[x:y])
                         if len(lista) == 1:
                             self.szepitveBeolvas(lista)            
-
+    # tulajdonképpen egy __init__
+    # mindent elindít
     def start_server (self, port):
         self.filetrunc()
         # socket cuccok
