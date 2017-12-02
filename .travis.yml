@@ -3,5 +3,5 @@ python:
   - "2.7"
 before_install: cd szerver/
 script:
-  - python server.py # or py.test for Python versions 3.5 and below
+  - python server.py travis # or py.test for Python versions 3.5 and below
 sudo: enabled
