@@ -4,3 +4,4 @@ python:
 # command to install dependencies
 script:
   - szerver/server.py # or py.test for Python versions 3.5 and below
+sudo: enabled
