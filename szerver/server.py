@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from libserver import PyWSock
-import sys, time
+import sys
 try:
 	port = 5000
 	if len(sys.argv) == 1:
