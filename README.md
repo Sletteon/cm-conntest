@@ -4,8 +4,9 @@
 <a href = "http://docs.phonegap.com/">PhoneGap dokumentáció</a><br>
 <a href="https://cordova.apache.org/docs/en/latest/">Cordova dokumentáció</a><br>
 <b>Szerver:</b><br>
-A szerver mappában 2 futtatható fájl található; egy server.py és a serverlib.py.<br>
+A szerver mappában 3 fájl található; egy server.py, libserver.py és az ex[tended]libserver.py.<br>
 A server.py-t kell futtatni, hogy elinduljon a szerver.<br>
+A serverlib-ben lévő PyWSock osztályt kiegészíti a PyWSockFunc (exlibserver.py) ostály, amiben a handle_clients methóduson kívűl minden egyéb funkciót tárolunk.<br>
 A szerver nem csak LAN hálózatokon működik.<br>
 A szerver egyenlőre elfogadja a kliens csatlakozását, handshake történik, amit a kliens által megadott szövegek kiírása követ.<br>
 Egy csatlakozásnál csak egyszer fogadhat adatot a szerver, így ezt kicselezve, majd minden rögzített változásnál egy új kapcsolat jön létre.<br>
