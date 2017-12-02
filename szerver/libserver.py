@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # importok
-import socket, hashlib, base64, threading, sys, time
+import threading, time, socket
 from exlibserver import PyWSockFunc
 # hasznos cumó: https://stackoverflow.com/questions/18240358/html5-websocket-connecting-to-python
 
@@ -11,7 +11,7 @@ from exlibserver import PyWSockFunc
 #
 #     #Adatok fogadása:
 #     ws.recv_data(<kliensek>)
-#     
+#
 #     #Adatok kiíratása mindenkivel(broadcast):
 #     ws.broadcast("valami") # "valami" elküldése mindenkinek
 #
@@ -22,7 +22,7 @@ from exlibserver import PyWSockFunc
 #     <<!>> : Végzetes hiba
 #     ++++<IP-cím>++++ : IP-című kliens csatlakozott
 #     ----<IP-cím>---- : IP-című kliens lekapcsolódott
-#     
+#
 #
 #
 #
@@ -51,7 +51,7 @@ class PyWSock(PyWSockFunc):
 		jfile = open("debug/J.ssv","a+")
 
 		try:
-			while 1:            
+			while 1:
 				# Adat elkapása
 				data = self.recv_data(client)
 				print("Parancs: " + data)
@@ -82,11 +82,11 @@ class PyWSock(PyWSockFunc):
 					else:
 						if splitdata[2] == 'J':
 						   self.ment(jfile, data)
-					
+
 					print ('Nap: ' + splitdata[3])
 					print ('Tantárgy: ' + splitdata[4])
 					print ('Anyag: ' + splitdata[5])
-					
+
 				else:
 					print("Lekérés")
 					# ha valaki le szeretné kérni ennek a hétnek az anyagát, küldje is el
@@ -104,9 +104,9 @@ class PyWSock(PyWSockFunc):
 
 		except Exception as e:
 			# ha valami hiba történt, írja ki
-			# debughoz hasznos, de gyakran kiírja, 
+			# debughoz hasznos, de gyakran kiírja,
 			# hogy adatolvasási hiba,
-			# és mindig beilleszt egy kéretlen newlinet, 
+			# és mindig beilleszt egy kéretlen newlinet,
 			# hacsak nem ír ki valamit
 			print(e)
 			# ha nem írunk ki semmit, ne történjen semmi
@@ -124,7 +124,8 @@ class PyWSock(PyWSockFunc):
 
 	# tulajdonképpen egy __init__
 	# mindent elindít
-	def start_server (self, port):
+	# def start_server (self, port):
+	def __init__(self, port):
 		self.filetrunc()
 		# socket cuccok
 		s = socket.socket()
@@ -138,11 +139,11 @@ class PyWSock(PyWSockFunc):
 		while(1):
 			# fogadjon el minden beérkező kapcsolatot
 			conn, addr = s.accept()
-			# írja ki szépen a kliensek IP-címét, 
+			# írja ki szépen a kliensek IP-címét,
 			# jó sok plusszal, hogy látszódjon, ki kapcsolódott
 			print ('+++' + addr[0] + '+++')
 			threading.Thread(target = self.handle_client, args = (conn, addr)).start()
-			# threading cuccok, kliensek objektumát írja a 
+			# threading cuccok, kliensek objektumát írja a
 			# kliens lista végére.
 			self.LOCK.acquire()
 			self.clients.append(conn)

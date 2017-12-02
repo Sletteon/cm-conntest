@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import socket, hashlib, base64, threading, time
 class PyWSockFunc:
 
 	# listát sztringekbe konvertálja, és így olvassa be a klienseknek
@@ -28,7 +29,7 @@ class PyWSockFunc:
 		jfile = open("debug/J.ssv", "a+")
 		jfile.truncate()
 		jfile.close()
-		
+
 	# 3-asával elküldi a parancsokat (szépítve)
 	def listaTobbreOsztvaElkuld(self, lista):
 		if len(lista) >= 3:
@@ -53,7 +54,8 @@ class PyWSockFunc:
 		resp_data = self.HSHAKE_RESP % ((base64.b64encode(hashlib.sha1(key+self.MAGIC).digest()),))
 		#print('[%s]' % (resp_data,))
 		return client.send(resp_data)
-		# adatok befogadásához egy metódus
+
+	# adatok befogadásához egy metódus
 	# na ezt a methódust nem értem
 	def recv_data (self, client):
 		# as a simple server, we expect to receive:
@@ -85,7 +87,7 @@ class PyWSockFunc:
 		# lényegében egy tuningolt client.send
 	def broadcast(self, data):
 		# 1st byte: fin bit set. text frame bits set.
-		# 2nd byte: no mask. length set in 1 byte. 
+		# 2nd byte: no mask. length set in 1 byte.
 		resp = bytearray([0b10000001, len(data)])
 		# append the data bytes
 		for d in bytearray(data):
@@ -98,7 +100,7 @@ class PyWSockFunc:
 				print("<!> Broadcast hiba:" + e)
 		self.LOCK.release()
 
-	# formázás
+	# formázás (szintén nem értem)
 	def parse_headers (self, data):
 		headers = {}
 		lines = data.splitlines()

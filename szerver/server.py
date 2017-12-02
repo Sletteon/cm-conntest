@@ -7,7 +7,6 @@ try:
 		print("Port: 5000")
 	if len(sys.argv) == 2:
 		port = int(sys.argv[1])
-	ws = PyWSock()
-	ws.start_server(port)
+	ws = PyWSock(port)
 except KeyboardInterrupt:
 	exit()
