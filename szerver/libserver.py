@@ -6,8 +6,7 @@ from exlibserver import PyWSockFunc
 
 # Használat:
 #     #Indítás:
-#     ws = PyWSock() # objektum létrehozása ws néven
-#     ws.start_server(int(sys.argv[1])) # szerver indítása, port az legyen az első flag python <ezafájl.py> <portszám>
+#     ws= PyWSock(int(sys.argv[1])) # szerver indítása, port az legyen az első flag
 #
 #     #Adatok fogadása:
 #     ws.recv_data(<kliensek>)
@@ -22,24 +21,9 @@ from exlibserver import PyWSockFunc
 #     <<!>> : Végzetes hiba
 #     ++++<IP-cím>++++ : IP-című kliens csatlakozott
 #     ----<IP-cím>---- : IP-című kliens lekapcsolódott
-#
-#
-#
-#
 
 class PyWSock(PyWSockFunc):
-	MAGIC = '258EAFA5-E914-47DA-95CA-C5AB0DC85B11'
-
-	# ha rossz a handshake válasz, nem működik a kapcsolat,
-	# nem kéne ezt megváltoztatni, mert eleve elég átláthatatlan
-	HSHAKE_RESP = "HTTP/1.1 101 Switching Protocols\r\n" + \
-				"Upgrade: websocket\r\n" + \
-				"Connection: Upgrade\r\n" + \
-				"Sec-WebSocket-Accept: %s\r\n" + \
-				"\r\n"
-
 	LOCK = threading.Lock()
-
 	# kliens lista deklarálása
 	clients = []
 	# mit csináljon a kliensekkel (egyenként)
@@ -55,6 +39,7 @@ class PyWSock(PyWSockFunc):
 				# Adat elkapása
 				data = self.recv_data(client)
 				print("Parancs: " + data)
+
 				# hozza létre az efiletart változót,
 				# és mindig frissítse, így mindenki a legfrissebb
 				# változatot kapja
@@ -62,10 +47,6 @@ class PyWSock(PyWSockFunc):
 				efiletart = efile.readlines()
 				jfiletart = jfile.readlines()
 
-				# ha kapott egy parancsot, elsősorban írja ki azt
-				# nem szükséges, talán hátráltathat is.
-				# ki kéne törölni
-				#self.broadcast(data)
 				# a parancsok stringek, pontosvesszővel elválasztva,
 				# itt kerülnek szétbontásra, egy splitdata listába
 				splitdata = data.split(';')
@@ -105,7 +86,7 @@ class PyWSock(PyWSockFunc):
 		except Exception as e:
 			# ha valami hiba történt, írja ki
 			# debughoz hasznos, de gyakran kiírja,
-			# hogy adatolvasási hiba,
+			# hogy adatolvasási hiba
 			# és mindig beilleszt egy kéretlen newlinet,
 			# hacsak nem ír ki valamit
 			print(e)
@@ -122,7 +103,6 @@ class PyWSock(PyWSockFunc):
 		self.LOCK.release()
 		client.close()
 
-	# tulajdonképpen egy __init__
 	# mindent elindít
 	# def start_server (self, port):
 	def __init__(self, port):
@@ -133,7 +113,8 @@ class PyWSock(PyWSockFunc):
 		s.bind(('', port))
 		# maximum 50 kapcsolatot fogadjon el
 		# lehetne sokkal kevesebb is, mert a kapcsolat nem keep-alive,
-		# a kliensek kevés idő erejéig kapcsolódnak a szerverhez
+		# a kliensek kevés idő erejéig kapcsolódnak a szerverhez,
+		# legalábbis ezt tervezem
 		s.listen(50)
 		print ('<+> Szerver online')
 		while(1):
@@ -142,6 +123,8 @@ class PyWSock(PyWSockFunc):
 			# írja ki szépen a kliensek IP-címét,
 			# jó sok plusszal, hogy látszódjon, ki kapcsolódott
 			print ('+++' + addr[0] + '+++')
+			# threadingesen hívja meg a handle_client methódust
+			# gondolom külön-külön szálakat foglaljon le a handle_client methódusnak
 			threading.Thread(target = self.handle_client, args = (conn, addr)).start()
 			# threading cuccok, kliensek objektumát írja a
 			# kliens lista végére.

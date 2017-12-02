@@ -1,6 +1,13 @@
 # -*- coding: utf-8 -*-
 import socket, hashlib, base64, threading, time
 class PyWSockFunc:
+	# networking stringek
+	MAGIC = '258EAFA5-E914-47DA-95CA-C5AB0DC85B11'
+	HSHAKE_RESP = "HTTP/1.1 101 Switching Protocols\r\n" + \
+				"Upgrade: websocket\r\n" + \
+				"Connection: Upgrade\r\n" + \
+				"Sec-WebSocket-Accept: %s\r\n" + \
+				"\r\n"
 	# handshakelés, ne írja ki a választ, csak annyit, hogy sikeres volt-e
 	# egyrészt a http követeli meg a handshaket, de még a kapcsolat tesztelésére is jó
 	def handshake (self, client, addrh):
@@ -14,7 +21,7 @@ class PyWSockFunc:
 		return client.send(resp_data)
 
 	# adatok befogadásához egy metódus
-	# na ezt a methódust nem értem
+	# na ezt a methódust sem értem
 	def recv_data (self, client):
 		# as a simple server, we expect to receive:
 		#    - all data at one go and one frame
@@ -72,13 +79,16 @@ class PyWSockFunc:
 	# listát sztringekbe konvertálja, és így olvassa be a klienseknek
 	def szepitveBeolvas(self, xfiletart):
 		# létrehoz egy stringet az xfiletart listábol
-		# ha szóköz nélküli adat nem üres, küldje el
 		xfiletartstr = "".join(str(x) for x in xfiletart)
+		# ha szóköz nélküli adat nem üres, küldje azt el
 		if xfiletartstr.replace(" ","") != "":
 			self.broadcast(xfiletartstr)
-			# print('----')
+			# egyébként sokszor utálom, de most jól jön
+			# egy üres line ez a print után,
+			# ugyanis mi hármasával küldjük el az xfiletartstr-t,
+			# és nagyon szépen elválasztja 3-asával a küldött parancsokat
 			print(xfiletartstr)
-			# print('---')
+
 	# csak elmenti a megadott fájlba a megadott adatot,
 	# mivel kétszer kellett ugyanazt írnom, gondoltam,
 	# talán egyszerübben fut, ha külön metódusba írom
@@ -87,7 +97,9 @@ class PyWSockFunc:
 
 	# fájlok tartalmának törlése, ha nincs meg a fájl,
 	# hozza létre azt.
-	# Ha felhasználóknak adjuk, TÖRÖLNI KELL
+	# Ha felhasználóknak adjuk, TÖRÖLNI kell
+	# ha mégse, a beírt parancsok csak a szerver futásáig
+	# maradnak meg
 	def filetrunc(self):
 		efile = open("debug/E.ssv","a+")
 		efile.truncate()
