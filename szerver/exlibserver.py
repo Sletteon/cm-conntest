@@ -1,48 +1,6 @@
 # -*- coding: utf-8 -*-
 import socket, hashlib, base64, threading, time
 class PyWSockFunc:
-
-	# listát sztringekbe konvertálja, és így olvassa be a klienseknek
-	def szepitveBeolvas(self, xfiletart):
-		# létrehoz egy stringet az xfiletart listábol
-		# ha szóköz nélküli adat nem üres, küldje el
-		xfiletartstr = "".join(str(x) for x in xfiletart)
-		if xfiletartstr.replace(" ","") != "":
-			self.broadcast(xfiletartstr)
-			# print('----')
-			print(xfiletartstr)
-			# print('---')
-	# csak elmenti a megadott fájlba a megadott adatot,
-	# mivel kétszer kellett ugyanazt írnom, gondoltam,
-	# talán egyszerübben fut, ha külön metódusba írom
-	def ment(self, xfile, data):
-		xfile.write(data + '\n')
-
-	# fájlok tartalmának törlése, ha nincs meg a fájl,
-	# hozza létre azt.
-	# Ha felhasználóknak adjuk, TÖRÖLNI KELL
-	def filetrunc(self):
-		efile = open("debug/E.ssv","a+")
-		efile.truncate()
-		efile.close()
-
-		jfile = open("debug/J.ssv", "a+")
-		jfile.truncate()
-		jfile.close()
-
-	# 3-asával elküldi a parancsokat (szépítve)
-	def listaTobbreOsztvaElkuld(self, lista):
-		if len(lista) >= 3:
-			x = 0
-			y = 3
-			self.szepitveBeolvas(lista[x:y])
-			for i in range(len(lista) - 3):
-				x += 3
-				y += 3
-				self.szepitveBeolvas(lista[x:y])
-			if len(lista) == 1:
-				self.szepitveBeolvas(lista)
-
 	# handshakelés, ne írja ki a választ, csak annyit, hogy sikeres volt-e
 	# egyrészt a http követeli meg a handshaket, de még a kapcsolat tesztelésére is jó
 	def handshake (self, client, addrh):
@@ -110,3 +68,44 @@ class PyWSockFunc:
 				headers[parts[0]] = parts[1]
 		headers['code'] = lines[len(lines) - 1]
 		return headers
+
+	# listát sztringekbe konvertálja, és így olvassa be a klienseknek
+	def szepitveBeolvas(self, xfiletart):
+		# létrehoz egy stringet az xfiletart listábol
+		# ha szóköz nélküli adat nem üres, küldje el
+		xfiletartstr = "".join(str(x) for x in xfiletart)
+		if xfiletartstr.replace(" ","") != "":
+			self.broadcast(xfiletartstr)
+			# print('----')
+			print(xfiletartstr)
+			# print('---')
+	# csak elmenti a megadott fájlba a megadott adatot,
+	# mivel kétszer kellett ugyanazt írnom, gondoltam,
+	# talán egyszerübben fut, ha külön metódusba írom
+	def ment(self, xfile, data):
+		xfile.write(data + '\n')
+
+	# fájlok tartalmának törlése, ha nincs meg a fájl,
+	# hozza létre azt.
+	# Ha felhasználóknak adjuk, TÖRÖLNI KELL
+	def filetrunc(self):
+		efile = open("debug/E.ssv","a+")
+		efile.truncate()
+		efile.close()
+
+		jfile = open("debug/J.ssv", "a+")
+		jfile.truncate()
+		jfile.close()
+
+	# 3-asával elküldi a parancsokat (szépítve)
+	def listaTobbreOsztvaElkuld(self, lista):
+		if len(lista) >= 3:
+			x = 0
+			y = 3
+			self.szepitveBeolvas(lista[x:y])
+			for i in range(len(lista) - 3):
+				x += 3
+				y += 3
+				self.szepitveBeolvas(lista[x:y])
+			if len(lista) == 1:
+				self.szepitveBeolvas(lista)
