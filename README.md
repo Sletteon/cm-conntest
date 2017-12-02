@@ -3,7 +3,7 @@
 <h3>Hasznos linkek</h3>
 <a href = "http://docs.phonegap.com/">PhoneGap dokumentáció</a><br>
 <a href="https://cordova.apache.org/docs/en/latest/">Cordova dokumentáció</a><br>
-<a href = "https://build.phonegap.com/apps/2893794/download/android/?qr_key=a5nry2YDex911S8dvqJu">Legstabilabb apk</a>
+<a href = "https://build.phonegap.com/apps/2893794/download/android/?qr_key=a5nry2YDex911S8dvqJu">Legstabilabb apk</a><br>
 <b>Szerver:</b><br>
 A szerver mappában 3 fájl található; egy server.py, libserver.py és az ex[tended]libserver.py.<br>
 A server.py-t kell futtatni, hogy elinduljon a szerver.<br>
