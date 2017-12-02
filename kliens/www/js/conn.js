@@ -1,7 +1,7 @@
 window.onload = function(){
 	// így alakult a uname változó neve: uname = UserNAME
         // kérje le a létező, vagy nem létező felhnevet
-        // (uname itt most a kulcs, ha lekérünk vmi más adatot, 
+        // (uname itt most a kulcs, ha lekérünk vmi más adatot,
         // egy általunk kitalált másik kulcsot kell beírni a uname helyett)
     var uname = window.localStorage.getItem("uname");
     if (uname == null) {
@@ -10,7 +10,7 @@ window.onload = function(){
         // állítsa be a uname változót a uname kulcshoz
         window.localStorage.setItem("uname", uname);
     }
-    // mikor betöltődik az oldal, állítsa be a mutató kurzort a 
+    // mikor betöltődik az oldal, állítsa be a mutató kurzort a
     // felhnév törléshez, és fehéret a kapcsolódás állapot szövegéhez
     document.getElementById("unameDel").style.cursor = "pointer";
 	document.getElementById("connState").style.color = "white"
@@ -29,12 +29,34 @@ function networkStatus(online) {
     	document.getElementById("connState").innerHTML = "Offline";
     }
 }
+
+function getDay() {
+  var d = new Date();
+  var n = d.getDay();
+
+  switch (n) {
+    case 0:
+      document.getElementById("nap").value = "K";
+    case 1:
+      document.getElementById("nap").value = "H";
+    case 2:
+      document.getElementById("nap").value = "K";
+    case 3:
+      document.getElementById("nap").value = "S";
+    case 4:
+      document.getElementById("nap").value = "C";
+    case 5:
+      document.getElementById("nap").value = "P";
+    case 6:
+      document.getElementById("nap").value = "K";
+  }
+}
 function conn(message, set) {
     // kérje el változókba az IP-t és a portot
     var IPaddress = document.getElementById("IP").value;
     var Port = document.getElementById("Port").value;
     // kérje le a felhnevet
-    var uname = window.localStorage.getItem("uname"); 
+    var uname = window.localStorage.getItem("uname");
     // ez a hét, vagy a jövő hét
     var h = document.getElementById("het");
     var het = h.options[h.selectedIndex].value;
@@ -45,9 +67,9 @@ function conn(message, set) {
         var connection = new WebSocket(wsURL);}
         catch (err){
        alert('Hiba:' + err)
-    } 
+    }
         // ha kapcsolat létesült
-        connection.onopen = function () { 
+        connection.onopen = function () {
         // ha a set boolean igaz, küldje el a message paramétert set-tel
         // ellenben, ha hamis, gettel küldje el
 	   if (set){
@@ -96,7 +118,7 @@ document.getElementById("connButton").onclick = function(){
     // és most be szeretnénk írni vmi a szerverre
 
     document.getElementById("socket").innerHTML = conn(mess,true);
-    
+
 };
 // ha a gombok alatti szövegre kattintanak, törölje a felhasználónevet,
 // és frissítse az oldalt
