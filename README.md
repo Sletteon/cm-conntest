@@ -1,5 +1,6 @@
 <!Doctype html>
 <b>Szerver-kliens kapcsolatteszt</b><br>
+[![Build Status](https://travis-ci.org/Sletteon/cm-conntest.svg?branch=master)](https://travis-ci.org/Sletteon/cm-conntest)
 <h3>Hasznos linkek</h3>
 <a href = "http://docs.phonegap.com/">PhoneGap dokumentáció</a><br>
 <a href="https://cordova.apache.org/docs/en/latest/">Cordova dokumentáció</a><br>
@@ -21,7 +22,7 @@ misi;set;E;H;töri;frank birodalom;
 
 Ahol misi a felhasználónév, amit első indításnál elkér a weboldal,
 [E]z a hét [H]étfőjére töriből a frank birodalom lesz a tananyag.<br>
-Példa a get parancsra: 
+Példa a get parancsra:
 
 ```
 misi;get;E;
@@ -39,4 +40,3 @@ Debuggolás folyamata a böngészőben történik a fejlesztői eszközök miatt
 index.html helye: /kliens/www/index.html<br>
 Ha egy sikeres handshake történik a szerver és a kliens között, megnézi, van-e egy felhasználónév mentve.<br>
 Amennyiben nincs, egy gyors promptal bekér egyet és elküldi a szervernek, ha talált, akkor azt a nevet küldi el. <br>
-
