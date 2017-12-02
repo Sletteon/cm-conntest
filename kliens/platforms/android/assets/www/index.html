@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <!-- hasznos cumó: https://stackoverflow.com/questions/18240358/html5-websocket-connecting-to-python -->
 <html>
-        <head>
-                <meta charset="UTF-8">
-                <title>csatlakozz a python szerverre</title>
-                <!-- google jqueryje -->
-                <script src="js/jquery.min.js"></script>
-                <!-- <script type="text/javascript" src="cordova.js"></script> -->
-                <link rel="stylesheet" type="text/css" href="css/index.css" />
-        </head>
-        <body>
-        <center>
-                <h1>cm kapcsolatteszt</h1>
+
+<head>
+	<meta charset="UTF-8">
+	<title>csatlakozz a python szerverre</title>
+	<!-- google jqueryje -->
+	<script src="js/jquery.min.js"></script>
+	<!-- <script type="text/javascript" src="cordova.js"></script> -->
+	<link rel="stylesheet" type="text/css" href="css/index.css" />
+</head>
+
+<body>
+	<center>
+		<h1>cm kapcsolatteszt</h1>
 		<p id="connState" class="connState">helo</p>
-                <input type="text" id="IP" placeholder="IP-cím" value="localhost">
-                <input type="number" id="Port" value="5000" >
+		<input type="text" id="IP" placeholder="IP-cím" value="localhost">
+		<input type="number" id="Port" value="5000">
 		<br><br>
 		<select name="melyik_het" id="het">
 			<option value="E">Ez a hét</option>
@@ -30,13 +32,14 @@
 		<input type="text" id="tantargy" placeholder="Tantárgy">
 		<input type="text" id="anyag" placeholder="Anyag">
 		<br>
-                <button  class="button button1" id="connButton">Parancs küldése</button>
+		<button class="button button1" id="connButton">Parancs küldése</button>
 		<button class="button button1" id="getButton">Heti anyag lekérése</button>
-                <br>
-                <!-- ide fog megjelenni a szerver válasza -->
-                <div id="socket" class="ServerResp"></div>
-                <a id="unameDel">Felhasználónév törlése</a>
-        </center>
-        </body>
-                <script type="text/javascript" src="js/conn.js"></script>
+		<br>
+		<!-- ide fog megjelenni a szerver válasza -->
+		<div id="socket" class="ServerResp"></div>
+		<a id="unameDel">Felhasználónév törlése</a>
+	</center>
+</body>
+<script type="text/javascript" src="js/conn.js"></script>
+
 </html>
