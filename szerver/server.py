@@ -12,10 +12,12 @@ def main():
 		if len(sys.argv) == 1:
 			print('Port: ' + str(port))
 		if len(sys.argv) == 2:
-			port = int(sys.argv[1])
-			if sys.argv[1] == "travis":
-				print("<+> Minden jónak tűnik...")
-				exit()
+			try:
+				port = int(sys.argv[1])
+			except ValueError:
+				if sys.argv[1] == "travis":
+					print("<+> Minden jónak tűnik...")
+					exit()
 
 		# itt történik minden varázslat, ez meghívja a PyWSock osztály
 		# __init__ metódusát
