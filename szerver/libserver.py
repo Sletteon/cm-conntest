@@ -2,18 +2,8 @@
 # importok
 import threading, time, socket
 from exlibserver import PyWSockFunc
-# hasznos cumó: https://stackoverflow.com/questions/18240358/html5-websocket-connecting-to-python
+# hatalmas segítség: https://stackoverflow.com/questions/18240358/html5-websocket-connecting-to-python
 
-# Használat:
-#     #Indítás:
-#     ws= PyWSock(int(sys.argv[1])) # szerver indítása, port az legyen az első flag
-#
-#     #Adatok fogadása:
-#     ws.recv_data(<kliensek>)
-#
-#     #Adatok kiíratása mindenkivel(broadcast):
-#     ws.broadcast("valami") # "valami" elküldése mindenkinek
-#
 # Jelek:
 #     <+> : Rendben lezajlott a megadott funkció/parancs
 #     <-> : Semmi extra
@@ -22,10 +12,55 @@ from exlibserver import PyWSockFunc
 #     ++++<IP-cím>++++ : IP-című kliens csatlakozott
 #     ----<IP-cím>---- : IP-című kliens lekapcsolódott
 
+# =====================================
+# ELIGAZODÁS:
+# 		A szerver.pyban meghívjuk egy objekummal a PyWSock osztálynak
+#		a __init__ metódusát.
+# 		Ez a metódus a beérkező kapcsolatokat fogadja el,
+# 		minden kliensnek fusson le a handle_client, külön-külön szálakon.
+# 		Az exlibserver.py fájlban a klienseknek futásához szükséges
+#		globális változókat, illetve további metódusokat találjuk meg, amik
+# 		többnyire a handle_client funkcióban kerülnek felhasználásra,
+# 		illetve meghívásra.
+# 		A szervert tehát 2 while(True) ciklus hajtja: egy figyelő, illetve egy
+# 		kliens-kiszolgáló.
+# 		Az utóbbiban a loop a kliensek parancsat figyeli, illetve azokra reagál.
+# =====================================
+
 class PyWSock(PyWSockFunc):
 	LOCK = threading.Lock()
 	# kliens lista deklarálása
 	clients = []
+
+	# mindent elindít
+	def __init__(self, port):
+		self.filetrunc()
+		# socket cuccok
+		s = socket.socket()
+		s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+		s.bind(('', port))
+		# maximum 50 kapcsolatot fogadjon el
+		# lehetne sokkal kevesebb is, mert a kapcsolat nem keep-alive,
+		# a kliensek kevés idő erejéig kapcsolódnak a szerverhez,
+		# legalábbis ezt tervezem
+		s.listen(50)
+		print ('<+> Szerver online')
+		while(1):
+			# fogadjon el minden beérkező kapcsolatot
+			conn, addr = s.accept()
+			# írja ki szépen a kliensek IP-címét,
+			# jó sok plusszal, hogy látszódjon, ki kapcsolódott
+			print ('+++' + addr[0] + '+++')
+			# threadingesen hívja meg a handle_client metódust
+			# gondolom külön-külön szálakat foglaljon le a handle_client metódusnak
+			threading.Thread(target = self.handle_client, args = (conn, addr)).start()
+			# threading cuccok, kliensek objektumát írja a
+			# kliens lista végére.
+			self.LOCK.acquire()
+			self.clients.append(conn)
+			self.LOCK.release()
+			time.sleep(0.1)
+
 	# mit csináljon a kliensekkel (egyenként)
 	def handle_client (self, client, addr):
 		# handshake
@@ -102,33 +137,3 @@ class PyWSock(PyWSockFunc):
 		self.clients.remove(client)
 		self.LOCK.release()
 		client.close()
-
-	# mindent elindít
-	# def start_server (self, port):
-	def __init__(self, port):
-		self.filetrunc()
-		# socket cuccok
-		s = socket.socket()
-		s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-		s.bind(('', port))
-		# maximum 50 kapcsolatot fogadjon el
-		# lehetne sokkal kevesebb is, mert a kapcsolat nem keep-alive,
-		# a kliensek kevés idő erejéig kapcsolódnak a szerverhez,
-		# legalábbis ezt tervezem
-		s.listen(50)
-		print ('<+> Szerver online')
-		while(1):
-			# fogadjon el minden beérkező kapcsolatot
-			conn, addr = s.accept()
-			# írja ki szépen a kliensek IP-címét,
-			# jó sok plusszal, hogy látszódjon, ki kapcsolódott
-			print ('+++' + addr[0] + '+++')
-			# threadingesen hívja meg a handle_client methódust
-			# gondolom külön-külön szálakat foglaljon le a handle_client methódusnak
-			threading.Thread(target = self.handle_client, args = (conn, addr)).start()
-			# threading cuccok, kliensek objektumát írja a
-			# kliens lista végére.
-			self.LOCK.acquire()
-			self.clients.append(conn)
-			self.LOCK.release()
-			time.sleep(0.1)

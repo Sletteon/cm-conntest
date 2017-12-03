@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 import socket, hashlib, base64, threading, time
+# =======
+# Ez az osztály kiegészíti a PyWSock osztályt ami a libservet.py fileban található
+# =======
 class PyWSockFunc:
 	# networking stringek
 	MAGIC = '258EAFA5-E914-47DA-95CA-C5AB0DC85B11'
@@ -21,7 +24,7 @@ class PyWSockFunc:
 		return client.send(resp_data)
 
 	# adatok befogadásához egy metódus
-	# na ezt a methódust sem értem
+	# na ezt a metódust sem értem
 	def recv_data (self, client):
 		# as a simple server, we expect to receive:
 		#    - all data at one go and one frame
