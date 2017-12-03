@@ -1,7 +1,7 @@
 **Szerver-kliens kapcsolatteszt**<br>
 [![Build Status](https://travis-ci.org/Sletteon/cm-conntest.svg?branch=master)](https://travis-ci.org/Sletteon/cm-conntest)<br>
 _A Travis a szervert teszteli, hogy nincs-e szintaxis hiba. A szerver.py minden osztályt meghív, tehát azok <br>
-beolvasásakor kiderül, elgépeltem-e valamit. (tudom, nincs sok értelme, mert én is lefuttatom a kódot, <br>
+beolvasásakor kiderül, elrontottam-e valamit. (tudom, nincs sok értelme, mert én is lefuttatom a kódot, <br>
 de nemrég fedeztem ezt fel, és nagyon tetszik)_<br><br>
 **Hasznos linkek**<br>
 [PhoneGap dokumentáció](http://docs.phonegap.com/)<br>
