@@ -1,5 +1,4 @@
 language: python
-os: osx
 python:
   - "2.3"
   - "2.4"
@@ -19,3 +18,4 @@ before_install: cd szerver/ && sudo chmod +x server.py
 script:
   - ./server.py travis
 sudo: enabled
+ö
