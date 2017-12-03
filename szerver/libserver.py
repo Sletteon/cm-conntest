@@ -37,17 +37,17 @@ class PyWSock(PyWSockFunc):
     def __init__(self, port):
         self.filetrunc()
         # socket cuccok
-        s = socket.socket()
-        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        s.bind(('', port))
+        socketObj = socket.socket()
+        socketObj.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        socketObj.bind(('', port))
         # maximum 50 kapcsolatot fogadjon el
         # lehetne sokkal kevesebb is, mert a kapcsolat nem keep-alive,
         # a kliensek kevés idő erejéig kapcsolódnak a szerverhez,
         # legalábbis ezt tervezem
-        s.listen(50)
+        socketObj.listen(50)
         print('<+> Szerver online')
         while 1:
-            conn, addr = s.accept()
+            conn, addr = socketObj.accept()
             # írja ki szépen a kliensek IP-címét,
             # jó sok plusszal, hogy látszódjon, ki kapcsolódott
             print('+++' + addr[0] + '+++')
@@ -111,13 +111,13 @@ class PyWSock(PyWSockFunc):
                 # ne egye meg a CPU-t
                 time.sleep(0.1)
 
-        except Exception as e:
+        except Exception as error:
             # ha valami hiba történt, írja ki
             # debughoz hasznos, de gyakran kiírja,
             # hogy adatolvasási hiba
             # és mindig beilleszt egy kéretlen newlinet,
             # hacsak nem ír ki valamit
-            print(e)
+            print(error)
             # ha nem írunk ki semmit, ne történjen semmi
             # ha tényleg nincs szükségünk az elöbbi printre,
             # ki lehet a try-t törölni
