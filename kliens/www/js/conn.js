@@ -123,11 +123,11 @@ function getDataFromHTMLAndSendGetCommand(separatorChar){
 }
 
 document.getElementById("getButton").onclick = function() {
-	getDataFromHTMLAndSendGetCommand(";");
+	getDataFromHTMLAndSendGetCommand("<|>");
 };
 // ha megnyomják ezt a gombot, futtassa le ezt az anonim funkciót
 document.getElementById("connButton").onclick = function() {
-    getDataFromHTMLAndSendSetCommand(";");
+    getDataFromHTMLAndSendSetCommand("<|>");
 };
 // ha a gombok alatti szövegre kattintanak, törölje a felhasználónevet,
 // és frissítse az oldalt

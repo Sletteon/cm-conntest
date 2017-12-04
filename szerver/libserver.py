@@ -82,7 +82,7 @@ class PyWSock(PyWSockFunc):
                 EFileTart = EFile.readlines()
                 JFileTart = JFile.readlines()
 
-                splitdata = data.split(';')
+                splitdata = data.split('<|>')
                 print('Felhasználónév: ' + splitdata[0])
 
                 if splitdata[1] == 'set':
