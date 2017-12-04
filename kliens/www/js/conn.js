@@ -38,6 +38,7 @@ window.onload = function() {
             break;
     }
 }
+
 // ha az online paraméter igaz, legyen zöld a connState,
 // de ha hamis, legyen piros
 // ja, meg írja ki a kapcsolódási állapotot
@@ -66,15 +67,19 @@ function connect(message, set) {
         var wsURL = "ws://" + IPaddress + ":" + Port + "/";
         // csináljon egy connection objektumot, és nyissa meg az előzőleg összedobott linkkel
         var connection = new WebSocket(wsURL);
+
     } catch (err) {
         alert('Hiba:' + err)
     }
+
     connection.onopen = function() {
         if (set) {
             connection.send(UName + ';set;' + het + ';' + message);
             networkStatus(true);
+
             connection.close();
             networkStatus(false);
+
         } else {
             connection.send(UName + ';get;' + het + ';');
             networkStatus(true)
@@ -82,17 +87,20 @@ function connect(message, set) {
             // connection.close();
         }
     };
+
     // ha vmi hibát kaptunk, írja ki a consoleba
     // nem valami hasznos, mert csak  ezt írja ki: [Socket object]
     connection.onerror = function(error) {
         console.log('WebSocket hiba ' + error);
     };
     // ha kaptunk vmit a szervertől, írja ki a logba és írja ki a gombok alatti p tagbe
-    connection.onmessage = function(e) {
+    connection.onmessage = function(gotMessage) {
         networkStatus(true);
+
         var gotList = [];
-        console.log(e.data);
-        gotList.push(e.data);
+        console.log(gotMessage.data);
+        gotList.push(gotMessage.data);
+
         document.getElementById("socket").innerHTML = gotList;
     };
     return UName + ';set;' + het + ';' + message;
@@ -105,8 +113,8 @@ document.getElementById("getButton").onclick = function() {
 // ha megnyomják ezt a gombot, futtassa le ezt az anonim funkciót
 document.getElementById("connButton").onclick = function() {
     // nap illetve a hét lekérése
-    var n = document.getElementById("nap");
-    var nap = n.options[n.selectedIndex].value;
+    var napSelect = document.getElementById("nap");
+    var nap = napSelect.options[napSelect.selectedIndex].value;
     // tantárgy, anyag
     var tant = document.getElementById("tantargy").value;
     var anyag = document.getElementById("anyag").value;
@@ -121,6 +129,6 @@ document.getElementById("connButton").onclick = function() {
 // ha a gombok alatti szövegre kattintanak, törölje a felhasználónevet,
 // és frissítse az oldalt
 document.getElementById("unameDel").onclick = function() {
-    window.localStorage.removeItem("uname");
+    window.localStorage.removeItem("UName");
     location.reload(false);
 };
