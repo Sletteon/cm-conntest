@@ -30,6 +30,15 @@
     },
     "cordova-plugin-dialogs": {
       "PACKAGE_NAME": "com.sletteon.cm_client"
+    },
+    "cordova-plugin-geolocation": {
+      "PACKAGE_NAME": "com.sletteon.cm_client"
+    },
+    "cordova-plugin-globalization": {
+      "PACKAGE_NAME": "com.sletteon.cm_client"
+    },
+    "cordova-plugin-inappbrowser": {
+      "PACKAGE_NAME": "com.sletteon.cm_client"
     }
   },
   "dependent_plugins": {
