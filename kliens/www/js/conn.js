@@ -1,9 +1,9 @@
 window.onload = function() {
-    var uName = window.localStorage.getItem("uName");
+    var UName = window.localStorage.getItem("UName");
 	// amennyiben nincs felhnév mentve, prompttal kérjen egyet
-    if (uName == null) {
-        uName = prompt("Add meg a beceneved:");
-        window.localStorage.setItem("uName", uName);
+    if (UName == null) {
+        UName = prompt("Add meg a beceneved:");
+        window.localStorage.setItem("UName", UName);
     }
     // mikor betöltődik az oldal, állítsa be a mutató kurzort a
     // felhnév törléshez, és fehéret a kapcsolódás állapot szövegéhez
@@ -11,10 +11,10 @@ window.onload = function() {
     document.getElementById("connState").style.color = "white";
 
 	// kérje le a napot, és állítsa be a nap ID-jű selectet
-    var d = new Date();
-    var n = d.getDay();
+    var dateObj = new Date();
+    var nap = dateObj.getDay();
 
-    switch (n) {
+    switch (nap) {
         case 0:
             document.getElementById("nap").value = "K";
             break;
@@ -52,34 +52,31 @@ function networkStatus(online) {
     }
 }
 
-function conn(message, set) {
-    // kérje el változókba az IP-t és a portot
+function connect(message, set) {
+
     var IPaddress = document.getElementById("IP").value;
     var Port = document.getElementById("Port").value;
-    // kérje le a felhnevet
-    var uName = window.localStorage.getItem("uName");
-    // ez a hét, vagy a jövő hét
-    var h = document.getElementById("het");
-    var het = h.options[h.selectedIndex].value;
+
+    var UName = window.localStorage.getItem("UName");
+
+    var hetSelect = document.getElementById("het");
+    var het = hetSelect.options[hetSelect.selectedIndex].value;
+
     try {
-        // rakja össze az IP-t és a portot egy link formájában
         var wsURL = "ws://" + IPaddress + ":" + Port + "/";
         // csináljon egy connection objektumot, és nyissa meg az előzőleg összedobott linkkel
         var connection = new WebSocket(wsURL);
     } catch (err) {
         alert('Hiba:' + err)
     }
-    // ha kapcsolat létesült
     connection.onopen = function() {
-        // ha a set boolean igaz, küldje el a message paramétert set-tel
-        // ellenben, ha hamis, gettel küldje el
         if (set) {
-            connection.send(uName + ';set;' + het + ';' + message);
+            connection.send(UName + ';set;' + het + ';' + message);
             networkStatus(true);
             connection.close();
             networkStatus(false);
         } else {
-            connection.send(uName + ';get;' + het + ';');
+            connection.send(UName + ';get;' + het + ';');
             networkStatus(true)
             // ha bezárjuk a kapcsolatot, csak 1 parancsot kapunk vissza
             // connection.close();
@@ -98,12 +95,12 @@ function conn(message, set) {
         gotList.push(e.data);
         document.getElementById("socket").innerHTML = gotList;
     };
-    return uName + ';set;' + het + ';' + message;
+    return UName + ';set;' + het + ';' + message;
 }
-// ha le akarjuk kérni, mi történt ezen a héten, hívja meg a conn funkciót
+// ha le akarjuk kérni, mi történt ezen a héten, hívja meg a connect funkciót
 // üres message-vel, illetve mi nem szeretnénk vmit beállítani, csak lekérdezni
 document.getElementById("getButton").onclick = function() {
-    conn("", false);
+    connect("", false);
 }
 // ha megnyomják ezt a gombot, futtassa le ezt az anonim funkciót
 document.getElementById("connButton").onclick = function() {
@@ -115,10 +112,10 @@ document.getElementById("connButton").onclick = function() {
     var anyag = document.getElementById("anyag").value;
     // minden megadott adat egyesítése, illetve ezek elválasztása pontosvesszővel
     var mess = nap + ';' + tant + ';' + anyag + ';'
-    // végül hívja meg a conn funkciót az előbb összeállított stringgel,
+    // végül hívja meg a connect funkciót az előbb összeállított stringgel,
     // és most be szeretnénk írni vmi a szerverre
 
-    document.getElementById("socket").innerHTML = conn(mess, true);
+    document.getElementById("socket").innerHTML = connect(mess, true);
 
 };
 // ha a gombok alatti szövegre kattintanak, törölje a felhasználónevet,
