@@ -53,78 +53,99 @@ function networkStatus(online) {
     }
 }
 
-function connect(message, set) {
+function connect() {
+	var IPaddress = document.getElementById("IP").value;
+	var Port = document.getElementById("Port").value;
 
-    var IPaddress = document.getElementById("IP").value;
-    var Port = document.getElementById("Port").value;
-
-    var UName = window.localStorage.getItem("UName");
-
-    var hetSelect = document.getElementById("het");
-    var het = hetSelect.options[hetSelect.selectedIndex].value;
-
-    try {
+	try {
         var wsURL = "ws://" + IPaddress + ":" + Port + "/";
-        // csináljon egy connection objektumot, és nyissa meg az előzőleg összedobott linkkel
         var connection = new WebSocket(wsURL);
 
     } catch (err) {
         alert('Hiba:' + err)
     }
 
-    connection.onopen = function() {
-        if (set) {
-            connection.send(UName + ';set;' + het + ';' + message);
-            networkStatus(true);
-
-            connection.close();
-            networkStatus(false);
-
-        } else {
-            connection.send(UName + ';get;' + het + ';');
-            networkStatus(true)
-            // ha bezárjuk a kapcsolatot, csak 1 parancsot kapunk vissza
-            // connection.close();
-        }
-    };
-
-    // ha vmi hibát kaptunk, írja ki a consoleba
-    // nem valami hasznos, mert csak  ezt írja ki: [Socket object]
-    connection.onerror = function(error) {
-        console.log('WebSocket hiba ' + error);
-    };
-    // ha kaptunk vmit a szervertől, írja ki a logba és írja ki a gombok alatti p tagbe
-    connection.onmessage = function(gotMessage) {
-        networkStatus(true);
-
-        var gotList = [];
-        console.log(gotMessage.data);
-        gotList.push(gotMessage.data);
-
-        document.getElementById("socket").innerHTML = gotList;
-    };
-    return UName + ';set;' + het + ';' + message;
+	return connection;
 }
+
+function getDataFromHTMLAndSendSetCommand(separatorChar){
+
+    var napSelect = document.getElementById("nap");
+    var nap = napSelect.options[napSelect.selectedIndex].value;
+
+    var tant = document.getElementById("tantargy").value;
+    var anyag = document.getElementById("anyag").value;
+
+    var UName = window.localStorage.getItem("UName");
+
+    var hetSelect = document.getElementById("het");
+    var het = hetSelect.options[hetSelect.selectedIndex].value;
+
+	connObj = connect()
+    connObj.onopen = function() {
+		// parancs sorrend ha | a separatorChar:
+		// UName|set|het|nap|tant|anyag|
+    	connObj.send(
+			UName + separatorChar + 'set' +
+	   		separatorChar + het + separatorChar + nap + separatorChar +
+			tant + separatorChar + anyag + separatorChar
+		);
+       networkStatus(true);
+
+       connObj.close();
+       networkStatus(false);
+    }
+
+}
+function getDataFromHTMLAndSendGetCommand(separatorChar){
+	var IPaddress = document.getElementById("IP").value;
+    var Port = document.getElementById("Port").value;
+
+    var UName = window.localStorage.getItem("UName");
+
+    var hetSelect = document.getElementById("het");
+    var het = hetSelect.options[hetSelect.selectedIndex].value;
+	connObj = connect()
+	connObj.onopen = function() {
+		connObj.send(
+			UName + separatorChar + 'get' + separatorChar + het + separatorChar
+		);
+		connObj.onmessage = function(gotMessage) {
+		    networkStatus(true);
+
+		    var gotList = [];
+        	console.log(gotMessage.data);
+		    gotList.push(gotMessage.data);
+
+        	document.getElementById("socket").innerHTML = gotList;
+		}
+	}
+}
+
+// function connect(message, set) {
+//     connection.onerror = function(error) {
+//         console.log('WebSocket hiba ' + error);
+//     };
+//     // ha kaptunk vmit a szervertől, írja ki a logba és írja ki a gombok alatti p tagbe
+//     connection.onmessage = function(gotMessage) {
+//         networkStatus(true);
+//
+//         var gotList = [];
+//         console.log(gotMessage.data);
+//         gotList.push(gotMessage.data);
+//
+//         document.getElementById("socket").innerHTML = gotList;
+//     };
+//     return UName + ';set;' + het + ';' + message;
+// }
 // ha le akarjuk kérni, mi történt ezen a héten, hívja meg a connect funkciót
 // üres message-vel, illetve mi nem szeretnénk vmit beállítani, csak lekérdezni
 document.getElementById("getButton").onclick = function() {
-    connect("", false);
-}
+	getDataFromHTMLAndSendGetCommand(";");
+};
 // ha megnyomják ezt a gombot, futtassa le ezt az anonim funkciót
 document.getElementById("connButton").onclick = function() {
-    // nap illetve a hét lekérése
-    var napSelect = document.getElementById("nap");
-    var nap = napSelect.options[napSelect.selectedIndex].value;
-    // tantárgy, anyag
-    var tant = document.getElementById("tantargy").value;
-    var anyag = document.getElementById("anyag").value;
-    // minden megadott adat egyesítése, illetve ezek elválasztása pontosvesszővel
-    var mess = nap + ';' + tant + ';' + anyag + ';'
-    // végül hívja meg a connect funkciót az előbb összeállított stringgel,
-    // és most be szeretnénk írni vmi a szerverre
-
-    document.getElementById("socket").innerHTML = connect(mess, true);
-
+    getDataFromHTMLAndSendSetCommand(";");
 };
 // ha a gombok alatti szövegre kattintanak, törölje a felhasználónevet,
 // és frissítse az oldalt
