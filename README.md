@@ -4,6 +4,8 @@ _A Travis a szervert teszteli, hogy nincs-e szintaxis hiba. A szerver.py minden 
 beolvasásakor kiderül, elrontottam-e valamit. (Tudom, nincs sok értelme, mert én is lefuttatom a kódot,<br>
 de nemrég fedeztem ezt fel, és nagyon tetszik.)_<br>
 <br>
+**Ismert hibák:**<br>
+Ha a kliens csatlakozás gombját túl gyorsan nyomjuk le, akkor csatlakozás közben történik az új csatlakozás, ami miatt nem küld el semmit a kliens. A végleges terméknél nem lesz ez a hiba, ugyanis ott nem lehet ilyen gyorsan parancsot küldeni.<br><br>
 **Hasznos linkek**<br>
 [PhoneGap dokumentáció](http://docs.phonegap.com/)<br>
 [Cordova dokumentáció](https://cordova.apache.org/docs/en/latest/)<br>

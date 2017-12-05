@@ -39,6 +39,21 @@
     },
     "cordova-plugin-inappbrowser": {
       "PACKAGE_NAME": "com.sletteon.cm_client"
+    },
+    "cordova-plugin-network-information": {
+      "PACKAGE_NAME": "com.sletteon.cm_client"
+    },
+    "cordova-plugin-splashscreen": {
+      "PACKAGE_NAME": "com.sletteon.cm_client"
+    },
+    "cordova-plugin-statusbar": {
+      "PACKAGE_NAME": "com.sletteon.cm_client"
+    },
+    "cordova-plugin-vibration": {
+      "PACKAGE_NAME": "com.sletteon.cm_client"
+    },
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "com.sletteon.cm_client"
     }
   },
   "dependent_plugins": {

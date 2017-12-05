@@ -98,7 +98,8 @@ class PyWSockFunc:
     # mivel kétszer kellett ugyanazt írnom, gondoltam,
     # talán egyszerübben fut, ha külön metódusba írom
     def ment(self, xfile, data):
-        xfile.write(data + '\n')
+		xfile.write(data + '\n')
+		xfile.close()
 
     # fájlok tartalmának törlése, ha nincs meg a fájl,
     # hozza létre azt.

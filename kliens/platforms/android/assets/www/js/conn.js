@@ -122,30 +122,12 @@ function getDataFromHTMLAndSendGetCommand(separatorChar){
 	}
 }
 
-// function connect(message, set) {
-//     connection.onerror = function(error) {
-//         console.log('WebSocket hiba ' + error);
-//     };
-//     // ha kaptunk vmit a szervertől, írja ki a logba és írja ki a gombok alatti p tagbe
-//     connection.onmessage = function(gotMessage) {
-//         networkStatus(true);
-//
-//         var gotList = [];
-//         console.log(gotMessage.data);
-//         gotList.push(gotMessage.data);
-//
-//         document.getElementById("socket").innerHTML = gotList;
-//     };
-//     return UName + ';set;' + het + ';' + message;
-// }
-// ha le akarjuk kérni, mi történt ezen a héten, hívja meg a connect funkciót
-// üres message-vel, illetve mi nem szeretnénk vmit beállítani, csak lekérdezni
 document.getElementById("getButton").onclick = function() {
-	getDataFromHTMLAndSendGetCommand(";");
+	getDataFromHTMLAndSendGetCommand("<|>");
 };
 // ha megnyomják ezt a gombot, futtassa le ezt az anonim funkciót
 document.getElementById("connButton").onclick = function() {
-    getDataFromHTMLAndSendSetCommand(";");
+    getDataFromHTMLAndSendSetCommand("<|>");
 };
 // ha a gombok alatti szövegre kattintanak, törölje a felhasználónevet,
 // és frissítse az oldalt

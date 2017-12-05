@@ -104,10 +104,11 @@ class PyWSock(PyWSockFunc):
                     if splitdata[2] == 'E':
                         print('Hét: Ez a hét')
                         self.listatKuld(EFileTart)
+                        EFile.close()
                     if splitdata[2] == 'J':
                         print('Hét: Jövő hét')
                         self.listatKuld(JFileTart)
-                EFile.close()
+                        JFile.close()
                 # ne egye meg a CPU-t
                 time.sleep(0.1)
 
