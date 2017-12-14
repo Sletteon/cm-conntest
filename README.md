@@ -3,12 +3,9 @@
 [PhoneGap dokumentáció](http://docs.phonegap.com/)<br>
 [Cordova dokumentáció](https://cordova.apache.org/docs/en/latest/)<br>
 [Legstabilabb kliens apk](https://build.phonegap.com/apps/2893794/download/android/?qr_key=a5nry2YDex911S8dvqJu)<br>
+**Függőségek:**<br>
+flask, flask_cors<br>
 **Szerver:**<br>
-A szerver mappában 3 fájl található; egy server.py, libserver.py és az ex[tending]libserver.py.<br>
-A server.py-t kell futtatni, hogy elinduljon a szerver.<br>
-A serverlib-ben lévő PyWSock osztályt kiegészíti a PyWSockFunc (exlibserver.py) osztály, amiben a handle_clients methóduson kívül minden egyéb funkciót tárolunk.<br>
-A szerver nem csak LAN hálózatokon működik.<br>
-A szerver egyenlőre elfogadja a kliens csatlakozását, handshake történik, amit a kliens által megadott szövegek kiírása követ.<br>
 Egy csatlakozásnál csak egyszer fogadhat adatot a szerver, így ezt kicselezve, majd minden rögzített változásnál egy új kapcsolat jön létre.<br>
 Ez még azért is jó, mert így lehetséges lesz az offline munka.<br>
 A szerver elmenti, amit kapott set parancsokat, és egy get paranccsal elérhető ez a lista.<br>
