@@ -53,40 +53,27 @@ function networkStatus(online) {
     }
 }
 
-function objectifyForm(formArray) {
-    var returnArray = {};
-    for (var i = 0; i < formArray.length; i++) {
-        returnArray[formArray[i]['name']] = formArray[i]['value'];
-    }
-    return returnArray;
-}
-
 function getUrl() {
     var IPaddress = document.getElementById("IP").value;
     var Port = document.getElementById("Port").value;
 
-    return "http://" + IPaddress + ":" + Port
+    return "http://" + IPaddress + ":" + Port;
 }
 
-function receive() {
-    var IPaddress = document.getElementById("IP").value;
-    var Port = document.getElementById("Port").value;
-
+function AnyagLekeres() {
     $.ajax({
-        type: "get",
-        url: getUrl(),
-        success: function(responseData, textStatus, jqXHR) {
-            document.getElementById("socket").innerHTML = responseData;
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert(errorThrown);
-            console.log(errorThrown);
-        }
-    })
+    	type: "get",
+    	url: getUrl(),
+    	success: function(responseData, textStatus, jqXHR) {
+        	document.getElementById("socket").innerHTML = responseData;
+    	},
+    	error: function(jqXHR, textStatus, errorThrown) {}
+    });
 }
 
 
-function getDataFromHTMLAndSendSetCommand() {
+
+function AnyagBeallitas() {
 
     var napSelect = document.getElementById("nap");
     var nap = napSelect.options[napSelect.selectedIndex].value;
@@ -101,7 +88,7 @@ function getDataFromHTMLAndSendSetCommand() {
         "tant": document.getElementById("tantargy").value,
         "anyag": document.getElementById("anyag").value
     };
-    console.log(JSON.stringify(sendingJSON))
+    console.log(JSON.stringify(sendingJSON));
 
     $.ajax({
         type: "post",
@@ -114,40 +101,15 @@ function getDataFromHTMLAndSendSetCommand() {
             console.log(textStatus);
             console.log(errorThrown);
         }
-    })
-}
-
-function getDataFromHTMLAndSendGetCommand() {
-    var IPaddress = document.getElementById("IP").value;
-    var Port = document.getElementById("Port").value;
-
-    var UName = window.localStorage.getItem("UName");
-
-    var hetSelect = document.getElementById("het");
-    var het = hetSelect.options[hetSelect.selectedIndex].value;
-    connObj = connect()
-    connObj.onopen = function() {
-        connObj.send(
-            UName + separatorChar + 'get' + separatorChar + het + separatorChar
-        );
-        connObj.onmessage = function(gotMessage) {
-            networkStatus(true);
-
-            var gotList = [];
-            console.log(gotMessage.data);
-            gotList.push(gotMessage.data);
-
-            document.getElementById("socket").innerHTML = gotList;
-        }
-    }
+    });
 }
 
 document.getElementById("getButton").onclick = function() {
-    alert("Még nincs kész.")
+    AnyagLekeres();
 };
 // ha megnyomják ezt a gombot, futtassa le ezt az anonim funkciót
 document.getElementById("connButton").onclick = function() {
-    getDataFromHTMLAndSendSetCommand();
+    AnyagBeallitas();
 };
 // ha a gombok alatti szövegre kattintanak, törölje a felhasználónevet,
 // és frissítse az oldalt
