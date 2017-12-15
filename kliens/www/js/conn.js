@@ -66,6 +66,7 @@ function AnyagLekeres() {
     	url: getUrl(),
     	success: function(responseData, textStatus, jqXHR) {
         	document.getElementById("socket").innerHTML = responseData;
+			console.log(responseData);
     	},
     	error: function(jqXHR, textStatus, errorThrown) {}
     });
