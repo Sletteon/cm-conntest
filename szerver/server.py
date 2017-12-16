@@ -12,15 +12,11 @@ app = Flask(__name__, static_folder = STATIC_FOLDER)
 # Kell, ha nincs akkor kliens hibát kap
 CORS(app, resources={r'/*': {'origins': '*'}})
 
-# Ezzel választja el a fájlokban az adatokat
-separatorChar = '<|>'
-
 # Törölje a megnyitott fájlok tartalmát
 def filetrunc():
 	with open('debug/data.json', 'w') as efile:
 		efile.truncate()
 		efile.close()
-
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -30,7 +26,7 @@ def index():
 		# [*] jancsi (jancsi.ip.címe.briós) bejegyzése:
 		print('\n' + '[*] ' + str(gotJSON['uname']) + ' (' + clientIP + ')' + ' bejegyzése: ')
 		# Próbálja meg a beküldött adatot (JSON) szétválasztani,
-		# Lokális változókat létrehozva
+		# lokális változókat létrehozva
 		try:
 			uname = gotJSON['uname']
 			het = gotJSON['het']
@@ -47,6 +43,7 @@ def index():
 		print('--- Tantárgy: ' + str(tant))
 		print('--- Anyag: ' + str(anyag))
 
+		# Adatok mentése
 		with open('debug/data.json', 'a') as file:
 			json.dump(gotJSON, file)
 			file.write('\n')
