@@ -14,7 +14,7 @@ CORS(app, resources={r'/*': {'origins': '*'}})
 
 # Törölje a megnyitott fájlok tartalmát
 def filetrunc():
-	with open('debug/data.json', 'w') as efile:
+	with open('debug/data.json', 'w', encoding='utf-8') as efile:
 		efile.truncate()
 		efile.close()
 
@@ -44,8 +44,8 @@ def index():
 		print('--- Anyag: ' + str(anyag))
 
 		# Adatok mentése
-		with open('debug/data.json', 'a') as file:
-			json.dump(gotJSON, file)
+		with open('debug/data.json', 'a', encoding='utf-8') as file:
+			json.dump(gotJSON, file, ensure_ascii=False)
 			file.write('\n')
 
 		return Response(json.dumps('SUCCESS'), mimetype='application/json')
@@ -54,7 +54,7 @@ def index():
 		print('\n' + '[*] Anyaglekérés: ' + clientIP)
 
 		# Nyissa meg a fájlt, tartalmát küldje el
-		with open('debug/data.json', 'r') as file:
+		with open('debug/data.json', 'r', encoding='utf-8') as file:
 			fileList = file.readlines()
 			return Response("\n".join(fileList))
 
