@@ -8,7 +8,6 @@ window.onload = function() {
     // mikor betöltődik az oldal, állítsa be a mutató kurzort a
     // felhnév törléshez, és fehéret a kapcsolódás állapot szövegéhez
     document.getElementById("unameDel").style.cursor = "pointer";
-    document.getElementById("connState").style.color = "white";
 
     // kérje le a napot, és állítsa be a nap ID-jű selectet
     var dateObj = new Date();
@@ -39,20 +38,6 @@ window.onload = function() {
     }
 }
 
-// ha az online paraméter igaz, legyen zöld a connState,
-// de ha hamis, legyen piros
-// ja, meg írja ki a kapcsolódási állapotot
-function networkStatus(online) {
-    if (online) {
-        document.getElementById("connState").style.backgroundColor = "LimeGreen";
-        document.getElementById("connState").innerHTML = "Online";
-    }
-    if (online === false) {
-        document.getElementById("connState").style.backgroundColor = "red";
-        document.getElementById("connState").innerHTML = "Offline";
-    }
-}
-
 function getUrl() {
     var IPaddress = document.getElementById("IP").value;
     var Port = document.getElementById("Port").value;
@@ -62,17 +47,15 @@ function getUrl() {
 
 function AnyagLekeres() {
     $.ajax({
-    	type: "get",
-    	url: getUrl(),
-    	success: function(responseData, textStatus, jqXHR) {
-        	document.getElementById("socket").innerHTML = responseData;
-			console.log(responseData);
-    	},
-    	error: function(jqXHR, textStatus, errorThrown) {}
+        type: "get",
+        url: getUrl(),
+        success: function(responseData, textStatus, jqXHR) {
+            document.getElementById("socket").innerHTML = responseData;
+            console.log('Szerver: ' + '\n' + responseData + '\n ---');
+        },
+        error: function(jqXHR, textStatus, errorThrown) {}
     });
 }
-
-
 
 function AnyagBeallitas() {
 
@@ -89,7 +72,7 @@ function AnyagBeallitas() {
         "tant": document.getElementById("tantargy").value,
         "anyag": document.getElementById("anyag").value
     };
-    console.log(JSON.stringify(sendingJSON));
+    console.log('Küldendő: ' + '\n' + JSON.stringify(sendingJSON) + '\n ---');
 
     $.ajax({
         type: "post",
@@ -108,7 +91,7 @@ function AnyagBeallitas() {
 document.getElementById("getButton").onclick = function() {
     AnyagLekeres();
 };
-// ha megnyomják ezt a gombot, futtassa le ezt az anonim funkciót
+
 document.getElementById("connButton").onclick = function() {
     AnyagBeallitas();
 };
