@@ -53,7 +53,9 @@ function AnyagLekeres() {
             document.getElementById("socket").innerHTML = responseData;
             console.log('Szerver: ' + '\n' + responseData + '\n ---');
         },
-        error: function(jqXHR, textStatus, errorThrown) {}
+        error: function(jqXHR, textStatus, errorThrown) {
+			alert("Hiba a kapcsolat létesítésekor. (lásd konzol)");
+		}
     });
 }
 
@@ -80,10 +82,10 @@ function AnyagBeallitas() {
         data: JSON.stringify(sendingJSON),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        success: function(responseData, textStatus, jqXHR) {},
+        success: function(responseData, textStatus, jqXHR) {
+		},
         error: function(jqXHR, textStatus, errorThrown) {
-            console.log(textStatus);
-            console.log(errorThrown);
+			alert("Hiba a kapcsolat létesítésekor. (lásd konzol)");
         }
     });
 }
