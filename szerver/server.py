@@ -38,8 +38,8 @@ def onReceivePost(clientIP):
 
 	except KeyError:
 		return Response(json.dumps({'ERROR': 'JSON ERROR'}), status=422, mimetype='application/json')
-
 	return Response(json.dumps('SUCCESS'), mimetype='application/json')
+
 def onReceiveGet(clientIP):
 	# [*] Hétlekérés: jancsi.ip.címe.túróstáska
 	print('\n' + '[*] Anyaglekérés: ' + clientIP)
