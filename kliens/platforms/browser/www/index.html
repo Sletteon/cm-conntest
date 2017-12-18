@@ -1,25 +1,37 @@
 <!DOCTYPE html>
-<!-- hasznos cumó: https://stackoverflow.com/questions/18240358/html5-websocket-connecting-to-python -->
+<!-- hatalmas segítség: https://stackoverflow.com/questions/18240358/html5-websocket-connecting-to-python -->
 <html>
-        <head>
-                <meta charset="UTF-8">
-                <title>csatlakozz a python szerverre</title>
-                <!-- google jqueryje -->
-                <script src="js/jquery.min.js"></script>
-                <!-- <script type="text/javascript" src="cordova.js"></script> -->
-                <link rel="stylesheet" type="text/css" href="css/index.css" />
-        </head>
-        <body>
-        <center>
-                <h1>cm kapcsolatteszt</h1>
-		<p id="connState" class="connState">helo</p>
-                <input type="text" id="IP" placeholder="IP-cím" value="localhost">
-                <input type="number" id="Port" value="5000" >
+
+<head>
+	<!-- mobil eszközökön töltse ki a tejles szélességet -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- UTF-8-as karakterkódolás (magyar ékezetek miatt) -->
+	<meta charset="UTF-8">
+	<!-- webolda címe (nem látszódik alkalmazásban) -->
+	<title>csatlakozz a python szerverre</title>
+	<!-- jquery 2.2.2 -->
+	<script src="js/jquery.min.js"></script>
+	<!-- <script type="text/javascript" src="cordova.js"></script> -->
+	<!-- index.css meghívása -->
+	<link rel="stylesheet" type="text/css" href="css/index.css" />
+</head>
+
+<body>
+	<center>
+		<h1>cm kapcsolatteszt</h1>
+		<!-- ide kerül az online/offline felirat, amit js manipulál (stílusát is) -->
+		<p id="connState" class="connState">nincs javascript támogatás</p>
+		<!-- IP-cím -->
+		<input type="text" id="IP" placeholder="IP-cím" value="localhost">
+		<!-- Port -->
+		<input type="number" id="Port" value="5000">
 		<br><br>
+		<!-- Ez a hét/Jövő hét legördülő listája -->
 		<select name="melyik_het" id="het">
 			<option value="E">Ez a hét</option>
 			<option value="J">Jövő hét</option>
 		</select>
+		<!-- Napok legördülő listája -->
 		<select name="nap" id="nap">
 			<option value="H">Hétfő</option>
 			<option value="K">Kedd</option>
@@ -27,16 +39,23 @@
 			<option value="C">Csütörtök</option>
 			<option value="P">Péntek</option>
 		</select>
+		<!-- Tantárgy -->
 		<input type="text" id="tantargy" placeholder="Tantárgy">
+		<!-- Anyag -->
 		<input type="text" id="anyag" placeholder="Anyag">
 		<br>
-                <button  class="button button1" id="connButton">Parancs küldése</button>
+		<!-- set parancs küldését szolgáló gomb -->
+		<button class="button button1" id="connButton">Parancs küldése</button>
+		<!-- get parancs küldését szolgáló gomb -->
 		<button class="button button1" id="getButton">Heti anyag lekérése</button>
-                <br>
-                <!-- ide fog megjelenni a szerver válasza -->
-                <div id="socket" class="ServerResp"></div>
-                <a id="unameDel">Felhasználónév törlése</a>
-        </center>
-        </body>
-                <script type="text/javascript" src="js/conn.js"></script>
+		<br>
+		<!-- ide fog megjelenni a szerver válasza -->
+		<div id="socket" class="ServerResp"></div>
+		<!-- Felhasználónév törlése "link" -->
+		<a id="unameDel">Felhasználónév törlése</a>
+	</center>
+</body>
+<!-- csak akkor hívja meg a javascriptet, ha már betöltődött a html -->
+<script type="text/javascript" src="js/conn.js"></script>
+
 </html>
