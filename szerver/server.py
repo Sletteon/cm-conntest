@@ -21,15 +21,18 @@ def filetrunc():
 def onReceivePost(clientIP):
 	gotJSON = request.get_json()
 	# [*] jancsi (jancsi.ip.címe.briós) bejegyzése:
-	print('\n' + '[*] ' + str(gotJSON['uname']) +
-		  ' (' + clientIP + ') ' + 'bejegyzése: ')
+	try:
+		print('\n[*] %s (%s) bejegyzése:' %( str(gotJSON['uname']), clientIP))
+	except TypeError as e:
+		print(e)
+		return Response(json.dumps({'ERROR': 'ERROR READING RECEIVED MESSAGE'}), status=400, mimetype='application/json')
 
 	try:
 		# Adatok kiírása
-		print('--- Hét: ' + str(gotJSON['het']))
-		print('--- Nap: ' + str(gotJSON['nap']))
-		print('--- Tantárgy: ' + str(gotJSON['tant']))
-		print('--- Anyag: ' + str(gotJSON['anyag']))
+		print('--- Hét: %s' %(str(gotJSON['het'])))
+		print('--- Nap: %s' %(str(gotJSON['nap'])))
+		print('--- Tantárgy: %s' %(str(gotJSON['tant'])))
+		print('--- Anyag: %s' %(str(gotJSON['anyag'])))
 
 		# Adatok mentése
 		with open('debug/data.json', 'a', encoding='utf-8') as file:
@@ -38,11 +41,13 @@ def onReceivePost(clientIP):
 
 	except KeyError:
 		return Response(json.dumps({'ERROR': 'JSON ERROR'}), status=422, mimetype='application/json')
+	except TypeError:
+		return Response(json.dumps({'ERROR': 'ERROR READING RECEIVED MESSAGE'}), status=400, mimetype='application/json')
 	return Response(json.dumps('SUCCESS'), mimetype='application/json')
 
 def onReceiveGet(clientIP):
 	# [*] Hétlekérés: jancsi.ip.címe.túróstáska
-	print('\n' + '[*] Anyaglekérés: ' + clientIP)
+	print('\n[*] Anyaglekérés: %s' %(clientIP))
 
 	# Nyissa meg a fájlt, tartalmát küldje el
 	with open('debug/data.json', 'r', encoding='utf-8') as file:
@@ -64,6 +69,5 @@ if __name__ == '__main__':
 
 	# Pozitívum, ha már itt tartunk
 	# Lokális IP-cím lekérése zajlik a 'szerver fut' felirat mellett.
-	print('[+] Szerver fut: ' + (([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")]
-								  or [[(s.connect(("8.8.8.8", 53)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]]) + ["no IP found"])[0])
+	print('[+] Szerver fut: %s' %( (([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")] or [[(s.connect(("8.8.8.8", 53)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]]) + ["no IP found"])[0]))
 	app.run(host='0.0.0.0')
