@@ -2,9 +2,9 @@
 **Hasznos linkek**<br>
 [PhoneGap dokumentáció](http://docs.phonegap.com/)<br>
 [Cordova dokumentáció](https://cordova.apache.org/docs/en/latest/)<br>
-<!-- [Legstabilabb kliens apk](https://build.phonegap.com/apps/2893794/download/android/?qr_key=a5nry2YDex911S8dvqJu)<br> -->
+[Legstabilabb kliens apk](https://build.phonegap.com/apps/2934479/download/android)<br>
 **Függőségek:**<br>
-flask, flask_cors<br>v
+flask, flask_cors<br>
 **Szerver:**<br>
 Amikor a szerverre csatlakozik valaki, megnézi, amennyiben GET eljárást használ a kliens, valószínűleg le szeretné kérni az elmentett adatokat,
 így azokat JSON formátumban elküldi a szerver.
