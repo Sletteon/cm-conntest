@@ -1,6 +1,6 @@
 window.onload = function() {
     var UName = window.localStorage.getItem("UName");
-	// amennyiben nincs felhnév mentve, prompttal kérjen egyet
+    // amennyiben nincs felhnév mentve, prompttal kérjen egyet
     if (UName == null) {
         UName = prompt("Add meg a beceneved:");
         window.localStorage.setItem("UName", UName);
@@ -10,7 +10,7 @@ window.onload = function() {
     document.getElementById("unameDel").style.cursor = "pointer";
     document.getElementById("connState").style.color = "white";
 
-	// kérje le a napot, és állítsa be a nap ID-jű selectet
+    // kérje le a napot, és állítsa be a nap ID-jű selectet
     var dateObj = new Date();
     var nap = dateObj.getDay();
 
@@ -53,81 +53,64 @@ function networkStatus(online) {
     }
 }
 
-function connect() {
-	var IPaddress = document.getElementById("IP").value;
-	var Port = document.getElementById("Port").value;
+function getUrl() {
+    var IPaddress = document.getElementById("IP").value;
+    var Port = document.getElementById("Port").value;
 
-	try {
-        var wsURL = "ws://" + IPaddress + ":" + Port + "/";
-        var connection = new WebSocket(wsURL);
-
-    } catch (err) {
-        alert('Hiba:' + err)
-    }
-
-	return connection;
+    return "http://" + IPaddress + ":" + Port;
 }
 
-function getDataFromHTMLAndSendSetCommand(separatorChar){
+function AnyagLekeres() {
+    $.ajax({
+    	type: "get",
+    	url: getUrl(),
+    	success: function(responseData, textStatus, jqXHR) {
+        	document.getElementById("socket").innerHTML = responseData;
+			console.log(responseData);
+    	},
+    	error: function(jqXHR, textStatus, errorThrown) {}
+    });
+}
+
+
+
+function AnyagBeallitas() {
 
     var napSelect = document.getElementById("nap");
     var nap = napSelect.options[napSelect.selectedIndex].value;
 
-    var tant = document.getElementById("tantargy").value;
-    var anyag = document.getElementById("anyag").value;
-
-    var UName = window.localStorage.getItem("UName");
-
     var hetSelect = document.getElementById("het");
     var het = hetSelect.options[hetSelect.selectedIndex].value;
 
-	connObj = connect()
-    connObj.onopen = function() {
-		// parancs sorrend ha | a separatorChar:
-		// UName|set|het|nap|tant|anyag|
-    	connObj.send(
-			UName + separatorChar + 'set' +
-	   		separatorChar + het + separatorChar + nap + separatorChar +
-			tant + separatorChar + anyag + separatorChar
-		);
-       networkStatus(true);
+    var sendingJSON = {
+        "uname": window.localStorage.getItem("UName"),
+        "het": document.getElementById("het").options[document.getElementById("het").selectedIndex].value,
+        "nap": document.getElementById("nap").options[document.getElementById("nap").selectedIndex].value,
+        "tant": document.getElementById("tantargy").value,
+        "anyag": document.getElementById("anyag").value
+    };
+    console.log(JSON.stringify(sendingJSON));
 
-       connObj.close();
-       networkStatus(false);
-    }
-
-}
-function getDataFromHTMLAndSendGetCommand(separatorChar){
-	var IPaddress = document.getElementById("IP").value;
-    var Port = document.getElementById("Port").value;
-
-    var UName = window.localStorage.getItem("UName");
-
-    var hetSelect = document.getElementById("het");
-    var het = hetSelect.options[hetSelect.selectedIndex].value;
-	connObj = connect()
-	connObj.onopen = function() {
-		connObj.send(
-			UName + separatorChar + 'get' + separatorChar + het + separatorChar
-		);
-		connObj.onmessage = function(gotMessage) {
-		    networkStatus(true);
-
-		    var gotList = [];
-        	console.log(gotMessage.data);
-		    gotList.push(gotMessage.data);
-
-        	document.getElementById("socket").innerHTML = gotList;
-		}
-	}
+    $.ajax({
+        type: "post",
+        url: getUrl(),
+        data: JSON.stringify(sendingJSON),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function(responseData, textStatus, jqXHR) {},
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(textStatus);
+            console.log(errorThrown);
+        }
+    });
 }
 
 document.getElementById("getButton").onclick = function() {
-	getDataFromHTMLAndSendGetCommand("<|>");
+    AnyagLekeres();
 };
 // ha megnyomják ezt a gombot, futtassa le ezt az anonim funkciót
 document.getElementById("connButton").onclick = function() {
-    getDataFromHTMLAndSendSetCommand("<|>");
+    AnyagBeallitas();
 };
 // ha a gombok alatti szövegre kattintanak, törölje a felhasználónevet,
 // és frissítse az oldalt
