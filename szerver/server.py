@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import os, logging, socket
 from flask import Flask, request, Response, json

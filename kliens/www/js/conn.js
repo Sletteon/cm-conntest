@@ -48,7 +48,7 @@ function AnyagLekeres() {
         url: getUrl(),
         success: function(responseData, textStatus, jqXHR) {
             document.getElementById("socket").innerHTML = responseData;
-            console.log('Szerver: ' + '\n' + responseData + '\n ---');
+            console.log('Szerver: ' + '\n' + responseData + '\n -----');
         },
         error: function(jqXHR, textStatus, errorThrown) {
 			alert("Hiba a kapcsolat létesítésekor. (lásd konzol)");
@@ -71,7 +71,7 @@ function AnyagBeallitas() {
         "tant": document.getElementById("tantargy").value,
         "anyag": document.getElementById("anyag").value
     };
-    console.log('Küldendő: ' + '\n' + JSON.stringify(sendingJSON) + '\n ---');
+    console.log('Küldendő: ' + '\n' + JSON.stringify(sendingJSON) + '\n -----');
 
     $.ajax({
         type: "post",
