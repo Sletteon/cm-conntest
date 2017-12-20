@@ -1,6 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import os, logging, socket
+
+#######################################
+#	cm-kapcsolatteszt szerveroldali szkript
+#
+# 	Flask ügye, ha ez a gép egy kérést kap, akkor futtassa le az index() függvényt.
+# 	Amennyiben GET metódussal csatlakoztak kliensek erre a szerverre,
+#	lekérnek adatot, így a POST metódussal beküldött adatokat,
+#	JSON formában visszaszolgálja.
+#######################################
+
+import os, logging, socket, traceback
 from flask import Flask, request, Response, json
 from flask_cors import CORS
 
@@ -17,13 +27,22 @@ def filetrunc():
 		efile.truncate()
 		efile.close()
 
+# Fancy módon írja ki, hogy mi a hiba
+# Megjegyzés: azért traceback, mert az megmutatja a sorszámot,
+# ahol a hiba keletkezett
+def errorHandling(clientIP):
+	print('\nHiba történt egy kliensnél (%s):\n---------------traceback---------------' %(clientIP))
+	print(traceback.format_exc())
+	print('---------------traceback---------------')
+
 def onReceivePost(clientIP):
 	gotJSON = request.get_json()
-	# [*] jancsi (jancsi.ip.címe.briós) bejegyzése:
 	try:
+		# [*] jancsi (jancsi.ip.címe.briós) bejegyzése:
 		print('\n[*] %s (%s) bejegyzése:' %( str(gotJSON['uname']), clientIP))
-	except TypeError as e:
-		print(e)
+
+	except TypeError:
+		errorHandling(clientIP)
 		return Response(json.dumps({'ERROR': 'ERROR READING RECEIVED MESSAGE'}), status=400, mimetype='application/json')
 
 	try:
@@ -38,12 +57,14 @@ def onReceivePost(clientIP):
 			json.dump(gotJSON, file, ensure_ascii=False)
 			file.write('\n')
 
-	except KeyError as e:
-		print(e)
+	except KeyError:
+		errorHandling(clientIP)
 		return Response(json.dumps({'ERROR': 'JSON ERROR'}), status=422, mimetype='application/json')
-	except TypeError as e:
-		print(e)
+
+	except TypeError:
+		errorHandling(clientIP)
 		return Response(json.dumps({'ERROR': 'ERROR READING RECEIVED MESSAGE'}), status=400, mimetype='application/json')
+
 	return Response(json.dumps('SUCCESS'), mimetype='application/json')
 
 def onReceiveGet(clientIP):
@@ -52,7 +73,6 @@ def onReceiveGet(clientIP):
 
 	# Nyissa meg a fájlt, tartalmát küldje el
 	with open('debug/data.json', 'r', encoding='utf-8') as file:
-		#fileList = file.readlines()
 		return Response("\n".join(file.readlines()))
 
 @app.route('/', methods=['GET', 'POST'])
@@ -73,5 +93,5 @@ if __name__ == '__main__':
 	try:
 		print('[+] Szerver fut: %s' %( (([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")] or [[(s.connect(("8.8.8.8", 53)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]]) + ["no IP found"])[0]))
 	except:
-		print('[!] Szerver fut, de nem lehetet az IP-címet megállapítani.')
+		print('[!] Szerver fut, de nem lehetett az IP-címet megállapítani.')
 	app.run(host='0.0.0.0')
