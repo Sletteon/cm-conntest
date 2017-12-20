@@ -163,3 +163,7 @@ h1 {
 .connState {
     max-width: 50%;
 }
+
+.unameDel {
+	cursor: pointer;
+}

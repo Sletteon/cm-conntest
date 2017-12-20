@@ -5,9 +5,6 @@ window.onload = function() {
         UName = prompt("Add meg a beceneved:");
         window.localStorage.setItem("UName", UName);
     }
-    // mikor betöltődik az oldal, állítsa be a mutató kurzort a
-    // felhnév törléshez, és fehéret a kapcsolódás állapot szövegéhez
-    document.getElementById("unameDel").style.cursor = "pointer";
 
     // kérje le a napot, és állítsa be a nap ID-jű selectet
     var dateObj = new Date();
