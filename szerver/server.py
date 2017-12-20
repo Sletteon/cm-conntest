@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-import os
-import logging
-import socket
+import os, logging, socket
 from flask import Flask, request, Response, json
 from flask_cors import CORS
 
@@ -39,9 +37,11 @@ def onReceivePost(clientIP):
 			json.dump(gotJSON, file, ensure_ascii=False)
 			file.write('\n')
 
-	except KeyError:
+	except KeyError as e:
+		print(e)
 		return Response(json.dumps({'ERROR': 'JSON ERROR'}), status=422, mimetype='application/json')
-	except TypeError:
+	except TypeError as e:
+		print(e)
 		return Response(json.dumps({'ERROR': 'ERROR READING RECEIVED MESSAGE'}), status=400, mimetype='application/json')
 	return Response(json.dumps('SUCCESS'), mimetype='application/json')
 
@@ -69,5 +69,8 @@ if __name__ == '__main__':
 
 	# Pozitívum, ha már itt tartunk
 	# Lokális IP-cím lekérése zajlik a 'szerver fut' felirat mellett.
-	print('[+] Szerver fut: %s' %( (([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")] or [[(s.connect(("8.8.8.8", 53)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]]) + ["no IP found"])[0]))
+	try:
+		print('[+] Szerver fut: %s' %( (([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")] or [[(s.connect(("8.8.8.8", 53)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]]) + ["no IP found"])[0]))
+	except:
+		print('[!] Szerver fut, de nem lehetet az IP-címet megállapítani.')
 	app.run(host='0.0.0.0')
