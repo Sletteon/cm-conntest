@@ -4,7 +4,7 @@
 [Cordova dokumentáció](https://cordova.apache.org/docs/en/latest/)<br>
 [Legstabilabb kliens apk](https://build.phonegap.com/apps/2934479/download/android)<br>
 **Függőségek:**<br>
-flask, flask_cors<br>
+flask, flask_cors, colorama<br>
 **Szerver:**<br>
 Amikor a szerverre csatlakozik valaki, megnézi, amennyiben GET eljárást használ a kliens, valószínűleg le szeretné kérni az elmentett adatokat,
 így azokat JSON formátumban elküldi a szerver.
