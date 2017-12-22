@@ -19,6 +19,7 @@
 import os, logging, socket
 from flask import Flask, request, Response, json
 from flask_cors import CORS
+from colorama import Fore, Style
 
 from fileIO import fileIO
 from reqHandl import onReceiveReq
@@ -50,9 +51,9 @@ if __name__ == '__main__':
 	# Lokális IP-cím lekérése zajlik a 'szerver fut' felirat mellett.
 
 	try:
-		cp.okPrint('Szerver fut: %s' %( (([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")] or [[(s.connect(("8.8.8.8", 53)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]]) + ["no IP found"])[0]))
-	except:
+		print(Fore.GREEN + '[+] ' + Style.RESET_ALL + 'Szerver fut: %s' %( (([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")] or [[(s.connect(("8.8.8.8", 53)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]]) + ["no IP found"])[0]))
+	except Exception as e:
+		print(Fore.GREEN + '[+] ' + Style.RESET_ALL + 'Szerver fut...')
 		cp.warnPrint('Nem lehetett IP-címet megállapítani')
-		#print(e)
 
 	app.run(host='0.0.0.0')
