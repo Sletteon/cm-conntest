@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import traceback
-
+from colorPrint import colorPrint
 
 class errorHandl:
 	# Fancy módon írja ki, hogy mi a hiba
