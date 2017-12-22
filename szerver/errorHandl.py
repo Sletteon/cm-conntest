@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+
+# Később nem fogja kiírni a hibát, hanem egy logfile-ba jegyzi be
 import traceback
 from colorPrint import colorPrint
 
@@ -8,6 +10,6 @@ class errorHandl:
 	# ahol a hiba keletkezett
 	def errorHandling(self, clientIP):
 		printObj = colorPrint()
-		printObj.errPrint('\n[&&&]', ' Hiba történt egy kliensnél (%s):\n---------------traceback---------------' %(clientIP))
+		printObj.errPrint('Hiba történt egy kliensnél (%s):\n---------------traceback---------------' %(clientIP))
 		print(traceback.format_exc())
 		print('---------------traceback---------------')

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+
+# Amikor valaki üzenetet küld, ez az osztály lesz  megfelelő függvénye lesz meghívva
 import socket
 from flask import Flask, request, Response, json
 from flask_cors import CORS
@@ -9,17 +11,23 @@ from colorPrint import colorPrint
 class onReceiveReq(fileIO, errorHandl):
 	def onReceiveGet(self, clientIP):
 		printObj = colorPrint()
-		# [*] Hétlekérés: jancsi.ip.címe.túróstáska
-		print('\n[-] Anyaglekérés: %s' %(clientIP))
+		# [*] Anyaglekérés: jancsi.ip.címe.túróstáska
+		# print('\n[-] Anyaglekérés: %s' %(clientIP))
+
+		printObj.finePrint('Anyaglekérés: %s' %(clientIP))
 		return self.readJSONFormFile('debug/data.json')
 
 	def onReceivePost(self, clientIP):
 		errObj = errorHandl()
+		printObj = colorPrint()
 
 		gotJSON = request.get_json()
 		try:
 			# [*] jancsi (jancsi.ip.címe.briós) bejegyzése:
-			print('\n[-] %s (%s) bejegyzése:' %( str(gotJSON['uname']), clientIP))
+			# print('\n[-] %s (%s) bejegyzése:' %( str(gotJSON['uname']), clientIP))
+
+			printObj.finePrint('%s (%s) bejegyzése:' %(str(gotJSON['uname']), clientIP))
+
 
 		except TypeError:
 			errObj.errorHandling(clientIP)

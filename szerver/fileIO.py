@@ -21,4 +21,4 @@ class fileIO:
 
 if __name__ == '__main__':
 	printObj = colorPrint()
-	printObj.errPrint('[&&&]',' Nem elindítandó szkript')
+	printObj.errPrint('Nem elindítandó szkript')
