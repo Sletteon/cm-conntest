@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-
+# Színesen kiírja az állapotnak megfelelő ikont, és utána a szöveget
 from colorama import Fore, Style
 
 class colorPrint:

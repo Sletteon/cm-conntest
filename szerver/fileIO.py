@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+
+# Fájlokkal zsonglőrködik
 import json
 from colorPrint import colorPrint
 
