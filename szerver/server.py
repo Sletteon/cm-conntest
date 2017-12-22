@@ -22,7 +22,7 @@ from flask import Flask, request, Response, json
 from flask_cors import CORS
 from fileIO import fileIO
 from reqHandl import onReceiveReq
-
+from colorPrint import colorPrint
 
 # Ne látszódjanak a werkzeug (többek között HTTP-log) cuccai
 logging.getLogger('werkzeug').setLevel(logging.WARNING)
@@ -43,13 +43,17 @@ def index():
 
 if __name__ == '__main__':
 	fileIOObj = fileIO()
+	cp = colorPrint()
 	# Ha bennhagyjuk, a rögzített bejegyzések úrjaindításkor törlődnek
 	fileIOObj.filetrunc()
-
 	# Pozitívum, ha már itt tartunk
 	# Lokális IP-cím lekérése zajlik a 'szerver fut' felirat mellett.
+
 	try:
-		print('[+] Szerver fut: %s' %( (([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")] or [[(s.connect(("8.8.8.8", 53)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]]) + ["no IP found"])[0]))
+		cp.okPrint('[+]',' Szerver fut: %s' %( (([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")] or [[(s.connect(("8.8.8.8", 53)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]]) + ["no IP found"])[0]))
 	except:
-		print('[+] Szerver fut\n[*] Nem lehetett az IP-címet megállapítani')
+		print('[+] Szerver fut')
+		cp.warnPrint('[*] Nem lehetett IP-címet megállapítani')
+		#print(e)
+
 	app.run(host='0.0.0.0')

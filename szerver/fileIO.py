@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
+from colorPrint import colorPrint
 
 class fileIO:
 	# JSON adatok mentése
@@ -19,4 +20,5 @@ class fileIO:
 
 
 if __name__ == '__main__':
-	print("[!] Nem elindítandó szkript")
+	printObj = colorPrint()
+	printObj.errPrint('[&&&]',' Nem elindítandó szkript')
