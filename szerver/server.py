@@ -11,7 +11,7 @@
 #	######################################
 
 # [+] Hiba nélkül történt valami (zöld)
-# [-] Semmi extra (cián)
+# [-] Semmi extra (kék)
 # [*] Nem végzetes hiba (sárga)
 # [&&&] Végzetes hiba (piros, alig látszik)
 

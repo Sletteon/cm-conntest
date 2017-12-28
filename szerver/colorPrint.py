@@ -14,4 +14,4 @@ class colorPrint:
 		print('\n' + Fore.GREEN + '[+] ' + Style.RESET_ALL + message)
 
 	def finePrint(self, message):
-		print('\n' + Fore.CYAN + '[-] ' + Style.RESET_ALL + message)
+		print('\n' + Fore.BLUE + '[-] ' + Style.RESET_ALL + message)
