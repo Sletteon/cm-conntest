@@ -17,7 +17,7 @@
 
 
 import os, logging, socket
-from flask import Flask, request, Response, json
+from flask import Flask, request, Response, json, render_template
 from flask_cors import CORS
 from colorama import Fore, Style
 
@@ -31,6 +31,21 @@ logging.getLogger('werkzeug').setLevel(logging.WARNING)
 app = Flask(__name__, static_folder=os.path.join(os.environ['PWD'], 'client'))
 # Kell, ha nincs akkor kliens hibát kap
 CORS(app, resources={r'/*': {'origins': '*'}})
+
+@app.errorhandler(404)
+def badRequest(error):
+	colorPrint().errPrint('404-es hiba nála: %s' %(request.remote_addr))
+	return Response(json.dumps({'ERROR': '404 ERROR'}), status=404, mimetype='application/json')
+
+@app.errorhandler(400)
+def badRequest(error):
+	colorPrint().errPrint('400-as hiba nála: %s' %(request.remote_addr))
+	return Response(json.dumps({'ERROR': '400 ERROR'}), status=400, mimetype='application/json')
+
+@app.errorhandler(500)
+def badRequest(error):
+	colorPrint().errPrint('500-as hiba nála: %s' %(request.remote_addr))
+	return Response(json.dumps({'ERROR': '500 ERROR'}), status=500, mimetype='application/json')
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
