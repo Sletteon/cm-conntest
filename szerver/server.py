@@ -58,15 +58,15 @@ def index():
 	else:  # request.method == 'GET'
 		return onReceiveReqObj.onReceiveGet(clientIP)
 
+# Lokális Ip-t (hálózaton belülit) ad vissza
+# Ha nem vagyunk online, OSError-t dob fel
 def getlocalIp():
 	return (([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")] or [[(s.connect(("8.8.8.8", 53)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]]) + ["no IP found"])[0]
 
 
 if __name__ == '__main__':
-	# Ha bennhagyjuk, a rögzített bejegyzések úrjaindításkor törlődnek
+	# Ha bennhagyjuk, a rögzített bejegyzések újraindításkor törlődnek
 	fileIO().filetrunc()
-	# Pozitívum, ha már itt tartunk
-	# Lokális IP-cím lekérése zajlik a 'szerver fut' felirat mellett.
 
 	try:
 		port = sys.argv[1]
@@ -75,22 +75,23 @@ if __name__ == '__main__':
 
 		localIp = getlocalIp()
 
-	except IndexError: # ha nincs portszám megadva
-		try:
+	except IndexError: # nincs port
+		try: # van internet, nincs port
 			colorPrint().startPrint(getlocalIp() + ':5000')
 			app.run(host='0.0.0.0')
-		except OSError: # ha nem lehet lokális IP-t lekérni
+		except OSError: # nincs internet, nincs port
 			colorPrint().startPrintNoIP()
+			colorPrint().okPrint('Szerver elérhető az 5000-s porton')
 			app.run(host='0.0.0.0')
 
 	except ValueError: # ha a felhasználó nem érvényes portszámot adott meg
 		colorPrint().notValidPortNumberErr()
 
-	except OSError:
+	except OSError: # nincs internet, van port
 		colorPrint().startPrintNoIP()
-		colorPrint().okPrint('Szerver elérhető a %s porton' % (str(port)))
+		colorPrint().okPrint('Szerver elérhető a %s-s porton' % (str(port)))
 		app.run(host='0.0.0.0', port=int(port))
 
-	else: # ha meg van adva egy érvényes portszám
+	else: # van internet, van port
 		colorPrint().startPrint('%s:%s' %(localIp, str(port)))
 		app.run(host='0.0.0.0', port=int(port))
