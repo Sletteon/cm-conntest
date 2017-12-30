@@ -19,8 +19,3 @@ class fileIO:
 		with open('debug/data.json', 'w', encoding='utf-8') as file:
 			file.truncate()
 			file.close()
-
-
-if __name__ == '__main__':
-	printObj = colorPrint()
-	printObj.errPrint('Nem elindítandó szkript')
