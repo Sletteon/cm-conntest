@@ -19,7 +19,7 @@
 import os, logging, socket
 
 # Hozzáadott könyvárak
-from flask import Flask, request, Response, json
+from flask import Flask, request, Response
 from flask_cors import CORS
 
 # Saját osztáyok

@@ -2,7 +2,6 @@
 
 # Fájlokkal zsonglőrködik
 import json
-from colorPrint import colorPrint
 
 class fileIO:
 	# JSON adatok mentése
@@ -13,7 +12,7 @@ class fileIO:
 
 	def readJSONFormFile(self, file):
 		with open(file, 'r', encoding='utf-8') as file:
-			return "\n".join(file.readlines())
+			return '\n'.join(file.readlines())
 
 	def filetrunc(self):
 		with open('debug/data.json', 'w', encoding='utf-8') as file:

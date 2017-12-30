@@ -3,7 +3,7 @@
 # Később nem fogja kiírni a hibát, hanem egy logfile-ba jegyzi be
 import traceback
 from colorPrint import colorPrint
-from flask import json
+import json
 
 class errorHandl:
 	# Fancy módon írja ki, hogy mi a hiba

@@ -2,8 +2,10 @@
 
 # Amikor valaki üzenetet küld, ez az osztály lesz  megfelelő függvénye lesz meghívva
 import socket
+
 from flask import Flask, request, Response, json
 from flask_cors import CORS
+
 from fileIO import fileIO
 from errorHandl import errorHandl
 from colorPrint import colorPrint
@@ -18,19 +20,17 @@ class onReceiveReq(fileIO, errorHandl):
 		return self.readJSONFormFile('debug/data.json')
 
 	def onReceivePost(self, clientIP):
-		errObj = errorHandl()
-		printObj = colorPrint()
 
 		gotJSON = request.get_json()
 		try:
 			# [*] jancsi (jancsi.ip.címe.briós) bejegyzése:
 			# print('\n[-] %s (%s) bejegyzése:' %( str(gotJSON['uname']), clientIP))
 
-			printObj.finePrint('%s (%s) bejegyzése:' %(str(gotJSON['uname']), clientIP))
+			colorPrint().finePrint('%s (%s) bejegyzése:' %(str(gotJSON['uname']), clientIP))
 
 
 		except TypeError:
-			errObj.errorHandling(clientIP)
+			errorHandl().errorHandling(clientIP)
 			return Response(json.dumps({'ERROR': 'ERROR READING RECEIVED MESSAGE'}), status=400, mimetype='application/json')
 
 		try:
