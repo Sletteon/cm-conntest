@@ -21,7 +21,6 @@ import os, logging, socket
 # Hozzáadott könyvárak
 from flask import Flask, request, Response, json
 from flask_cors import CORS
-from colorama import Fore, Style
 
 # Saját osztáyok
 from fileIO import fileIO
