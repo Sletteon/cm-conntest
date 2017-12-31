@@ -12,5 +12,5 @@ before_install: cd szerver/
 install:
   - pip install requests
 script:
-  - travis_wait python3 autoTestClient.py
+  - travis_wait 50 python3 autoTestClient.py
 sudo: enabled
