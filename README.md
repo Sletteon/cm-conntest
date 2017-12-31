@@ -1,4 +1,8 @@
-**Szerver-kliens kapcsolatteszt**<br><br>
+**Szerver-kliens kapcsolatteszt**<br>
+[![Build Status](https://travis-ci.org/Sletteon/cm-conntest.svg?branch=master)](https://travis-ci.org/Sletteon/cm-conntest)<br>
+
+*A techtabor/cm-conntest, illetve a sletteon/cm-conntest repository gyakorlatilag ugyanaz, de a travis miatt nem akartam a mentorokat zavarni. Úgy pusholok ide hogy a techtabor repoját cloneolom, rendes commitok mellett nyomok ```git push --mirror https://github.com/sletteon/cm-conntest```-et, és ezután rendes ```git push```t*<br>
+
 **Hasznos linkek**<br>
 [PhoneGap dokumentáció](http://docs.phonegap.com/)<br>
 [Cordova dokumentáció](https://cordova.apache.org/docs/en/latest/)<br>
