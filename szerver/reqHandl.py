@@ -43,7 +43,7 @@ class onReceiveReq(fileIO, errorHandl):
 			self.writeJSONToFile('debug/data.json', gotJSON)
 
 		except KeyError:
-			errObj.errorHandling(clientIP)
+			errorHandl().errorHandling(clientIP)
 			return Response(json.dumps({'ERROR': 'JSON ERROR'}), status=422, mimetype='application/json')
 
 		except TypeError:

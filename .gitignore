@@ -3,3 +3,4 @@
 */debug/*
 *.db
 *.pyc
+szerver/autoTestClient.py
