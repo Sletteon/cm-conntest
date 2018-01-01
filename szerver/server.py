@@ -78,11 +78,17 @@ if __name__ == '__main__':
 	except IndexError: # nincs port
 		try: # van internet, nincs port
 			colorPrint().startPrint(getlocalIp() + ':5000')
-			app.run(host='0.0.0.0')
+			try:
+				app.run(host='0.0.0.0')
+			except OSError:
+				colorPrint().errPrint('Már el lett indítva a szerver ezen a porton')
 		except OSError: # nincs internet, nincs port
 			colorPrint().startPrintNoIP()
 			colorPrint().okPrint('Szerver elérhető az 5000-s porton')
-			app.run(host='0.0.0.0')
+			try:
+				app.run(host='0.0.0.0')
+			except OSError:
+				colorPrint().errPrint('Már el lett indítva a szerver ezen a porton')
 
 	except ValueError: # ha a felhasználó nem érvényes portszámot adott meg
 		colorPrint().notValidPortNumberErr()
@@ -90,8 +96,14 @@ if __name__ == '__main__':
 	except OSError: # nincs internet, van port
 		colorPrint().startPrintNoIP()
 		colorPrint().okPrint('Szerver elérhető a %s-s porton' % (str(port)))
-		app.run(host='0.0.0.0', port=int(port))
+		try:
+			app.run(host='0.0.0.0', port=int(port))
+		except OSError:
+			colorPrint().errPrint('Már el lett indítva a szerver ezen a porton')
 
 	else: # van internet, van port
 		colorPrint().startPrint('%s:%s' %(localIp, str(port)))
-		app.run(host='0.0.0.0', port=int(port))
+		try:
+			app.run(host='0.0.0.0', port=int(port))
+		except OSError:
+			colorPrint().errPrint('Már el lett indítva a szerver ezen a porton')
