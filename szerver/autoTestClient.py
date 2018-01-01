@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import requests
+import requests, hashlib
 
 # 1000 hosszú json-t küld be, ami egy realisztikus terhelést törekszik elérni
 print('[*] Beállítás-teszt')
 for i in range(1001):
 	try:
-		r = requests.post('http://46.139.116.9:5000',json={'uname':'TESTNUMBER' + str(i), 'het':'E', 'nap':'P', 'tant':'NagyonHosszúTantárgyÉkezetekÉsEsetlegesEgyébProblémákTesztelésére', 'anyag':'EgyRandomAnyagAmitPárRandomÉkezetesBetűKövet:öüóőúáűíÖÜÓŐÚÁŰÍéÉ\|Ä<äđĐłŁ$ß¤'})
+		r = requests.post('http://46.139.116.9:5000',json={'uname':'TEST_NUMBER_' + str(i), 'het':'E', 'nap':'P', 'tant': hashlib.sha1(str(i).encode('utf-8')).hexdigest(), 'anyag': hashlib.md5(str(i).encode('utf-8')).hexdigest()})
 		r.raise_for_status()
 	except requests.exceptions.HTTPError as httperr:
 		print('<!> ' + str(httperr))

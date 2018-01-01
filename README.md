@@ -1,8 +1,7 @@
 **Szerver-kliens kapcsolatteszt**<br>
 [![Build Status](http://46.139.116.9:9000/buildStatus/icon?job=cm-conntest)](http://46.139.116.9:9000/job/cm-conntest)
 
-*A techtabor/cm-conntest, illetve a sletteon/cm-conntest repository gyakorlatilag ugyanaz, de a travis miatt nem akartam a mentorokat zavarni. Úgy pusholok ide hogy a techtabor repoját cloneolom, rendes commitok mellett nyomok ```git push --mirror https://github.com/sletteon/cm-conntest```-et, és ezután rendes ```git push```t*<br>
-*Travis-t használom főleg az automata teszteléshez, de most kísérletezek a Jenkins-el*
+*Jenkins a szerver/autoTestClient.py-t futtatja, ami a mindig elérhető tesztszervert (raspberry pi) teszteli. A teszt 1000 beírásból (teszt száma sha1, és md5 hashben), és egy lekérésből áll.*
 
 **Hasznos linkek**<br>
 [PhoneGap dokumentáció](http://docs.phonegap.com/)<br>
