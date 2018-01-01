@@ -14,10 +14,7 @@ class onReceiveReq(fileIO, errorHandl):
 	def onReceiveGet(self, clientIP):
 		printObj = colorPrint()
 		# [*] Anyaglekérés: jancsi.ip.címe.túróstáska
-		# print('\n[-] Anyaglekérés: %s' %(clientIP))
-
 		printObj.finePrint('Anyaglekérés: %s' %(clientIP))
-		#return ''
 		return self.readJSONFormFile('debug/data.json')
 
 	def onReceivePost(self, clientIP):
@@ -25,8 +22,6 @@ class onReceiveReq(fileIO, errorHandl):
 		gotJSON = request.get_json()
 		try:
 			# [*] jancsi (jancsi.ip.címe.briós) bejegyzése:
-			# print('\n[-] %s (%s) bejegyzése:' %( str(gotJSON['uname']), clientIP))
-
 			colorPrint().finePrint('%s (%s) bejegyzése:' %(str(gotJSON['uname']), clientIP))
 
 
