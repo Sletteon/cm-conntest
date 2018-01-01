@@ -12,11 +12,11 @@ het = ('E', 'J')
 for i in range(1001):
 	try:
 		r = requests.post('http://46.139.116.9:5000',json={
-															'uname':'TEST_NUMBER_' + str(i),
-															'het':het[randint(0,1)], 'nap':nap[randint(0,4)],
-															'tant': hashlib.sha1(str(i).encode('utf-8')).hexdigest(),
-															'anyag': hashlib.md5(str(i).encode('utf-8')).hexdigest()
-															})
+						'uname':'TEST_NUMBER_' + str(i),
+						'het':het[randint(0,1)], 'nap':nap[randint(0,4)],
+						'tant': hashlib.sha1(str(i).encode('utf-8')).hexdigest(),
+						'anyag': hashlib.md5(str(i).encode('utf-8')).hexdigest()
+						})
 		r.raise_for_status()
 	except requests.exceptions.HTTPError as httperr:
 		print('<!> ' + str(httperr))
