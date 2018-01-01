@@ -17,10 +17,11 @@ for i in range(1001):
 
 	if not r.json() == 'SUCCESS' and not i == 0 :
 		raise EnvironmentError('<!> Szerver rossz választ adott')
-		raise Error
+		exit(1)
 	else:
 		if not r.json() == 'SUCCESS':
 			raise EnvironmentError('<!> Hibás beállítás')
+			exit(1)
 
 if i == 1000:
 	print('[+] Sikeres beállítás-teszt')
@@ -32,6 +33,7 @@ if i == 1000:
 			print('[+] Sikeres lekérés')
 		else:
 			raise EnvironmentError('<!> Üres válasz a lekérésre')
+			exit(1)
 	except requests.exceptions.HTTPError as httperr:
 		print('<!> ' + str(httperr))
 		exit(1)

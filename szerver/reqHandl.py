@@ -17,8 +17,8 @@ class onReceiveReq(fileIO, errorHandl):
 		# print('\n[-] Anyaglekérés: %s' %(clientIP))
 
 		printObj.finePrint('Anyaglekérés: %s' %(clientIP))
-		return ''
-		#return self.readJSONFormFile('debug/data.json')
+		#return ''
+		return self.readJSONFormFile('debug/data.json')
 
 	def onReceivePost(self, clientIP):
 
