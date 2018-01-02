@@ -1,21 +1,29 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import requests, hashlib
+import requests, hashlib, sys
 from random import randint
+
+try:
+	ServerIp = sys.argv[1]
+except IndexError:
+	ServerIp = '46.139.116.9'
 
 # 1000 hosszú json-t küld be, ami egy (túl)realisztikus terhelést törekszik elérni
 print('[*] Beállítás-teszt')
 
 nap = ('H', 'K', 'S', 'C', 'P')
-het = ('E', 'J')
+het = ('E', 'J', 'EE', 'JU')
 
 for i in range(1001):
 	try:
-		r = requests.post('http://46.139.116.9:5000',json={
+		generatedHet = randint(0, len(het) - 1)
+		generatedNap = randint(0, len(nap) - 1)
+		r = requests.post('http://' + ServerIp + ':5000',json={
 						'uname':'TEST_NUMBER_' + str(i),
-						'het':het[randint(0,1)], 'nap':nap[randint(0,4)],
-						'tant': hashlib.sha1(str(i).encode('utf-8')).hexdigest(),
-						'anyag': hashlib.md5(str(i).encode('utf-8')).hexdigest()
+						'het': het[generatedHet],
+						'nap': nap[generatedNap],
+						'tant': hashlib.sha1(str(i + generatedHet * generatedNap).encode('utf-8')).hexdigest(),
+						'anyag': hashlib.md5(str(i + generatedHet * generatedNap).encode('utf-8')).hexdigest()
 						})
 		r.raise_for_status()
 	except requests.exceptions.HTTPError as httperr:
@@ -37,7 +45,7 @@ if i == 1000:
 	print('[+] Sikeres beállítás-teszt')
 	print('[*] Lekérés')
 	try:
-		r = requests.get('http://46.139.116.9:5000')
+		r = requests.get('http://' + ServerIp + ':5000')
 		r.raise_for_status()
 		if not r.text == None and not r.text == '':
 			print('[+] Sikeres lekérés')
