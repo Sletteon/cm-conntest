@@ -22,7 +22,7 @@ Példa az anyagbeállításra:<br>
 	"het":"E",
 	"nap":"K",
 	"tant":"töri",
-	"anyag":"frank birodalom"
+	"anyag":"frankreichische Reich"
 }
 ```
 <br>
