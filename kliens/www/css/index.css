@@ -166,4 +166,34 @@ h1 {
 
 .unameDel {
 	cursor: pointer;
+
+}
+#top {
+    background-color: #00cc00;
+    height: 80px;
+}
+#buttons {
+    background-color: #00cc00;
+    height: 60px;
+}
+#swipezone {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  background: #fff;
+  color: #fff;
+  cursor: pointer;
+  font-size: 30px;
+
+}
+#lekérés {
+    height: 100%;
+    width: 49%;
+    background:none;border:none;
+}
+#feltöltés {
+    height: 100%;
+    width: 49%;
+    background:none;border:none;
+    background-color: #8def9a;
 }

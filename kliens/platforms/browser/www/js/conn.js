@@ -5,10 +5,6 @@ window.onload = function() {
         UName = prompt("Add meg a beceneved:");
         window.localStorage.setItem("UName", UName);
     }
-    // mikor betöltődik az oldal, állítsa be a mutató kurzort a
-    // felhnév törléshez, és fehéret a kapcsolódás állapot szövegéhez
-    document.getElementById("unameDel").style.cursor = "pointer";
-    document.getElementById("connState").style.color = "white";
 
     // kérje le a napot, és állítsa be a nap ID-jű selectet
     var dateObj = new Date();
@@ -39,40 +35,26 @@ window.onload = function() {
     }
 }
 
-// ha az online paraméter igaz, legyen zöld a connState,
-// de ha hamis, legyen piros
-// ja, meg írja ki a kapcsolódási állapotot
-function networkStatus(online) {
-    if (online) {
-        document.getElementById("connState").style.backgroundColor = "LimeGreen";
-        document.getElementById("connState").innerHTML = "Online";
-    }
-    if (online === false) {
-        document.getElementById("connState").style.backgroundColor = "red";
-        document.getElementById("connState").innerHTML = "Offline";
-    }
-}
-
 function getUrl() {
-    var IPaddress = document.getElementById("IP").value;
-    var Port = document.getElementById("Port").value;
+    var IPaddress = '10.43.47.86';/*document.getElementById("IP").value;*/
+    var Port = 5000;/*document.getElementById("Port").value;*/
 
     return "http://" + IPaddress + ":" + Port;
 }
 
 function AnyagLekeres() {
     $.ajax({
-    	type: "get",
-    	url: getUrl(),
-    	success: function(responseData, textStatus, jqXHR) {
-        	document.getElementById("socket").innerHTML = responseData;
-			console.log(responseData);
-    	},
-    	error: function(jqXHR, textStatus, errorThrown) {}
+        type: "get",
+        url: getUrl(),
+        success: function(responseData, textStatus, jqXHR) {
+            document.getElementById("socket").innerHTML = responseData;
+            console.log('Szerver: ' + '\n' + responseData + '\n -----');
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+			alert("Hiba a kapcsolat létesítésekor. (lásd konzol)");
+		}
     });
 }
-
-
 
 function AnyagBeallitas() {
 
@@ -89,7 +71,7 @@ function AnyagBeallitas() {
         "tant": document.getElementById("tantargy").value,
         "anyag": document.getElementById("anyag").value
     };
-    console.log(JSON.stringify(sendingJSON));
+    console.log('Küldendő: ' + '\n' + JSON.stringify(sendingJSON) + '\n -----');
 
     $.ajax({
         type: "post",
@@ -97,10 +79,10 @@ function AnyagBeallitas() {
         data: JSON.stringify(sendingJSON),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        success: function(responseData, textStatus, jqXHR) {},
+        success: function(responseData, textStatus, jqXHR) {
+		},
         error: function(jqXHR, textStatus, errorThrown) {
-            console.log(textStatus);
-            console.log(errorThrown);
+			alert("Hiba a kapcsolat létesítésekor. (lásd konzol)");
         }
     });
 }
@@ -108,7 +90,7 @@ function AnyagBeallitas() {
 document.getElementById("getButton").onclick = function() {
     AnyagLekeres();
 };
-// ha megnyomják ezt a gombot, futtassa le ezt az anonim funkciót
+
 document.getElementById("connButton").onclick = function() {
     AnyagBeallitas();
 };

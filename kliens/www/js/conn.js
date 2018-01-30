@@ -36,8 +36,8 @@ window.onload = function() {
 }
 
 function getUrl() {
-    var IPaddress = document.getElementById("IP").value;
-    var Port = document.getElementById("Port").value;
+    var IPaddress = '10.43.47.86';/*document.getElementById("IP").value;*/
+    var Port = 5000;/*document.getElementById("Port").value;*/
 
     return "http://" + IPaddress + ":" + Port;
 }

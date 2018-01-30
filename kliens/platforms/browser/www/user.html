@@ -10,6 +10,7 @@
     <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
     <link rel="stylesheet" type="text/css" href="css/user.css" />
     <script src="js/jquery.min.js"></script>
+    <script src="js/conn.js"></script>
     <title>Hello World</title>
 </head>
 
@@ -18,11 +19,12 @@
         <h1 align="center">Classmate</h1>
     </div>
     <div id="buttons">
-        <button id="lekérés" onclick="goToUrl('index.html')">lekérés</button>
+        <button id="lekérés" onclick="goToUrl('user.html')">lekérés</button>
         <button id="feltöltés" onclick="goToUrl('upload.html')">feltöltés</button>
     </div>
     		<!-- ide fog megjelenni a szerver válasza -->
     <div id="socket" class="ServerResp">
+        		<button class="button button1" id="getButton">Heti anyag lekérése</button>
         <script>
         // credit: http://www.javascriptkit.com/javatutors/touchevents2.shtml
 function swipedetect(el, callback){
@@ -77,14 +79,18 @@ function swipedetect(el, callback){
 var el = document.getElementById('socket');
 swipedetect(el, function(swipedir){
     // swipedir contains either "none", "left", "right", "top", or "down"
-/*  el.innerHTML = 'Swiped <span style="color:yellow">' + swipedir +'</span>';*/
+  /*el.innerHTML = 'Swiped <span style="color:yellow">' + swipedir +'</span>';*/
     if(swipedir === 'left')
         {
             goToUrl('upload.html')
         }
     if(swipedir === 'right')
         {
-            goToUrl('index.html')
+            goToUrl('user.html')
+        }
+    if(swipedir === 'down')
+        {
+            AnyagLekeres();
         }
 });
             function goToUrl (val){
