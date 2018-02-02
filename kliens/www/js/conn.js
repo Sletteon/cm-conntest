@@ -52,9 +52,16 @@ function getWeek() {
 	return new Date().getWeekNumber();
 }
 
-function getUrl() {
-    var IPaddress = '192.168.1.108'; /*document.getElementById("IP").value;*/
+function getUrl/*HardCoded*/() {
+    var IPaddress = '46.139.116.9'; /*document.getElementById("IP").value;*/
     var Port = 5000; /*document.getElementById("Port").value;*/
+
+    return "http://" + IPaddress + ":" + Port;
+}
+
+function getUrlS/*oftCoded*/() {
+	var IPaddress = /document.getElementById("IP").value;
+    var Port = document.getElementById("Port").value;
 
     return "http://" + IPaddress + ":" + Port;
 }
