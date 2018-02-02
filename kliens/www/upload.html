@@ -17,123 +17,55 @@
 </head>
 
 <body>
-    <div id="top">
-        <h1 align="center">Classmate</h1>
-    </div>
-    <div id="buttons">
-        <button id="lekérés" onclick="goToUrl('user.html')">lekérés</button>
-        <button id="feltöltés" onclick="goToUrl('upload.html')">feltöltés</button>
-    </div>
-    <div id="swipezone">
-	<center>
-		<h1>cm kapcsolatteszt</h1>
-		<!-- IP-cím -->
-		<input type="text" id="IP" placeholder="IP-cím" value="localhost">
-		<!-- Port -->
-		<input type="number" id="Port" value="5000">
-		<br><br>
-		<!-- hetek legördülő listája -->
-		<select name="melyik_het" id="het">
+	<div id="top">
+		<h1 align="center">Classmate</h1>
+	</div>
+	<div id="buttons">
+		<button id="lekérés" onclick="goToUrl('user.html')">lekérés</button>
+		<button id="feltöltés" onclick="goToUrl('upload.html')">feltöltés</button>
+	</div>
+	<div id="swipezone">
+		<center>
+			<h1>cm kapcsolatteszt</h1>
+			<!-- IP-cím -->
+			<input type="text" id="IP" placeholder="IP-cím" value="localhost">
+			<!-- Port -->
+			<input type="number" id="Port" value="5000">
+			<br><br>
+			<!-- hetek legördülő listája -->
+			<select name="melyik_het" id="het">
 			<option value="E">Ez a hét</option>
 			<option value="EE">Előző hét</option>
 			<option value="J">Jövő hét</option>
 			<option value="JU">Jövő utáni hét</option>
 		</select>
-		<!-- Napok legördülő listája -->
-		<select name="nap" id="nap">
+			<!-- Napok legördülő listája -->
+			<select name="nap" id="nap">
 			<option value="H">Hétfő</option>
 			<option value="K">Kedd</option>
 			<option value="S">Szerda</option>
 			<option value="C">Csütörtök</option>
 			<option value="P">Péntek</option>
 		</select>
-		<!-- Tantárgy -->
-		<input type="text" id="tantargy" placeholder="Tantárgy">
-		<!-- Anyag -->
-		<input type="text" id="anyag" placeholder="Anyag">
-		<br>
-		<!-- set parancs küldését szolgáló gomb -->
-		<button class="button button1" id="connButton">Parancs küldése</button>
-		<!-- get parancs küldését szolgáló gomb -->
-		<button class="button button1" id="getButton">Heti anyag lekérése</button>
-		<br>
-		<!-- ide fog megjelenni a szerver válasza -->
-		<div id="socket" class="ServerResp"></div>
-		<!-- Felhasználónév törlése "link" -->
-		<a id="unameDel" class="unameDel" style="color: black">Felhasználónév törlése</a>
-	</center>
-    </div>
+			<!-- Tantárgy -->
+			<input type="text" id="tantargy" placeholder="Tantárgy">
+			<!-- Anyag -->
+			<input type="text" id="anyag" placeholder="Anyag">
+			<br>
+			<!-- set parancs küldését szolgáló gomb -->
+			<button class="button button1" id="connButton">Parancs küldése</button>
+			<!-- get parancs küldését szolgáló gomb -->
+			<button class="button button1" id="getButton">Heti anyag lekérése</button>
+			<br>
+			<!-- ide fog megjelenni a szerver válasza -->
+			<div id="socket" class="ServerResp"></div>
+			<!-- Felhasználónév törlése "link" -->
+			<a id="unameDel" class="unameDel" style="color: black">Felhasználónév törlése</a>
+		</center>
+	</div>
 </body>
 <!-- csak akkor hívja meg a javascriptet, ha már betöltődött a body -->
 <script type="text/javascript" src="js/conn.js"></script>
-<script>
-        // credit: http://www.javascriptkit.com/javatutors/touchevents2.shtml
-/*function swipedetect(el, callback){
-  
-    var touchsurface = el,
-    swipedir,
-    startX,
-    startY,
-    distX,
-    distY,
-    threshold = 150, //required min distance traveled to be considered swipe
-    restraint = 100, // maximum distance allowed at the same time in perpendicular direction
-    allowedTime = 300, // maximum time allowed to travel that distance
-    elapsedTime,
-    startTime,
-    handleswipe = callback || function(swipedir){}
-  
-    touchsurface.addEventListener('touchstart', function(e){
-        var touchobj = e.changedTouches[0]
-        swipedir = 'none'
-        dist = 0
-        startX = touchobj.pageX
-        startY = touchobj.pageY
-        startTime = new Date().getTime() // record time when finger first makes contact with surface
-        e.preventDefault()
-    }, false)
-  
-    touchsurface.addEventListener('touchmove', function(e){
-        e.preventDefault() // prevent scrolling when inside DIV
-    }, false)
-  
-    touchsurface.addEventListener('touchend', function(e){
-        var touchobj = e.changedTouches[0]
-        distX = touchobj.pageX - startX // get horizontal dist traveled by finger while in contact with surface
-        distY = touchobj.pageY - startY // get vertical dist traveled by finger while in contact with surface
-        elapsedTime = new Date().getTime() - startTime // get time elapsed
-        if (elapsedTime <= allowedTime){ // first condition for awipe met
-            if (Math.abs(distX) >= threshold && Math.abs(distY) <= restraint){ // 2nd condition for horizontal swipe met
-                swipedir = (distX < 0)? 'left' : 'right' // if dist traveled is negative, it indicates left swipe
-            }
-            else if (Math.abs(distY) >= threshold && Math.abs(distX) <= restraint){ // 2nd condition for vertical swipe met
-                swipedir = (distY < 0)? 'up' : 'down' // if dist traveled is negative, it indicates up swipe
-            }
-        }
-        handleswipe(swipedir)
-        e.preventDefault()
-    }, false)
-}
-  
-//USAGE:
-
-var el = document.getElementById('swipezone');
-swipedetect(el, function(swipedir){
-    // swipedir contains either "none", "left", "right", "top", or "down"
-    /*el.innerHTML = 'Swiped <span style="color:yellow">' + swipedir +'</span>';
-    if(swipedir === 'left')
-        {
-            goToUrl('upload.html')
-        }
-    if(swipedir === 'right')
-        {
-            goToUrl('user.html')
-        }
-});*/
-            function goToUrl (val){
-                location.href = val;	
-            }
-
-        </script>
+<script type="text/javascript" src="js/swipe_upload.js"></script>
 
 </html>

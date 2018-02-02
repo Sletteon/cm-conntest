@@ -6,38 +6,55 @@ window.onload = function() {
         window.localStorage.setItem("UName", UName);
     }
 
-    // kérje le a napot, és állítsa be a nap ID-jű selectet
+
+}
+
+// visszaadja a mai napnak a berűkódját
+function getDay() {
+
     var dateObj = new Date();
     var nap = dateObj.getDay();
 
     switch (nap) {
         case 0:
-            document.getElementById("nap").value = "K";
+            return "K";
             break;
         case 1:
-            document.getElementById("nap").value = "H";
+            return "H";
             break;
         case 2:
-            document.getElementById("nap").value = "K";
+            return "K";
             break;
         case 3:
-            document.getElementById("nap").value = "S";
+            return "S";
             break;
         case 4:
-            document.getElementById("nap").value = "C";
+            return "C";
             break;
         case 5:
-            document.getElementById("nap").value = "P";
+            return "P";
             break;
         case 6:
-            document.getElementById("nap").value = "K";
+            return "K";
             break;
     }
 }
 
+function getWeek() {
+    // Hét száma az évben
+    Date.prototype.getWeekNumber = function() {
+        var d = new Date(Date.UTC(this.getFullYear(), this.getMonth(), this.getDate()))
+        var dayNum = d.getUTCDay() || 7;
+        d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+        var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+        return Math.ceil((((d - yearStart) / 86400000) + 1) / 7)
+    };
+	return new Date().getWeekNumber();
+}
+
 function getUrl() {
-    var IPaddress = '10.43.47.86';/*document.getElementById("IP").value;*/
-    var Port = 5000;/*document.getElementById("Port").value;*/
+    var IPaddress = '192.168.1.108'; /*document.getElementById("IP").value;*/
+    var Port = 5000; /*document.getElementById("Port").value;*/
 
     return "http://" + IPaddress + ":" + Port;
 }
@@ -47,12 +64,12 @@ function AnyagLekeres() {
         type: "get",
         url: getUrl(),
         success: function(responseData, textStatus, jqXHR) {
-            document.getElementById("socket").innerHTML = responseData;
+            document.getElementById("socket").innerHTML = '<h2>' + responseData + '<h2>';
             console.log('Szerver: ' + '\n' + responseData + '\n -----');
         },
         error: function(jqXHR, textStatus, errorThrown) {
-			alert("Hiba a kapcsolat létesítésekor. (lásd konzol)");
-		}
+            alert("Hiba a kapcsolat létesítésekor. (lásd konzol)");
+        }
     });
 }
 
@@ -66,8 +83,8 @@ function AnyagBeallitas() {
 
     var sendingJSON = {
         "uname": window.localStorage.getItem("UName"),
-        "het": document.getElementById("het").options[document.getElementById("het").selectedIndex].value,
-        "nap": document.getElementById("nap").options[document.getElementById("nap").selectedIndex].value,
+        "het": getWeek(),
+        "nap": getDay(),
         "tant": document.getElementById("tantargy").value,
         "anyag": document.getElementById("anyag").value
     };
@@ -79,10 +96,9 @@ function AnyagBeallitas() {
         data: JSON.stringify(sendingJSON),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        success: function(responseData, textStatus, jqXHR) {
-		},
+        success: function(responseData, textStatus, jqXHR) {},
         error: function(jqXHR, textStatus, errorThrown) {
-			alert("Hiba a kapcsolat létesítésekor. (lásd konzol)");
+            alert("Hiba a kapcsolat létesítésekor. (lásd konzol)");
         }
     });
 }
