@@ -60,7 +60,7 @@ function getUrl/*HardCoded*/() {
 }
 
 function getUrlS/*oftCoded*/() {
-	var IPaddress = /document.getElementById("IP").value;
+	var IPaddress = document.getElementById("IP").value;
     var Port = document.getElementById("Port").value;
 
     return "http://" + IPaddress + ":" + Port;
