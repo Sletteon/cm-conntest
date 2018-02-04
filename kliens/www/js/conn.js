@@ -53,7 +53,7 @@ function getWeek() {
 }
 
 function getUrl/*HardCoded*/() {
-    var IPaddress = '46.139.116.9'; /*document.getElementById("IP").value;*/
+    var IPaddress = 'localhost'; /*document.getElementById("IP").value;*/
     var Port = 5000; /*document.getElementById("Port").value;*/
 
     return "http://" + IPaddress + ":" + Port;
