@@ -9,14 +9,16 @@ from flask_cors import CORS
 from fileIO import fileIO
 from errorHandl import errorHandl
 from colorPrint import colorPrint
+from dbIO import dbIO
 
 
-class onReceiveReq(fileIO, errorHandl):
+class onReceiveReq(fileIO, errorHandl, dbIO):
     def onReceiveGet(self, clientIP):
         printObj = colorPrint()
         # [*] Anyaglekérés: jancsi.ip.címe.túróstáska
         printObj.finePrint('Anyaglekérés: %s' % (clientIP))
-        return self.readJSONFormFile(fileIO().dataDotJsonPath)
+        #return self.readJSONFormFile(fileIO().dataDotJsonPath)
+        return self.getAllData()
 
     def onReceivePost(self, clientIP):
 
@@ -37,14 +39,15 @@ class onReceiveReq(fileIO, errorHandl):
             print('--- Tantárgy: %s' % (str(gotJSON['tant'])))
             print('--- Anyag: %s' % (str(gotJSON['anyag'])))
 
-            self.writeJSONToFile(fileIO().dataDotJsonPath, gotJSON)
+            #self.writeJSONToFile(fileIO().dataDotJsonPath, gotJSON)
+            self.sendJSONToDB(gotJSON)
 
         except KeyError:
             errorHandl().errorHandling(clientIP)
             return Response(json.dumps({'ERROR': 'JSON ERROR'}), status=422, mimetype='application/json')
 
         except TypeError:
-            errObj.errorHandling(clientIP)
+            errorHandl().errorHandling(clientIP)
             return Response(json.dumps({'ERROR': 'ERROR READING RECEIVED MESSAGE'}), status=400, mimetype='application/json')
 
         return Response(json.dumps('SUCCESS'), mimetype='application/json')

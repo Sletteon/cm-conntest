@@ -85,8 +85,8 @@ function AnyagBeallitas() {
     var napSelect = document.getElementById("nap");
     var nap = napSelect.options[napSelect.selectedIndex].value;
 
-    var hetSelect = document.getElementById("het");
-    var het = hetSelect.options[hetSelect.selectedIndex].value;
+    // var hetSelect = document.getElementById("het");
+    // var het = hetSelect.options[hetSelect.selectedIndex].value;
 
     var sendingJSON = {
         "uname": window.localStorage.getItem("UName"),
