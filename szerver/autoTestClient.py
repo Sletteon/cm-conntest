@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import requests
-import hashlib
-import sys
+import requests, hashlib, sys, time
 from random import randint
 
 try:
@@ -10,19 +8,20 @@ try:
 except IndexError:
     ServerIp = '46.139.116.9'
 
-# 1000 hosszú json-t küld be, ami egy (túl)realisztikus terhelést törekszik elérni
-print('[*] Beállítás-teszt')
+# 1000 hosszú json-t küld be, ami egy (egyáltalán nem) realisztikus terhelést törekszik elérni
+print('[*] Beállítás-teszt\n')
 
 nap = ('H', 'K', 'S', 'C', 'P')
 het = ('E', 'J', 'EE', 'JU')
 
+start = time.time()
 for i in range(1001):
     try:
-        generatedHet = randint(0, len(het) - 1)
+        generatedHet = randint(0, 52)
         generatedNap = randint(0, len(nap) - 1)
         r = requests.post('http://' + ServerIp + ':5000', json={
             'uname': 'TEST_NUMBER_' + str(i),
-            'het': het[generatedHet],
+            'het': generatedHet,
             'nap': nap[generatedNap],
             'tant': hashlib.sha1(str(i + generatedHet * generatedNap).encode('utf-8')).hexdigest(),
             'anyag': hashlib.md5(str(i + generatedHet * generatedNap).encode('utf-8')).hexdigest()
@@ -44,8 +43,9 @@ for i in range(1001):
             exit(1)
 
 if i == 1000:
-    print('[+] Sikeres beállítás-teszt')
-    print('[*] Lekérés')
+    print('[+] Sikeres beállítás-teszt\n')
+    print('[*] ' + str(i) + ' beküldés ' + str(time.time() - start)[:5] + ' mp alatt lett feldolgozva\n')
+    print('[*] Lekérés\n')
     try:
         r = requests.get('http://' + ServerIp + ':5000')
         r.raise_for_status()
