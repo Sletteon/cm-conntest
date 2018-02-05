@@ -24,23 +24,25 @@ class onReceiveReq(fileIO, errorHandl, dbIO):
 
         gotJSON = request.get_json()
         try:
-            # [*] jancsi (jancsi.ip.címe.briós) bejegyzése:
-            colorPrint().finePrint('%s (%s) bejegyzése:' %
-                                   (str(gotJSON['uname']), clientIP))
+            if str(gotJSON['tant']) == '<|>DELETE_ALL<|>':
+                self.deleteAllData()
+                colorPrint().warnPrint('Adatok törölve: %s' % (clientIP))
+            else:
+                # [*] jancsi (jancsi.ip.címe.briós) bejegyzése:
+                colorPrint().finePrint('%s (%s) bejegyzése:' %
+                                        (str(gotJSON['uname']), clientIP))
 
-        except TypeError:
-            errorHandl().errorHandling(clientIP)
-            return Response(json.dumps({'ERROR': 'ERROR READING RECEIVED MESSAGE'}), status=400, mimetype='application/json')
+                self.sendJSONToDB(gotJSON)
+                # Adatok kiírása
+                print('--- Hét: %s' % (str(gotJSON['het'])))
+                print('--- Nap: %s' % (str(gotJSON['nap'])))
+                print('--- Tantárgy: %s' % (str(gotJSON['tant'])))
+                print('--- Anyag: %s' % (str(gotJSON['anyag'])))
 
-        try:
-            # Adatok kiírása
-            print('--- Hét: %s' % (str(gotJSON['het'])))
-            print('--- Nap: %s' % (str(gotJSON['nap'])))
-            print('--- Tantárgy: %s' % (str(gotJSON['tant'])))
-            print('--- Anyag: %s' % (str(gotJSON['anyag'])))
 
-            #self.writeJSONToFile(fileIO().dataDotJsonPath, gotJSON)
-            self.sendJSONToDB(gotJSON)
+
+                #self.writeJSONToFile(fileIO().dataDotJsonPath, gotJSON)
+
 
         except KeyError:
             errorHandl().errorHandling(clientIP)
