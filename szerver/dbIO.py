@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from pymongo import MongoClient
 # MongoDB json-jában található egy objectId, ami nem feltétlenül json-barát,
-# tehát ezért kell ezt a fura jsont rendes jsonné alakítani 
+# tehát ezért kell ezt a fura jsont rendes jsonné alakítani
 from bson import Binary, Code
 from bson.json_util import dumps
 
@@ -28,6 +28,13 @@ class dbIO:
 
     def getAllData(self):
         cursor = self.dbCollection().find({})
+        ListOfJsons = []
+        for document in cursor:
+            ListOfJsons.append(document)
+        return str(dumps(ListOfJsons)).replace("'", '"')
+
+    def getSpecifiedWeekData(self, het):
+        cursor = self.dbCollection().find({"het":int(het)})
         ListOfJsons = []
         for document in cursor:
             ListOfJsons.append(document)

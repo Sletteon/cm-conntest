@@ -16,9 +16,14 @@ class onReceiveReq(fileIO, errorHandl, dbIO):
     def onReceiveGet(self, clientIP):
         printObj = colorPrint()
         # [*] Anyaglekérés: jancsi.ip.címe.túróstáska
-        printObj.finePrint('Anyaglekérés: %s' % (clientIP))
+        printObj.finePrint('Mindegyik hét lekérése: %s' % (clientIP))
         # return self.readJSONFormFile(fileIO().dataDotJsonPath)
         return self.getAllData()
+
+    def onReceiveSpecifiedGet(self, clientIP, het):
+        colorPrint().finePrint('%s.hét lekérése: %s' % (het, clientIP))
+
+        return self.getSpecifiedWeekData(het)
 
     def onReceivePost(self, clientIP):
 

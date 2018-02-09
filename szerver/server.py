@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-#	######################################
-#	cm-kapcsolatteszt szerveroldali szkript
+#    ######################################
+#    cm-kapcsolatteszt szerveroldali szkript
 #
-# 	Flask ügye, ha ez a gép egy kérést kap, akkor futtassa le az index() függvényt.
-# 	Amennyiben GET metódussal csatlakoztak kliensek erre a szerverre,
-#	lekérnek adatot, így a POST metódussal beküldött adatokat,
-#	JSON formában visszaszolgálja.
-#	######################################
+#     Flask ügye, ha ez a gép egy kérést kap, akkor futtassa le az index() függvényt.
+#     Amennyiben GET metódussal csatlakoztak kliensek erre a szerverre,
+#    lekérnek adatot, így a POST metódussal beküldött adatokat,
+#    JSON formában visszaszolgálja.
+#    ######################################
 
 # [+] Hiba nélkül történt valami (zöld)
 # [-] Semmi extra (kék)
@@ -53,6 +53,8 @@ def badRequest(e):
 def badRequest(e):
     return Response(errorHandl().RequestError(request, 500, errorCodeToldalek='-as'), status=500, mimetype='application/json')
 
+#   GET - Minden hét lekérése (nem kéne használni, de még nem törlöm ki)
+#   POST - Beküldés
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -63,6 +65,12 @@ def index():
         return onReceiveReqObj.onReceivePost(clientIP)
     else:  # request.method == 'GET'
         return onReceiveReqObj.onReceiveGet(clientIP)
+
+#    GET - Meghatározott hét lekérése
+@app.route('/het/<Het>', methods=['GET'])
+def lekeres(Het):
+    clientIP = request.remote_addr
+    return onReceiveReq().onReceiveSpecifiedGet(clientIP, Het)
 
 # Lokális Ip-t (hálózaton belülit) ad vissza
 # Ha nem vagyunk online, OSError-t dob fel
