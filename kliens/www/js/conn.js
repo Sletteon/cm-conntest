@@ -6,17 +6,18 @@ window.onload = function() {
         window.localStorage.setItem("UName", UName);
     }
 
+	document.getElementById("nap").value = getDay();
 
 }
 
-// visszaadja a mai napnak a berűkódját
+// visszaadja a mai napnak a betűkódját
 function getDay() {
 
     var dateObj = new Date();
     var nap = dateObj.getDay();
 
     switch (nap) {
-        case 0:
+        case 0: // vasárnap
             return "K";
             break;
         case 1:
@@ -34,7 +35,7 @@ function getDay() {
         case 5:
             return "P";
             break;
-        case 6:
+        case 6: // szombat
             return "K";
             break;
     }
@@ -66,13 +67,53 @@ function getUrlS/*oftCoded*/() {
     return "http://" + IPaddress + ":" + Port;
 }
 
+
+// https://coderwall.com/p/nilaba/simple-pure-javascript-array-unique-method-with-5-lines-of-code
+// Ha egy listában több ugyanolyan elem is megtalálható, csak egy ilyen elemet adjon vissza
+
+// napok lekérésénél lehet hasznos
+Array.prototype.unique = function() {
+  return this.filter(function (value, index, self) {
+    return self.indexOf(value) === index;
+  });
+}
+
+
 function AnyagLekeres() {
     $.ajax({
         type: "get",
         url: getUrl(),
         success: function(responseData, textStatus, jqXHR) {
+			responseJSON = JSON.parse(responseData)
+
+			// JSON KIBONTÁS
+			
+			// uname: felhasználónév (string)
+			// het: hét (integer)
+			// nap: nap (char) (JS szerint a char is string)
+			// tant: tantárgy (string)
+			// anyag: anyag (string)
+
+			// JSON-lista első JSON-jának elérése: responseJSON[0]
+			// JSON-ban a tantárgy elérése: responseJSON.tant
+
             document.getElementById("socket").innerHTML = '<h2>' + responseData + '<h2>';
-            console.log('Szerver: ' + '\n' + responseData + '\n -----');
+            console.log('Első bejegyzés szerkesztője: ' + '\n' + responseJSON[0].uname + '\n -----');
+
+			// Összes JSON anyaga
+			pufferAnyag = []
+			for (i = 0; i < responseJSON.length; i++) {
+				pufferAnyag.push(responseJSON[i].anyag);
+			}
+			console.log('Összes JSON anyaga: ' + '\n' + pufferAnyag + '\n -----');
+
+			// Összes JSON napja
+			pufferNap = []
+			for (i = 0; i < responseJSON.length; i++) {
+				pufferNap.push(responseJSON[i].nap);
+			}
+			// Ne az összes napot írja ki, hanem mindenből csak egyet (ha van legalább arra a napra bejegyzés)
+			console.log('Összes JSON napja: ' + '\n' + pufferNap.unique() + '\n -----');
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert("Hiba a kapcsolat létesítésekor. (lásd konzol)");
@@ -91,7 +132,7 @@ function AnyagBeallitas() {
     var sendingJSON = {
         "uname": window.localStorage.getItem("UName"),
         "het": getWeek(),
-        "nap": getDay(),
+        "nap": nap,
         "tant": document.getElementById("tantargy").value,
         "anyag": document.getElementById("anyag").value
     };
