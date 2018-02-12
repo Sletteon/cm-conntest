@@ -5,8 +5,15 @@ from random import randint
 
 try:
     ServerIp = sys.argv[1]
+    if ":" in ServerIp:
+        ServerAddr = ServerIp.split(":")
+        fullServerAddr = 'http://' + ServerAddr[0] + ':' + ServerAddr[1]
+    else:
+        fullServerAddr = 'http://' + ServerIp + ':5000'
+
 except IndexError:
-    ServerIp = '46.139.116.9'
+    print('<!> Nincs IP-cím szolgáltatva, kilépés')
+    exit()
 
 # 1000 hosszú json-t küld be, ami egy (egyáltalán nem) realisztikus terhelést törekszik elérni
 print('[*] Beállítás-teszt\n')
@@ -19,7 +26,7 @@ for i in range(1001):
     try:
         generatedHet = randint(0, 52)
         generatedNap = randint(0, len(nap) - 1)
-        r = requests.post('http://' + ServerIp + ':5000', json={
+        r = requests.post(fullServerAddr, json={
             'uname': 'TEST_NUMBER_' + str(i),
             'het': generatedHet,
             'nap': nap[generatedNap],
@@ -47,7 +54,7 @@ if i == 1000:
     print('[*] ' + str(i) + ' beküldés ' + str(time.time() - start)[:5] + ' mp alatt lett feldolgozva\n')
     print('[*] Lekérés\n')
     try:
-        r = requests.get('http://' + ServerIp + ':5000')
+        r = requests.get(fullServerAddr)
         r.raise_for_status()
         if not r.text == None and not r.text == '':
             print('[+] Sikeres lekérés')
