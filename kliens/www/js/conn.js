@@ -114,6 +114,7 @@ function AnyagLekeres() {
 			}
 			// Ne az összes napot írja ki, hanem mindenből csak egyet (ha van legalább arra a napra bejegyzés)
 			console.log('Összes JSON napja: ' + '\n' + pufferNap.unique() + '\n -----');
+			document.getElementById('socket').innerHTML = '<h2>Napok: </h2>' + pufferNap.unique()
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert("Hiba a kapcsolat létesítésekor. (lásd konzol)");
