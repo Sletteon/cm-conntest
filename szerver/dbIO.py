@@ -24,7 +24,7 @@ class dbIO:
         self.dbCollection().remove({})
 
     def getRecordNumber(self):
-        colorPrint().finePrint(self.dbCollection().find({}).count())
+        return str(self.dbCollection().find({}).count())
 
     def getAllData(self):
         cursor = self.dbCollection().find({})

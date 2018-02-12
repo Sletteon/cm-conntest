@@ -72,6 +72,11 @@ def lekeres(Het):
     clientIP = request.remote_addr
     return onReceiveReq().onReceiveSpecifiedGet(clientIP, Het)
 
+@app.route('/getRecord', methods=['GET'])
+def adatSzama():
+    clientIP = request.remote_addr
+    return onReceiveReq().onReceiveRecordNumberGet(clientIP)
+
 # Lokális Ip-t (hálózaton belülit) ad vissza
 # Ha nem vagyunk online, OSError-t dob fel
 

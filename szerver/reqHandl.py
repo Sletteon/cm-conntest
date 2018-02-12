@@ -25,6 +25,10 @@ class onReceiveReq(fileIO, errorHandl, dbIO):
 
         return self.getSpecifiedWeekData(het)
 
+    def onReceiveRecordNumberGet(self, clientIP):
+        colorPrint().finePrint('Adatok számának lekérése: %s' % (clientIP))
+        return self.getRecordNumber()
+
     def onReceivePost(self, clientIP):
 
         gotJSON = request.get_json()
