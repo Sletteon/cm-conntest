@@ -58,4 +58,4 @@ class onReceiveReq(fileIO, errorHandl, dbIO):
             errorHandl().errorHandling(clientIP)
             return Response(json.dumps({'ERROR': 'ERROR READING RECEIVED MESSAGE'}), status=400, mimetype='application/json')
 
-        return Response(json.dumps('SUCCESS'), mimetype='application/json')
+        return Response(json.dumps({'SUCCESS': 'SUCCESS'}), mimetype='application/json')
