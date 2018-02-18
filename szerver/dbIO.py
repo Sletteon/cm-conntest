@@ -4,7 +4,6 @@ from pymongo import MongoClient
 # tehát ezért kell ezt a fura jsont rendes jsonné alakítani
 from bson.json_util import dumps
 from config import get_config
-
 COLLECTION_NAME = 'posts'
 
 
@@ -31,11 +30,11 @@ class dbIO:
         ListOfJsons = []
         for document in cursor:
             ListOfJsons.append(document)
-        return str(dumps(ListOfJsons)).replace("'", '"')
+        return dumps(ListOfJsons)
 
     def getSpecifiedWeekData(self, het):
         cursor = self.dbCollection().find({"het": int(het)})
         ListOfJsons = []
         for document in cursor:
             ListOfJsons.append(document)
-        return str(dumps(ListOfJsons)).replace("'", '"')
+        return dumps(ListOfJsons)

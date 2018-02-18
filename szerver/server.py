@@ -20,7 +20,6 @@ import os
 import logging
 import socket
 import sys
-import configparser
 
 # Hozzáadott könyvárak
 from flask import Flask, request, Response
