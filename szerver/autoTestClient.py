@@ -5,10 +5,13 @@ from random import randint
 
 try:
     ServerIp = sys.argv[1]
-    if ":" in ServerIp:
+    if ":" and "." in ServerIp:
         ServerAddr = ServerIp.split(":")
         fullServerAddr = 'http://' + ServerAddr[0] + ':' + ServerAddr[1]
     else:
+        if "." not in ServerIp:
+            print('<!> Hibás hostname vagy IP-cím')
+            exit()
         fullServerAddr = 'http://' + ServerIp + ':5000'
 
 except IndexError:
