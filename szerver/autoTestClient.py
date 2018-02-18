@@ -41,11 +41,11 @@ for i in range(1001):
         print('<!> ' + str(e))
         exit(1)
 
-    if not r.json() == 'SUCCESS' and not i == 0:
+    if not r.json() == {'SUCCESS': 'SUCCESS'} and not i == 0:
         raise EnvironmentError('<!> Szerver rossz választ adott')
         exit(1)
     else:
-        if not r.json() == 'SUCCESS':
+        if not r.json() == {'SUCCESS': 'SUCCESS'} :
             raise EnvironmentError('<!> Hibás beállítás')
             exit(1)
 
