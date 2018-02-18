@@ -2,18 +2,18 @@
 from pymongo import MongoClient
 # MongoDB json-jában található egy objectId, ami nem feltétlenül json-barát,
 # tehát ezért kell ezt a fura jsont rendes jsonné alakítani
-from bson import Binary, Code
 from bson.json_util import dumps
+from config import get_config
 
-from colorPrint import colorPrint
+COLLECTION_NAME = 'posts'
 
 
 class dbIO:
-
     def dbCollection(self):
-        client = MongoClient('192.168.1.160', 27017)
-        db = client['cm']
-        return db['posts']
+        mongo_cfg = get_config()['mongodb']
+        client = MongoClient(mongo_cfg['host'], int(mongo_cfg['port']))
+        db = client[mongo_cfg['db']]
+        return db[COLLECTION_NAME]
 
     def sendJSONToDB(self, Json):
         objectId = self.dbCollection().insert(Json)
@@ -34,7 +34,7 @@ class dbIO:
         return str(dumps(ListOfJsons)).replace("'", '"')
 
     def getSpecifiedWeekData(self, het):
-        cursor = self.dbCollection().find({"het":int(het)})
+        cursor = self.dbCollection().find({"het": int(het)})
         ListOfJsons = []
         for document in cursor:
             ListOfJsons.append(document)

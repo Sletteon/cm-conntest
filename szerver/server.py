@@ -20,6 +20,7 @@ import os
 import logging
 import socket
 import sys
+import configparser
 
 # Hozzáadott könyvárak
 from flask import Flask, request, Response
@@ -30,11 +31,12 @@ from fileIO import fileIO
 from reqHandl import onReceiveReq
 from colorPrint import colorPrint
 from errorHandl import errorHandl
+from config import init_config
 
 # Ne látszódjanak a werkzeug (többek között HTTP-log) cuccai
 logging.getLogger('werkzeug').setLevel(logging.WARNING)
 
-app = Flask(__name__, static_folder=os.path.join(os.environ['PWD'], 'client'))
+app = Flask(__name__, static_folder=os.path.join(os.environ['PWD'], 'kliens'))
 # Kell, ha nincs akkor kliens hibát kap
 CORS(app, resources={r'/*': {'origins': '*'}})
 
@@ -45,19 +47,19 @@ def badRequest(e):
 
 
 @app.errorhandler(400)
-def badRequest(e):
+def badRequest400(e):
     return Response(errorHandl().RequestError(request, 400, errorCodeToldalek='-as'), status=400, mimetype='application/json')
 
 
 @app.errorhandler(500)
-def badRequest(e):
+def badRequest500(e):
     return Response(errorHandl().RequestError(request, 500, errorCodeToldalek='-as'), status=500, mimetype='application/json')
 
-#   GET - Minden hét lekérése (nem kéne használni, de még nem törlöm ki)
-#   POST - Beküldés
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    """ GET - Minden hét lekérése (nem kéne használni, de még nem törlöm ki)
+        POST - Beküldés"""
     onReceiveReqObj = onReceiveReq()
     # Csatlakozott kliens IP-címe
     clientIP = request.remote_addr
@@ -66,11 +68,13 @@ def index():
     else:  # request.method == 'GET'
         return onReceiveReqObj.onReceiveGet(clientIP)
 
-#    GET - Meghatározott hét lekérése
+
 @app.route('/het/<Het>', methods=['GET'])
 def lekeres(Het):
+    """ GET - Meghatározott hét lekérése """
     clientIP = request.remote_addr
     return onReceiveReq().onReceiveSpecifiedGet(clientIP, Het)
+
 
 @app.route('/getRecord', methods=['GET'])
 def adatSzama():
@@ -90,8 +94,10 @@ if __name__ == '__main__':
     fileIO().filetrunc()
 
     try:
-        port = sys.argv[1]
-        if int(port) < 1000:
+        config = init_config(sys.argv[1])
+
+        port = int(config['server']['port'])
+        if port < 1000:
             colorPrint().lowPortNumberWarn()
 
         localIp = getlocalIp()
@@ -111,8 +117,8 @@ if __name__ == '__main__':
     except OSError:  # nincs internet, van port
         colorPrint().startPrintNoIP()
         colorPrint().okPrint('Szerver elérhető a %s-s porton' % (str(port)))
-        app.run(host='0.0.0.0', port=int(port))
+        app.run(host='0.0.0.0', port=port)
 
     else:  # van internet, van port
         colorPrint().startPrint('%s:%s' % (localIp, str(port)))
-        app.run(host='0.0.0.0', port=int(port))
+        app.run(host='0.0.0.0', port=port)

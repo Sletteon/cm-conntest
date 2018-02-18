@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import requests, hashlib, sys, time
+import requests
+import hashlib
+import sys
+import time
+
 from random import randint
 
 try:
     ServerIp = sys.argv[1]
-    if ":" and "." in ServerIp:
+    if {":", "."}.issubset(ServerIp):
         ServerAddr = ServerIp.split(":")
         fullServerAddr = 'http://' + ServerAddr[0] + ':' + ServerAddr[1]
     else:
         if "." not in ServerIp:
             print('<!> Hibás hostname vagy IP-cím')
             exit()
-        fullServerAddr = 'http://' + ServerIp + ':5000'
+        fullServerAddr = 'http://{}:5000'.format(ServerIp)
 
 except IndexError:
     print('<!> Nincs IP-cím szolgáltatva, kilépés')
@@ -48,7 +52,7 @@ for i in range(1001):
         raise EnvironmentError('<!> Szerver rossz választ adott')
         exit(1)
     else:
-        if not r.json() == {'SUCCESS': 'SUCCESS'} :
+        if not r.json() == {'SUCCESS': 'SUCCESS'}:
             raise EnvironmentError('<!> Hibás beállítás')
             exit(1)
 
@@ -59,7 +63,7 @@ if i == 1000:
     try:
         r = requests.get(fullServerAddr)
         r.raise_for_status()
-        if not r.text == None and not r.text == '':
+        if r.text is not None and not r.text == '':
             print('[+] Sikeres lekérés')
         else:
             raise EnvironmentError('<!> Üres válasz a lekérésre')
