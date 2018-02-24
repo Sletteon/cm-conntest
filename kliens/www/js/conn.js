@@ -115,6 +115,8 @@ function AnyagLekeres() {
 			// Ne az összes napot írja ki, hanem mindenből csak egyet (ha van legalább arra a napra bejegyzés)
 			console.log('Összes JSON napja: ' + '\n' + pufferNap.unique() + '\n -----');
 			document.getElementById('socket').innerHTML = '<h2>Napok: </h2>' + pufferNap.unique()
+
+		console.log(JSON.stringify(responseJSON))
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert("Hiba a kapcsolat létesítésekor. (lásd konzol)");
@@ -152,6 +154,20 @@ function AnyagBeallitas() {
     });
 }
 
+function BejegyzTorlese() {
+    $.ajax({
+        type: "delete",
+        url: getUrl() + "/delete/" + document.getElementById('deleteObj').value,
+        success: function(responseData, textStatus, jqXHR) {},
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert("Hiba a kapcsolat létesítésekor. (lásd konzol)");
+        }
+    });
+
+
+
+}
+
 document.getElementById("getButton").onclick = function() {
     AnyagLekeres();
 };
@@ -159,6 +175,11 @@ document.getElementById("getButton").onclick = function() {
 document.getElementById("connButton").onclick = function() {
     AnyagBeallitas();
 };
+
+document.getElementById("objDelButton").onclick = function() {
+	BejegyzTorlese();
+};
+	
 // ha a gombok alatti szövegre kattintanak, törölje a felhasználónevet,
 // és frissítse az oldalt
 document.getElementById("unameDel").onclick = function() {

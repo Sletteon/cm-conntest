@@ -80,6 +80,12 @@ def adatSzama():
     clientIP = request.remote_addr
     return onReceiveReq().onReceiveRecordNumberGet(clientIP)
 
+@app.route('/delete/<objectIdToDelete>', methods=['DELETE'])
+def megadottBejegyzesTorlese(objectIdToDelete):
+    clientIP = request.remote_addr
+    return onReceiveReq().onReceiveDelete(clientIP, objectIdToDelete)
+
+
 # Lokális Ip-t (hálózaton belülit) ad vissza
 # Ha nem vagyunk online, OSError-t dob fel
 

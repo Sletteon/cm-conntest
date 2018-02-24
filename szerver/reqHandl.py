@@ -13,6 +13,18 @@ from dbIO import dbIO
 
 
 class onReceiveReq(fileIO, errorHandl, dbIO):
+
+    def onReceiveDelete(self, clientIP, objectIdToDelete):
+
+        if str(objectIdToDelete) == '<|>DELETE_ALL<|>':
+            self.deleteAllData()
+            colorPrint().warnPrint('Adatok törölve: %s' % (clientIP))
+        else:
+            self.deleteSpecifiedData(objectIdToDelete)
+            colorPrint().warnPrint('1 bejegyzés (%s) törölve: %s' % (objectIdToDelete, clientIP))
+
+        return Response(json.dumps({'SUCCESS': 'SUCCESS'}), mimetype='application/json')
+
     def onReceiveGet(self, clientIP):
         printObj = colorPrint()
         # [*] Anyaglekérés: jancsi.ip.címe.túróstáska
@@ -33,22 +45,15 @@ class onReceiveReq(fileIO, errorHandl, dbIO):
 
         gotJSON = request.get_json()
         try:
-            if str(gotJSON['tant']) == '<|>DELETE_ALL<|>':
-                self.deleteAllData()
-                colorPrint().warnPrint('Adatok törölve: %s' % (clientIP))
-            else:
-                # [*] jancsi (jancsi.ip.címe.briós) bejegyzése:
-                colorPrint().finePrint('%s (%s) bejegyzése:' %
-                                       (str(gotJSON['uname']), clientIP))
+             colorPrint().finePrint('%s (%s) bejegyzése:' %
+                                    (str(gotJSON['uname']), clientIP))
 
-                self.sendJSONToDB(gotJSON)
-                # Adatok kiírása
-                print('--- Hét: %s' % (str(gotJSON['het'])))
-                print('--- Nap: %s' % (str(gotJSON['nap'])))
-                print('--- Tantárgy: %s' % (str(gotJSON['tant'])))
-                print('--- Anyag: %s' % (str(gotJSON['anyag'])))
+             self.sendJSONToDB(gotJSON)
 
-                #self.writeJSONToFile(fileIO().dataDotJsonPath, gotJSON)
+             print('--- Hét: %s' % (str(gotJSON['het'])))
+             print('--- Nap: %s' % (str(gotJSON['nap'])))
+             print('--- Tantárgy: %s' % (str(gotJSON['tant'])))
+             print('--- Anyag: %s' % (str(gotJSON['anyag'])))
 
         except KeyError:
             errorHandl().errorHandling(clientIP)

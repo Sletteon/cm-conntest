@@ -3,6 +3,7 @@ from pymongo import MongoClient
 # MongoDB json-jában található egy objectId, ami nem feltétlenül json-barát,
 # tehát ezért kell ezt a fura jsont rendes jsonné alakítani
 from bson.json_util import dumps
+from bson.objectid import ObjectId
 from config import get_config
 COLLECTION_NAME = 'posts'
 
@@ -21,6 +22,9 @@ class dbIO:
 
     def deleteAllData(self):
         self.dbCollection().remove({})
+
+    def deleteSpecifiedData(self, objectIdToDelete):
+        self.dbCollection().remove({"_id":ObjectId(objectIdToDelete)})
 
     def getRecordNumber(self):
         return str(self.dbCollection().find({}).count())
