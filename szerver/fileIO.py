@@ -3,11 +3,13 @@
 # Fájlokkal zsonglőrködik
 import json
 import os
-
+import hashlib
+import base64
 
 class fileIO:
-    scriptPath = os.path.dirname(__file__)
-    dataDotJsonPath = os.path.join(scriptPath, 'debug', 'data.json')
+    _SCRPITPATH = os.path.dirname(__file__)
+    _DATAPATH = os.path.join(_SCRPITPATH, 'debug', 'data.json')
+    _SEPARATOR = "<|>MEZOPOTÁMIA<|>"
 
     # JSON adatok mentése
     def writeJSONToFile(self, file, JSON):
@@ -20,6 +22,17 @@ class fileIO:
             return '\n'.join(file.readlines())
 
     def filetrunc(self):
-        with open(self.dataDotJsonPath, 'w', encoding='utf-8') as file:
+        with open(self._DATAPATH, 'w', encoding='utf-8') as file:
             file.truncate()
             file.close()
+
+    def saveToPicture(self, base64encodedPic, filename):
+        #filename = hashlib.sha1(base64encodedPic.encode('utf-8')).hexdigest()
+        picList = base64encodedPic.split(self._SEPARATOR)
+        with open(filename, "wb") as fileobj:
+            for picture in picList:
+                fileobj.write(picture)
+
+    def picToBinary(self, picture):
+        return base64.b64encode(picture.read())
+

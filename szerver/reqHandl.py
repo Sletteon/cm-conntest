@@ -2,6 +2,8 @@
 
 # Amikor valaki üzenetet küld, ez az osztály lesz  megfelelő függvénye lesz meghívva
 import socket
+import datetime
+import hashlib
 
 from flask import Flask, request, Response, json
 from flask_cors import CORS
@@ -47,6 +49,15 @@ class onReceiveReq(fileIO, errorHandl, dbIO):
         try:
              colorPrint().finePrint('%s (%s) bejegyzése:' %
                                     (str(gotJSON['uname']), clientIP))
+            
+
+             if str(gotJSON['pic']) != "":
+                # Lekéri a mostani dátumot, időt és hasheli
+                fileSavingDateTimeHash = hashlib.sha1(datetime.datetime.now().encode('utf-8')).hexdigest()
+
+                # Elmenti a kapott kódolt képet, olyan fájlba, aminek a neve a  mostani dátum-időnek a hash-e
+                self.saveToPicture(str(gotJSON['pic']), fileSavingDateTimeHash) 
+                gotJSON['pic'] = fileSavingDateTimeHash 
 
              self.sendJSONToDB(gotJSON)
 
