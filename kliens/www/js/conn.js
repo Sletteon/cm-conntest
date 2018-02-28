@@ -53,14 +53,14 @@ function getWeek() {
 	return new Date().getWeekNumber();
 }
 
-function getUrl/*HardCoded*/() {
+function getUrlH/*ardCoded*/() {
     var IPaddress = 'localhost'; /*document.getElementById("IP").value;*/
     var Port = 5000; /*document.getElementById("Port").value;*/
 
     return "http://" + IPaddress + ":" + Port;
 }
 
-function getUrlS/*oftCoded*/() {
+function getUrl/*SoftCoded*/() {
 	var IPaddress = document.getElementById("IP").value;
     var Port = document.getElementById("Port").value;
 
