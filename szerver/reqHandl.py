@@ -50,21 +50,28 @@ class onReceiveReq(fileIO, errorHandl, dbIO):
              colorPrint().finePrint('%s (%s) bejegyzése:' %
                                     (str(gotJSON['uname']), clientIP))
             
+             try:
+                 if str(gotJSON['pic']) != "":
+                    dateTimeHash = hashlib.sha1(datetime.datetime.now().encode('utf-8')).hexdigest()
+                    gotJSON['pic'] = dateTimeHash 
+                 else:
+                    gotJSON['pic'] = ''
+             except KeyError:
+                 gotJSON['pic'] = ''
 
-            # if str(gotJSON['pic']) != "":
-            #    # Lekéri a mostani dátumot, időt és hasheli
-            #    fileSavingDateTimeHash = hashlib.sha1(datetime.datetime.now().encode('utf-8')).hexdigest()
-
-            #    # Elmenti a kapott kódolt képet, olyan fájlba, aminek a neve a  mostani dátum-időnek a hash-e
-            #    self.saveToPicture(str(gotJSON['pic']), fileSavingDateTimeHash) 
-            #    gotJSON['pic'] = fileSavingDateTimeHash 
 
              self.sendJSONToDB(gotJSON)
 
-             print('--- Hét: %s' % (str(gotJSON['het'])))
-             print('--- Nap: %s' % (str(gotJSON['nap'])))
-             print('--- Tantárgy: %s' % (str(gotJSON['tant'])))
-             print('--- Anyag: %s' % (str(gotJSON['anyag'])))
+             print('--- Hét: {}'.format(str(gotJSON['het'])))
+             print('--- Nap: {}'.format(str(gotJSON['nap'])))
+             print('--- Tantárgy: {}'.format(str(gotJSON['tant'])))
+             print('--- Anyag: {}'.format(str(gotJSON['anyag'])))
+
+             if str(gotJSON['pic']):
+                 print('--- Kép (hash): {}'.format(str(gotJSON['pic'])))
+             else:
+                 print('--- Kép (hash): {}'.format(str(gotJSON['pic'])))
+
 
         except KeyError:
             errorHandl().errorHandling(clientIP)

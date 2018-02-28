@@ -25,14 +25,3 @@ class fileIO:
         with open(self._DATAPATH, 'w', encoding='utf-8') as file:
             file.truncate()
             file.close()
-
-    def saveToPicture(self, base64encodedPic, filename):
-        #filename = hashlib.sha1(base64encodedPic.encode('utf-8')).hexdigest()
-        picList = base64encodedPic.split(self._SEPARATOR)
-        with open(filename, "wb") as fileobj:
-            for picture in picList:
-                fileobj.write(picture)
-
-    def picToBinary(self, picture):
-        return base64.b64encode(picture.read())
-
