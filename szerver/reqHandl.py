@@ -51,11 +51,9 @@ class onReceiveReq(fileIO, errorHandl, dbIO):
                                     (str(gotJSON['uname']), clientIP))
             
              try:
-                 if str(gotJSON['pic']) != "":
-                    dateTimeHash = hashlib.sha1(datetime.datetime.now().encode('utf-8')).hexdigest()
-                    gotJSON['pic'] = dateTimeHash 
-                 else:
-                    gotJSON['pic'] = ''
+                 if str(gotJSON['pic']) == "":
+                    dateTimeHash = datetime.datetime.now()
+                    gotJSON['pic'] = "" 
              except KeyError:
                  gotJSON['pic'] = ''
 
