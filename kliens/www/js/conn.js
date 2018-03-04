@@ -167,21 +167,21 @@ function BejegyzTorlese() {
 }
 
 function draw() {
+	    
 	    var ctx = document.getElementById('picCanvas').getContext('2d'),
 		        img = new Image(),
 		        f = document.getElementById("picSelect").files[0],
 		        url = window.URL || window.webkitURL,
 		        src = url.createObjectURL(f);
-
 	    img.src = src;
 	    img.onload = function() {
-		            ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, document.getElementById("picCanvas").height, document.getElementById("picCanvas").height);
+		            ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, document.getElementById("picCanvas").width, document.getElementById("picCanvas").height);
 		            url.revokeObjectURL(src);
 		        }
 }
 
 function getImage() {
-	var pictureMIMEtype = document.getElementById("picCanvas").type
+	var pictureMIMEtype = document.getElementById("picSelect").type
 	return pic = document.getElementById("picCanvas").toDataURL(pictureMIMEtype, 1.0);
 }
 
