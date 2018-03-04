@@ -166,26 +166,36 @@ function BejegyzTorlese() {
     });
 }
 
+// kiralzolja a picSelectben kiválasztott képet
 function draw() {
-	    
-	    var ctx = document.getElementById('picCanvas').getContext('2d'),
+	   canvas = document.getElementById('picCanvas')
+	   select = document.getElementById('picSelect')
+
+	    var ctx = canvas.getContext('2d'),
 		        img = new Image(),
-		        f = document.getElementById("picSelect").files[0],
+		        f = select.files[0],
 		        url = window.URL || window.webkitURL,
 		        src = url.createObjectURL(f);
 	    img.src = src;
+	canvas.width = f.width;
+	canvas.height = f.height;
 	    img.onload = function() {
-		            ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, document.getElementById("picCanvas").width, document.getElementById("picCanvas").height);
+	                    //alert(img.width + " " + img.height)
+			    canvas.width = img.width;
+			    canvas.height = img.height;
+		            ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
 		            url.revokeObjectURL(src);
 		        }
 }
 
+// A canvasra kirajzolt képet adja vissza base64 kódolásban, tejles minőségben
 function getImage() {
-	var pictureMIMEtype = document.getElementById("picSelect").type
+	var pictureMIMEtype = document.getElementById("picSelect").files[0].type;
+	//alert(pictureMIMEtype);
 	return pic = document.getElementById("picCanvas").toDataURL(pictureMIMEtype, 1.0);
 }
 
-
+// ha kiválasztottak egy kép-fájlt
 document.getElementById("picSelect").addEventListener("change", draw, false);
 
 document.getElementById("getButton").onclick = function() {
