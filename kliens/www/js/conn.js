@@ -190,7 +190,11 @@ function draw() {
 
 // A canvasra kirajzolt képet adja vissza base64 kódolásban, tejles minőségben
 function getImage() {
-	var pictureMIMEtype = document.getElementById("picSelect").files[0].type;
+	try {
+		var pictureMIMEtype = document.getElementById("picSelect").files[0].type;
+	} catch(TypeError) {
+		return '';	
+	}
 	//alert(pictureMIMEtype);
 	return pic = document.getElementById("picCanvas").toDataURL(pictureMIMEtype, 1.0);
 }
