@@ -13,7 +13,7 @@ try:
         ServerAddr = ServerIp.split(":")
         fullServerAddr = 'http://' + ServerAddr[0] + ':' + ServerAddr[1]
     else:
-        if "." not in ServerIp:
+        if "." not in ServerIp and 'localhost' not in ServerIp:
             print('<!> Hibás hostname vagy IP-cím')
             exit()
         fullServerAddr = 'http://{}:5000'.format(ServerIp)
