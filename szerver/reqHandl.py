@@ -49,14 +49,17 @@ class onReceiveReq(fileIO, errorHandl, dbIO):
         try:
              colorPrint().finePrint('%s (%s) bejegyzése:' %
                                     (str(gotJSON['uname']), clientIP))
-            
+           
+             # Ha nem létezik kép, akkor is hozzon létre kép kulcsot üres stringgel
              try:
-                 if str(gotJSON['pic']) == "":
-                    dateTimeHash = datetime.datetime.now()
-                    gotJSON['pic'] = "" 
+                 if str(gotJSON['pic']) != '':
+                     picExists = True
+                     pass
+                 else:
+                     picExists = False
              except KeyError:
                  gotJSON['pic'] = ''
-
+                 picExists = False
 
              self.sendJSONToDB(gotJSON)
 
@@ -64,12 +67,7 @@ class onReceiveReq(fileIO, errorHandl, dbIO):
              print('--- Nap: {}'.format(str(gotJSON['nap'])))
              print('--- Tantárgy: {}'.format(str(gotJSON['tant'])))
              print('--- Anyag: {}'.format(str(gotJSON['anyag'])))
-
-             if str(gotJSON['pic']):
-                 print('--- Kép (hash): {}'.format(str(gotJSON['pic'])))
-             else:
-                 print('--- Kép (hash): {}'.format(str(gotJSON['pic'])))
-
+             print('--- Kép: {}'.format('Van' if str(gotJSON['pic']) != '' else 'Nincs'))
 
         except KeyError:
             errorHandl().errorHandling(clientIP)
