@@ -4,9 +4,17 @@ import requests
 import hashlib
 import sys
 import time
+import base64
+import os
 
 from random import randint
 
+# Ahogy a neve is utal rá, visszaadja a fájlok tartalmát stringben
+def fileToBase64(filePath):
+    with open(filePath, 'rb') as fileObj:
+        return base64.b64encode(fileObj.read())
+
+# Mindenesetben egy 'http://{}:5000'-t kérünk, ha nincs így megadva, akkor egészítsük ki
 try:
     ServerIp = sys.argv[1]
     if {":", "."}.issubset(ServerIp):
@@ -22,24 +30,36 @@ except IndexError:
     print('<!> Nincs IP-cím szolgáltatva, kilépés')
     exit()
 
+# Ha van kép szolgáltatva, írjuk ki, mennyi adatot fogunk átküldeni, majd állítsuk be a pic változót a kódolt képre
+try:
+    picPath = sys.argv[2]
+    pic = str(fileToBase64(picPath))
+    picSize = os.path.getsize(picPath)
+    print('(i) {} MB-nyi kép kerül átküldésre (+ lekérés)\n'.format(str(round(picSize*1000/1048576, 2))))
+except IndexError:
+    pic = ''
+
+
 # 1000 hosszú json-t küld be, ami egy (egyáltalán nem) realisztikus terhelést törekszik elérni
 print('[*] Beállítás-teszt\n')
 
 nap = ('H', 'K', 'S', 'C', 'P')
-het = ('E', 'J', 'EE', 'JU')
 
 start = time.time()
 for i in range(1001):
     try:
         generatedHet = randint(0, 52)
         generatedNap = randint(0, len(nap) - 1)
+
         r = requests.post(fullServerAddr, json={
             'uname': 'TEST_NUMBER_' + str(i),
             'het': generatedHet,
             'nap': nap[generatedNap],
             'tant': hashlib.sha1(str(i + generatedHet * generatedNap).encode('utf-8')).hexdigest(),
-            'anyag': hashlib.md5(str(i + generatedHet * generatedNap).encode('utf-8')).hexdigest()
+            'anyag': hashlib.md5(str(i + generatedHet * generatedNap).encode('utf-8')).hexdigest(),
+            'pic': pic
         })
+    # Hibák elkapása
         r.raise_for_status()
     except requests.exceptions.HTTPError as httperr:
         print('<!> ' + str(httperr))
