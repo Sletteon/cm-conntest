@@ -1,29 +1,33 @@
 # -*- coding: utf-8 -*-
 
 # Színesen kiírja az állapotnak megfelelő ikont, és utána a szöveget
+from time import gmtime, strftime
 from colorama import Fore, Style
 
 
 class colorPrint:
+    def time(self):
+        return strftime("[ %Y-%m-%d %H:%M:%S ] ", gmtime())
+
     def errPrint(self, message):
-        print('\n' + Fore.RED + Style.BRIGHT +
-              '[&&&] ' + Style.RESET_ALL + message)
+        print('\n'+ Fore.RED + Style.BRIGHT +
+              '[&&&] ' + Style.RESET_ALL + self.time() + message)
 
     def warnPrint(self, message):
         print('\n' + Fore.YELLOW + Style.BRIGHT +
-              '[*] ' + Style.RESET_ALL + message)
+              '[*] ' + Style.RESET_ALL + self.time()+ message)
 
     def okPrint(self, message):
         print('\n' + Fore.GREEN + Style.BRIGHT +
-              '[+] ' + Style.RESET_ALL + message)
+              '[+] ' + Style.RESET_ALL + self.time()+ message)
 
     def finePrint(self, message):
         print('\n' + Fore.BLUE + Style.BRIGHT +
-              '[-] ' + Style.RESET_ALL + message)
+              '[-] ' + Style.RESET_ALL + self.time()+ message)
 
     def startPrint(self, IpAddress):
         print(Fore.GREEN + Style.BRIGHT +
-              '[+] ' + Style.RESET_ALL + 'Szerver fut: ' + IpAddress)
+              '[+] ' + Style.RESET_ALL + self.time()+ 'Szerver fut: ' + IpAddress)
 
     def startPrintNoIP(self):
         print(Fore.YELLOW + Style.BRIGHT +
