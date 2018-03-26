@@ -42,11 +42,8 @@
     <title>Hello World</title>
 </head>
 <script type="text/javascript">
-    function settings(){
-        goToUrl('settings.html')
-    }
-    function upload(){
-        goToUrl('upload.html')
+    function back(){
+        goToUrl('index.html')
     }
     function goToUrl(val) {
     location.href = val;
@@ -65,7 +62,7 @@
         <tbody>
           <tr>
             <td>
-                                <input type="image" id="gear" src="white-gear-icon-30586.png" onclick="settings()"/>
+                                <input type="image" id="back" src="traffic-light-section-left-arrow-512.png" onclick="back()" />
             </td>
             <td
  style="text-align: center; font-family: Franklin Gothic Book; color: white;">
@@ -80,20 +77,19 @@
     </tr>
     <tr>
       <td style="height: 480px;">
-          			<div id="socket" class="ServerResp"></div>
         </td>
     </tr>
     <tr>
              <td>
-                 <input type="image" id="refresh" src="refresh.png" id="getButton"/>
+                 <!--<input type="image" id="refresh" src="refresh.png" />-->
               </td>
               <td style="text-align: right">
-                  <input type="image" id="plus" src="plus.png" onclick="upload()"/>
+                  <!--<input type="image" id="plus" src="plus.png" />-->
               </td>
              </tr>
   </tbody>
     </table>
 
 </body>
-<script type="text/javascript" src="js/conn.js"></script>
+
 </html>

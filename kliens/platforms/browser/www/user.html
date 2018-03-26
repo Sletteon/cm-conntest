@@ -10,7 +10,6 @@
     <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
     <link rel="stylesheet" type="text/css" href="css/user.css" />
     <script src="js/jquery.min.js"></script>
-    <script src="js/conn.js"></script>
     <title>Hello World</title>
 </head>
 
@@ -28,7 +27,7 @@
         <script>
         // credit: http://www.javascriptkit.com/javatutors/touchevents2.shtml
 function swipedetect(el, callback){
-  
+
     var touchsurface = el,
     swipedir,
     startX,
@@ -41,7 +40,7 @@ function swipedetect(el, callback){
     elapsedTime,
     startTime,
     handleswipe = callback || function(swipedir){}
-  
+
     touchsurface.addEventListener('touchstart', function(e){
         var touchobj = e.changedTouches[0]
         swipedir = 'none'
@@ -51,11 +50,11 @@ function swipedetect(el, callback){
         startTime = new Date().getTime() // record time when finger first makes contact with surface
         e.preventDefault()
     }, false)
-  
+
     touchsurface.addEventListener('touchmove', function(e){
         e.preventDefault() // prevent scrolling when inside DIV
     }, false)
-  
+
     touchsurface.addEventListener('touchend', function(e){
         var touchobj = e.changedTouches[0]
         distX = touchobj.pageX - startX // get horizontal dist traveled by finger while in contact with surface
@@ -73,7 +72,7 @@ function swipedetect(el, callback){
         e.preventDefault()
     }, false)
 }
-  
+
 //USAGE:
 
 var el = document.getElementById('socket');
@@ -94,11 +93,13 @@ swipedetect(el, function(swipedir){
         }
 });
             function goToUrl (val){
-                location.href = val;	
+                location.href = val;
             }
 
         </script>
     </div>
 </body>
+
+    <script src="js/conn.js"></script>
 
 </html>
