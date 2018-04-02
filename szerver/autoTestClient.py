@@ -35,7 +35,7 @@ try:
     picPath = sys.argv[2]
     pic = str(fileToBase64(picPath))
     picSize = os.path.getsize(picPath)
-    print('(i) {} MB-nyi kép kerül átküldésre (+ lekérés)\n'.format(str(round(picSize*1000/1048576, 2))))
+    print('(i) {} MB-nyi adatforgalomra kell számítani (beküldés + ÖSSZES adatbázisban lévő kép)\n'.format(str(round(picSize*1000/1048576, 2)*2)))
 except IndexError:
     pic = ''
 
