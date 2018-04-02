@@ -22,6 +22,8 @@ class fileIO:
             return '\n'.join(file.readlines())
 
     def filetrunc(self):
-        with open(self._DATAPATH, 'w', encoding='utf-8') as file:
+        # Fedora python3.6-ban TypeErrort ad, nem tetszik neki az encoding
+        #with open(self._DATAPATH, 'w', encoding='utf-8') as file:
+        with open(self._DATAPATH, 'w') as file:
             file.truncate()
             file.close()
