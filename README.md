@@ -7,9 +7,9 @@
 [PhoneGap dokumentáció](http://docs.phonegap.com/)<br>
 [Cordova dokumentáció](https://cordova.apache.org/docs/en/latest/)<br>
 [Legstabilabb kliens apk](https://build.phonegap.com/apps/2934479/download/android)<br><hr>
-**Függőségek:**
+**Függőségek (szerver):**
 
-flask, flask_cors, colorama, pymongo, (teszthez) requests<br><br>
+requirements.txt-ben minden megvan (```pip3 install -r szerver/requirements.txt```)<br><br>
 **Szerver:**
 
 Amikor a szerverre csatlakozik valaki, megnézi, amennyiben GET eljárást használ a kliens, valószínűleg le szeretné kérni az elmentett adatokat, így azokat JSON formátumban elküldi a szerver. Ha viszont a kliens küldi el az adatokat, azt a szervernek POST metódusával teszi, szintén JSON-ban.
