@@ -18,7 +18,7 @@ class onReceiveReq(fileIO, errorHandl, dbIO):
 
     def onReceiveDelete(self, clientIP, objectIdToDelete):
 
-        if str(objectIdToDelete) == '<|>DELETE_ALL<|>':
+        if str(objectIdToDelete) == '*':
             self.deleteAllData()
             colorPrint().warnPrint('Adatok törölve: %s' % (clientIP))
         else:
