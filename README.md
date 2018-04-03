@@ -51,7 +51,7 @@ Napok: [H]étfő | [K]edd | [S]zerda | [C]sütörtök | [P]éntek<br>
 Shell-hozzáférés nélkül lehet a szerveren bizonyos funkciókat végrehajtani, debuggolást könnyítve. (lista bővűl)
 Használat: tantárgy helyében kell ezeket a parancsokat beírni.
 
-* <|>DELETE\_ALL<|> - eddigi adatokat törli ki (csak a teszt-szerveren lesz elérhető)
+* \* - eddigi adatokat törli ki (csak a teszt-szerveren lesz elérhető)
 
 <hr>
 
