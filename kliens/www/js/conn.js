@@ -54,14 +54,16 @@ function getWeek() {
 }
 
 function getUrlH/*ardCoded*/() {
-    var IPaddress = 'localhost'; /*document.getElementById("IP").value;*/
+    /*var IPaddress = 'localhost';*/ /*document.getElementById("IP").value;*/
+    var IPaddress = '46.139.116.9';
     var Port = 5000; /*document.getElementById("Port").value;*/
 
     return "http://" + IPaddress + ":" + Port;
 }
 
 function getUrl/*SoftCoded*/() {
-	var IPaddress = document.getElementById("IP").value;
+	/*var IPaddress = document.getElementById("IP").value;*/
+    var IPadress = "46.139.116.9";
     var Port = document.getElementById("Port").value;
 
     return "http://" + IPaddress + ":" + Port;
@@ -202,7 +204,7 @@ function getImage() {
 // ha kiválasztottak egy kép-fájlt
 document.getElementById("picSelect").addEventListener("change", draw, false);
 
-document.getElementById("getButton").onclick = function() {
+document.getElementById("getButton","getButton2").onclick = function() {
     AnyagLekeres();
 };
 
