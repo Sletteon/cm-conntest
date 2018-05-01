@@ -1,7 +1,4 @@
 **Szerver-kliens kapcsolatteszt**<br>
-<!-- [![Build Status](http://46.139.116.9:9000/buildStatus/icon?job=cm-conntest)](http://46.139.116.9:9000/job/cm-conntest) -->
-
-<!-- *Jenkins a szerver/autoTestClient.py-t futtatja, ami a mindig elérhető tesztszervert (raspberry pi) teszteli. A teszt 1000 beírásból (teszt száma sha1, és md5 hashben), és egy lekérésből áll.* -->
 
  **Hasznos linkek**<br>
 [PhoneGap dokumentáció](http://docs.phonegap.com/)<br>
@@ -63,3 +60,14 @@ Debuggolás folyamata a böngészőben történik a fejlesztői eszközök miatt
 index.html helye: /kliens/www/index.html
 A felhasználó be tud adni adatot, le tud kérni adatot, mindezeket külön gombokkal.
 Valamint a gombok alatt, egy link, megnyomása a felhasználónév törlésével, illetve a weboldal újratöltésével jár.
+
+**Teszt szkript**
+
+A tesztszript alapértelmezetten 1000 random adatbeküldést és egy lekérést szimulál, így a szkript szolgálhat stress-teszként és szerver-benchmarkként is.
+Használat:
+```python3 autoTestClient.py <hostname vagy IP-cím>:<port> <útvonal egy képhez>```
+
+Ha nincs port megadva, automatikusan az 5000-s lesz használatban.
+A képpel való tesztelés csak opcionális.
+A szkript leméri, mennyi időbe telik a szervernek feldolgoznia az 1000 beküldést, így lehet internetkapcsolatot vagy szervert "benchmarkolni".
+_AMD FX-8350 (8 mag, 4 Ghz) CPUval a gépem (Arch Linux) 17.81 mp alatt dolgozta fel, míg a Xeon E5506 (4 mag, 2 Ghz) processzorral felszerelt virtuális szerverem (Debian 9) 14.02 mp alatt végezte el az 1000 beküldést ugyanazzal az adatbázissal, ugyanazon a hálózaton._
