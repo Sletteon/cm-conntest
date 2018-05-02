@@ -19,11 +19,11 @@ class onReceiveReq(fileIO, errorHandl, dbIO):
     def onReceiveDelete(self, clientIP, objectIdToDelete):
 
         if str(objectIdToDelete) == '*':
+            colorPrint().warnPrint('Adatok törlése: %s' % (clientIP))
             self.deleteAllData()
-            colorPrint().warnPrint('Adatok törölve: %s' % (clientIP))
         else:
+            colorPrint().warnPrint('1 bejegyzés (%s) törlése: %s' % (objectIdToDelete, clientIP))
             self.deleteSpecifiedData(objectIdToDelete)
-            colorPrint().warnPrint('1 bejegyzés (%s) törölve: %s' % (objectIdToDelete, clientIP))
 
         return Response(json.dumps({'SUCCESS': 'SUCCESS'}), mimetype='application/json')
 
@@ -47,7 +47,7 @@ class onReceiveReq(fileIO, errorHandl, dbIO):
 
         gotJSON = request.get_json()
         try:
-             colorPrint().finePrint('%s (%s) bejegyzése:' %
+             colorPrint().finePrint('%s (%s) bejegyzést küldött' %
                                     (str(gotJSON['uname']), clientIP))
            
              # Ha nem létezik kép, akkor is hozzon létre kép kulcsot üres stringgel

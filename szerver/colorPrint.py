@@ -25,6 +25,14 @@ class colorPrint:
         print('\n' + Fore.BLUE + Style.BRIGHT +
               '[-] ' + Style.RESET_ALL + self.time()+ message)
 
+    def dbPrint(self, message, newline = True):
+        if newline:
+            print('\n' + Fore.CYAN + Style.BRIGHT +
+                      '[DB] ' + Style.RESET_ALL + self.time()+ message)
+        else:
+            print(Fore.CYAN + Style.BRIGHT +
+                    '[DB] ' + Style.RESET_ALL + self.time()+ message)
+
     def startPrint(self, IpAddress):
         print(Fore.GREEN + Style.BRIGHT +
               '[+] ' + Style.RESET_ALL + self.time()+ 'Szerver fut: ' + IpAddress)
