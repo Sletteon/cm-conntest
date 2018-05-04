@@ -14,14 +14,13 @@ class dbIO:
         mongo_cfg = get_config()['mongodb']
         client = MongoClient(mongo_cfg['host'], int(mongo_cfg['port']))
         db = client[mongo_cfg['db']]
-        colorPrint().dbPrint('Sikeres kapcsolódás az adatbázishoz', newline = False)
+        colorPrint().dbPrint('Sikeres kapcsolódás az adatbázishoz', newline = True)
         return db[COLLECTION_NAME]
 
     def sendJSONToDB(self, Json):
         objectId = self.dbCollection().insert(Json)
     # Nem kell adatbázis-szöveget írni, ha az ID ki van íratva, az már sikert jelent
-        print('--- Id: %s' % (objectId))
-
+        colorPrint().IdPrint(objectId)
     def deleteAllData(self):
         self.dbCollection().remove({})
         colorPrint().dbPrint('Adatok sikeresen törölve', newline = False)

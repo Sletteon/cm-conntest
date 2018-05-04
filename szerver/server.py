@@ -102,6 +102,7 @@ if __name__ == '__main__':
         config = init_config(sys.argv[1])
 
         port = int(config['server']['port'])
+        
         if port < 1000:
             colorPrint().lowPortNumberWarn()
 

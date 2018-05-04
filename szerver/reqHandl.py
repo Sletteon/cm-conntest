@@ -63,12 +63,18 @@ class onReceiveReq(fileIO, errorHandl, dbIO):
 
              self.sendJSONToDB(gotJSON)
 
-             print('--- Hét: {}'.format(str(gotJSON['het'])))
-             print('--- Nap: {}'.format(str(gotJSON['nap'])))
-             print('--- Tantárgy: {}'.format(str(gotJSON['tant'])))
-             print('--- Anyag: {}'.format(str(gotJSON['anyag'])))
-             print('--- Kép: {}'.format('Van' if str(gotJSON['pic']) != '' else 'Nincs'))
-
+             #print('--- hét: {}'.format(str(gotjson['het'])))
+             #print('--- nap: {}'.format(str(gotjson['nap'])))
+             #print('--- tantárgy: {}'.format(str(gotjson['tant'])))
+             #print('--- anyag: {}'.format(str(gotjson['anyag'])))
+             #print('--- kép: {}'.format('van' if str(gotjson['pic']) != '' else 'nincs'))
+             week = str(gotJSON['het'])
+             day = str(gotJSON['nap'])
+             subj = str(gotJSON['tant'])
+             mat = str(gotJSON['anyag'])
+             pic = 'van' if str(gotJSON['pic']) != '' else 'nincs'
+             colorPrint().gotDataPrint(week, day, subj, mat, pic)
+            
         except KeyError:
             errorHandl().errorHandling(clientIP)
             return Response(json.dumps({'ERROR': 'JSON ERROR'}), status=422, mimetype='application/json')
