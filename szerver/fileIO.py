@@ -7,8 +7,8 @@ import hashlib
 import base64
 
 class fileIO:
-    _SCRPITPATH = os.path.dirname(__file__)
-    _DATAPATH = os.path.join(_SCRPITPATH, 'debug', 'data.json')
+    _SCRIPTPATH = os.path.dirname(__file__)
+    _DATAPATH = os.path.join(_SCRIPTPATH, 'debug', 'data.json')
     _SEPARATOR = "<|>MEZOPOTÁMIA<|>"
 
     # JSON adatok mentése

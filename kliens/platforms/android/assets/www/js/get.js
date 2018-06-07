@@ -1,14 +1,11 @@
-var got_to_day = false;
-var locat = window.location.href;
-setInterval(function()
-           {
-    if(/nap.html/.test(locat) && got_to_day == false){
-        got_to_day = true;
+window.onload = function(){
+
+    if(window.location.href.search("nap.html")){
+                alert("halo")
         AnyagLekeres2();
-       }
-},
-           1000);
-function getUrl/*hardCoded*/() {
+    }
+}
+function getUrl/*ardCoded*/() {
     var IPaddress = '46.139.116.9'; /*document.getElementById("IP").value;*/
     /*var IPaddress = '46.139.116.9';*/
     var Port = 5000; /*document.getElementById("Port").value;*/
@@ -74,7 +71,7 @@ function AnyagLekeres() {
             var adottNap
             for(i = 0; i< napok.length; i++){
                 adottNap=napok[i];
-                document.getElementById('socket').innerHTML += '<button class="button button2" onclick=navigate('  + adottNap +  ') id= "day ' + adottNap + '">' + DayDict[adottNap] + '</button>'
+                document.getElementById('socket').innerHTML += '<button class="button button2" onclick=navigate(' + adottNap + ') id= "day ' + adottNap + '">' + DayDict[adottNap] + '</button>'
             }
 			// Ne az összes napot írja ki, hanem mindenből csak egyet (ha van legalább arra a napra bejegyzés)
 			console.log('Összes JSON napja: ' + '\n' + pufferNap.unique() + '\n -----');
@@ -86,19 +83,7 @@ function AnyagLekeres() {
         }
     });
 }
-var clickedButton;
-var url = new URL(window.location.href.replace("index.html", "nap.html"));  //URL query param
-
-console.log(clickedButton);
-function navigate(x){
-    console.log(clickedButton);
-    url.searchParams.append('day', x);                                      //URL query param
-    location.href = url;                                                    //URL query param
-
-}
 function AnyagLekeres2() {
-    var param = new URLSearchParams(window.location.search);
-    clickedButton = param.get('day');                                       
     $.ajax({
         type: "get",
         url: getUrl(),
@@ -107,8 +92,6 @@ function AnyagLekeres2() {
 
             for(i=0; i < responseJSON.length; i++){
         if(responseJSON[i].nap == clickedButton){
-            /*console.log(clickedButton);*/
-            console.log(responseJSON[i].nap);
             document.getElementById("socket2").innerHTML += '<h2>Tantárgy: ' + responseJSON[i].tant + '</h2>'
             document.getElementById("socket2").innerHTML += '<h2>Anyag: ' + responseJSON[i].anyag + '</h2>'
         }
@@ -128,3 +111,12 @@ function AnyagLekeres2() {
 document.getElementById("getButton2").onclick = function() {
     AnyagLekeres();
 };
+var clickedButton;
+function navigate(val){
+    navigate2('nap.html')
+    clickedButton = val;
+}
+function navigate2(val){
+    location.href = val;
+    write();
+}
