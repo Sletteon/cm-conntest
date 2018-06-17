@@ -10,7 +10,7 @@ setInterval(function()
 },
            1000);
 window.onload = function(){
-    if(/ujindex.html/.test(locat) && got_to_day == false){
+    if(/index.html/.test(locat) && got_to_day == false){
         AnyagLekeres();
        }
 }
@@ -132,6 +132,6 @@ function AnyagLekeres2() {
 
 // ha kiválasztottak egy kép-fájlt
 
-document.getElementById("getButton2").onclick = function() {
+/*document.getElementById("getButton2").onclick = function() {
     AnyagLekeres();
-};
+};*/

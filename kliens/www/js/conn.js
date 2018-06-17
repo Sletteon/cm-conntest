@@ -202,23 +202,23 @@ function getImage() {
 }
 
 // ha kiválasztottak egy kép-fájlt
-document.getElementById("picSelect").addEventListener("change", draw, false);
+/*document.getElementById("picSelect").addEventListener("change", draw, false);
 
 document.getElementById("getButton").onclick = function() {
     AnyagLekeres();
-};
+};*/
 
 document.getElementById("connButton").onclick = function() {
     AnyagBeallitas();
 };
 
-document.getElementById("objDelButton").onclick = function() {
+/*document.getElementById("objDelButton").onclick = function() {
 	BejegyzTorlese();
-};
+};*/
 	
 // ha a gombok alatti szövegre kattintanak, törölje a felhasználónevet,
 // és frissítse az oldalt
-document.getElementById("unameDel").onclick = function() {
+/*document.getElementById("unameDel").onclick = function() {
     window.localStorage.removeItem("UName");
     location.reload(false);
-};
+};*/
