@@ -1,5 +1,6 @@
 var got_to_day = false;
 var locat = window.location.href;
+var AnyagResponse;
 setInterval(function()
            {
     if(/nap.html/.test(locat) && got_to_day == false){
@@ -8,6 +9,11 @@ setInterval(function()
        }
 },
            1000);
+window.onload = function(){
+    if(/ujindex.html/.test(locat) && got_to_day == false){
+        AnyagLekeres();
+       }
+}
 function getUrl/*hardCoded*/() {
     var IPaddress = '46.139.116.9'; /*document.getElementById("IP").value;*/
     /*var IPaddress = '46.139.116.9';*/
@@ -74,7 +80,7 @@ function AnyagLekeres() {
             var adottNap
             for(i = 0; i< napok.length; i++){
                 adottNap=napok[i];
-                document.getElementById('socket').innerHTML += '<button class="button button2" onclick=navigate('  + adottNap +  ') id= "day ' + adottNap + '">' + DayDict[adottNap] + '</button>'
+                document.getElementById('socket').innerHTML += '<button class="button button2" onclick=navigate('  + adottNap +  ')>' + DayDict[adottNap] + '</button>'
             }
 			// Ne az összes napot írja ki, hanem mindenből csak egyet (ha van legalább arra a napra bejegyzés)
 			console.log('Összes JSON napja: ' + '\n' + pufferNap.unique() + '\n -----');
@@ -109,8 +115,9 @@ function AnyagLekeres2() {
         if(responseJSON[i].nap == clickedButton){
             /*console.log(clickedButton);*/
             console.log(responseJSON[i].nap);
-            document.getElementById("socket2").innerHTML += '<h2>Tantárgy: ' + responseJSON[i].tant + '</h2>'
-            document.getElementById("socket2").innerHTML += '<h2>Anyag: ' + responseJSON[i].anyag + '</h2>'
+            document.getElementById("socket2").innerHTML += '<div class="well" id="' + i + '"></div>'
+            document.getElementById(i).innerHTML += '<h2>Tantárgy: ' + responseJSON[i].tant + '</h2>'
+            document.getElementById(i).innerHTML += '<h2>Anyag: ' + responseJSON[i].anyag + '</h2>'
         }
     }
 		console.log(JSON.stringify(responseJSON))

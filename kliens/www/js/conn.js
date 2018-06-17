@@ -5,10 +5,11 @@ window.onload = function() {
         UName = prompt("Add meg a beceneved:");
         window.localStorage.setItem("UName", UName);
     }
-
+    alert("béla")
 	document.getElementById("nap").value = getDay();
 
 }
+
 
 // visszaadja a mai napnak a betűkódját
 function getDay() {
@@ -53,21 +54,20 @@ function getWeek() {
 	return new Date().getWeekNumber();
 }
 
-function getUrlH/*ardCoded*/() {
-    var IPaddress = 'localhost'; /*document.getElementById("IP").value;*/
-    /*var IPaddress = '46.139.116.9';*/
-    var Port = 5000; /*document.getElementById("Port").value;*/
+function getUrl() {
+    var IPaddress = "46.139.116.9"; 
+    var Port = 5000; 
 
     return "http://" + IPaddress + ":" + Port;
 }
 
-function getUrl/*SoftCoded*/() {
+/*function getUrlSoftCoded() {
 	var IPaddress = document.getElementById("IP").value;
-    /*var IPaddress = "46.139.116.9";*/
+    var IPaddress = "46.139.116.9";
     var Port = document.getElementById("Port").value;
 
     return "http://" + IPaddress + ":" + Port;
-}
+}*/
 
 
 // https://coderwall.com/p/nilaba/simple-pure-javascript-array-unique-method-with-5-lines-of-code
