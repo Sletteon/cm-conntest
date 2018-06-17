@@ -93,7 +93,7 @@ function AnyagLekeres() {
     });
 }
 var clickedButton;
-var url = new URL(window.location.href.replace("index.html", "nap.html"));  //URL query param
+var url = new URL(window.location.href.replace("index.html", "ujnap.html"));  //URL query param
 
 console.log(clickedButton);
 function navigate(x){
