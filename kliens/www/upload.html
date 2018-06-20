@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -8,119 +9,91 @@
     <meta name="format-detection" content="telephone=no" />
     <meta name="msapplication-tap-highlight" content="no" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
-    <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
-    <!-- Kiszedve, mert megakadályozza a képek feltöltését (chromnál még mindig nem működik) -->
-    <!-- <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" /> -->
-<!-- jquery 2.2.2 -->
-	<script src="js/jquery.min.js"></script>
+    <script src="js/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="css/index.css" />
     <title>Hello World</title>
 </head>
 <script type="text/javascript">
-    function back(){
+    function back() {
         goToUrl('index.html')
     }
+
     function goToUrl(val) {
-    location.href = val;
-}
-    </script>
-<body style="background-color: white">
-    <nav class="navbar navbar-inverse" id="boi">
+        location.href = val;
+    }
+</script>
+
+<body>
+    <nav class="navbar navbar-inverse" id="navbar">
+        <div class="container-fluid">
+
+            <!-- Logo -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mainNavBar">
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+</button>
+                <a href="#" class="navbar-brand" id="classmate">Classmate</a>
+            </div>
+
+            <!-- Menu Items -->
+            <div class="collapse navbar-collapse" id="mainNavBar">
+                <ul class="nav navbar-nav">
+                    <li><a href="index.html">Anyag lekérése</a></li>
+                    <li class="active"><a href="upload.html">Anyag feltöltése</a></li>
+                    <li><a href="#">Beállítások</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <h2 class="text-muted">Bejegyzés feltöltése</h2>
+
     <div class="container-fluid">
-
-        <!-- Logo -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mainNavBar">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a href="#" class="navbar-brand" id="classmate">Classmate</a>
+        <br>
+        <div class="dropdown">
+            <button class="btn btn-primary teljesKepernyoBootstrapPrimary dropdown-toggle" data-toggle="dropdown" id="napButton">Nap<span class="caret"></span></button>
+            <ul id="nap" class="dropdown-menu">
+                <li>Hétfő</li>
+                <li>Kedd</li>
+                <li>Szerda</li>
+                <li>Csütörtök</li>
+                <li>Péntek</li>
+                <li>Szombat</li>
+                </ul>
         </div>
+        <br>
 
-        <!-- Menu Items -->
-        <div class="collapse navbar-collapse" id="mainNavBar">
-            <ul class="nav navbar-nav">
-                <li><a href="index.html">Anyag lekérése</a></li>
-                <li class="active"><a href="upload.html">Anyag feltöltése</a></li>
-                <li><a href="#">Beállítások</a></li>
-            </ul>
-        </div>
+        <input class="form-control" type="text" id="tantargy" placeholder="Tantárgy">
+        <br>
+        <input class="form-control" type="text" id="anyag" placeholder="Anyag">
+        <br>
+        <button class="btn btn-primary teljesKepernyoBootstrapPrimary" id="connButton">Beküldés</button>
+        <br>
+        <div id="socket" class="ServerResp"></div>
+        <!-- <a id="unameDel" class="unameDel" style="color: black">Felhasználónév törlése</a> -->
+
+        <hr>
+        <h3 class="text-muted">Bejegyzés törlése</h3>
+        <input class="form-control" type="text" id="deleteObj" placeholder="Törlendő bejegyzés ID-ja">
+        <br>
+        <button class="btn btn-primary teljesKepernyoBootstrapPrimary" id="objDelButton">Bejegyzés törlése</button>
+
+        <!--<hr>
+        <h3 class="text-muted">Képfeltöltés</h3>
+        <input class="btn btn-primary" type="file" id="picSelect" />
+        <br>
+        <canvas id="picCanvas"></canvas>
+        -->
 
     </div>
-</nav>
-          <div id="swipezone">
-		<center>
-			<br>
-			<!-- Napok legördülő listája -->
-			<select name="nap" id="nap">
-				<option value="0">Hétfő</option>
-				<option value="1">Kedd</option>
-				<option value="2">Szerda</option>
-				<option value="3">Csütörtök</option>
-				<option value="4">Péntek</option>
-                <option value="5">Szombet</option>
-			</select>
-			<!-- Tantárgy -->
-			<input type="text" id="tantargy" placeholder="Tantárgy">
-			<!-- Anyag -->
-            <br>
-			<input type="text" id="anyag" placeholder="Anyag">
-			<br>
-			<!-- set parancs küldését szolgáló gomb -->
-			<button class="button button1" id="connButton">Parancs küldése</button>
-			<!-- get parancs küldését szolgáló gomb -->
-			<!--<button class="button button1" id="getButton">Heti anyag lekérése</button>
-			<br>
-			<!-- ide fog megjelenni a szerver válasza
-			<div id="socket" class="ServerResp"></div>
-			<!-- Felhasználónév törlése "link"
-			<!-- <a id="unameDel" class="unameDel" style="color: black">Felhasználónév törlése</a>
-			<br>
-            <input type="text" id="deleteObj" placeholder="Törlendő bejegyzés ID-ja">
-			<button class="button button1" id="objDelButton">Bejegyzés törlése</button> 
-            <input type="file" id= "picSelect"/>
-			<canvas id="picCanvas"></canvas>  -->
-			
-		</center>
-	</div>
 
 </body>
-<!-- csak akkor hívja meg a javascriptet, ha már betöltődött a body -->
-<script type="text/javascript" src="js/conn.js"></script>
 <script type="text/javascript">
-    window.onload = function(){
-        getDay();
-    }
-    function getDay() {
-
-    var dateObj = new Date();
-    var nap = dateObj.getDay();
-
-    switch (nap) {
-        case 0: // vasárnap
-            return "1";
-            break;
-        case 1:
-            return "0";
-            break;
-        case 2:
-            return "1";
-            break;
-        case 3:
-            return "2";
-            break;
-        case 4:
-            return "3";
-            break;
-        case 5:
-            return "4";
-            break;
-        case 6: // szombat
-            return "5";
-            break;
-    }
-}
-    </script>
-<!--<script type="text/javascript" src="js/swipe_upload.js"></script>-->
+    $('#nap li').on('click', function() {
+        console.log($(this).text())
+        $('#napButton').prop('innerText', $(this).text().replace(' ', ''));
+    });
+</script>
+<script type="text/javascript" src="js/conn.js"></script>
 </html>
