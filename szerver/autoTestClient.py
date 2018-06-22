@@ -43,7 +43,7 @@ except IndexError:
 # 1000 hosszú json-t küld be, ami egy (egyáltalán nem) realisztikus terhelést törekszik elérni
 print('[*] Beállítás-teszt\n')
 
-nap = ('H', 'K', 'S', 'C', 'P')
+nap = ('0', '1', '2', '3', '4', '5')
 
 start = time.time()
 for i in range(1001):

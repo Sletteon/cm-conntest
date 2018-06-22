@@ -77,8 +77,12 @@ def lowPortNumberWarn():
           '[*] ' + Style.RESET_ALL + 'Nem javasolt 1000-nél kisebb portszámot megadni\n')
 
 def gotDataPrint(week, day, subj, mat, pic):
+    dayDict = {'0':'Hétfő', '1':'Kedd', '2':'Szerda', '3':'Csütörtök', '4':'Péntek', '5':'Szombat'}
     weekS = '--- Hét: {}'.format(week) 
-    dayS = '--- Nap: {}'.format(day) 
+    try:
+        dayS = '--- Nap: {}'.format(dayDict[day]) 
+    except KeyError:
+        dayS = '--- Nap: {}'.format(day) 
     subjS = '--- Tantárgy: {}'.format(subj) 
     matS = '--- Anyag: {}'.format(mat) 
     picS = '--- Kép: {}'.format(pic) 
