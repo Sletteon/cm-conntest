@@ -26,11 +26,10 @@ from flask import Flask, request, Response
 from flask_cors import CORS
 
 # Saját osztáyok
-from fileIO import fileIO
-from reqHandl import onReceiveReq
-from colorPrint import colorPrint
-from errorHandl import errorHandl
-from config import init_config
+from lib.reqHandl import *
+from lib.colorPrint import *
+from lib.errorHandl import *
+from lib.config import *
 
 # Ne látszódjanak a werkzeug (többek között HTTP-log) cuccai
 logging.getLogger('werkzeug').setLevel(logging.WARNING)
@@ -42,48 +41,47 @@ CORS(app, resources={r'/*': {'origins': '*'}})
 
 @app.errorhandler(404)
 def badRequest(e):
-    return Response(errorHandl().RequestError(request, 404), status=404, mimetype='application/json')
+    return Response(RequestError(request, 404), status=404, mimetype='application/json')
 
 
 @app.errorhandler(400)
 def badRequest400(e):
-    return Response(errorHandl().RequestError(request, 400, errorCodeToldalek='-as'), status=400, mimetype='application/json')
+    return Response(RequestError(request, 400, errorCodeToldalek='-as'), status=400, mimetype='application/json')
 
 
 @app.errorhandler(500)
 def badRequest500(e):
-    return Response(errorHandl().RequestError(request, 500, errorCodeToldalek='-as'), status=500, mimetype='application/json')
+    return Response(RequestError(request, 500, errorCodeToldalek='-as'), status=500, mimetype='application/json')
 
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     """ GET - Minden hét lekérése (nem kéne használni, de még nem törlöm ki)
         POST - Beküldés"""
-    onReceiveReqObj = onReceiveReq()
     # Csatlakozott kliens IP-címe
     clientIP = request.remote_addr
     if request.method == 'POST':
-        return onReceiveReqObj.onReceivePost(clientIP)
+        return onReceivePost(clientIP)
     else:  # request.method == 'GET'
-        return onReceiveReqObj.onReceiveGet(clientIP)
+        return onReceiveGet(clientIP)
 
 
 @app.route('/het/<Het>', methods=['GET'])
 def lekeres(Het):
     """ GET - Meghatározott hét lekérése """
     clientIP = request.remote_addr
-    return onReceiveReq().onReceiveSpecifiedGet(clientIP, Het)
+    return onReceiveSpecifiedGet(clientIP, Het)
 
 
 @app.route('/getRecord', methods=['GET'])
 def adatSzama():
     clientIP = request.remote_addr
-    return onReceiveReq().onReceiveRecordNumberGet(clientIP)
+    return onReceiveRecordNumberGet(clientIP)
 
 @app.route('/delete/<objectIdToDelete>', methods=['DELETE'])
 def megadottBejegyzesTorlese(objectIdToDelete):
     clientIP = request.remote_addr
-    return onReceiveReq().onReceiveDelete(clientIP, objectIdToDelete)
+    return onReceiveDelete(clientIP, objectIdToDelete)
 
 
 # Lokális Ip-t (hálózaton belülit) ad vissza
@@ -95,36 +93,33 @@ def getlocalIp():
 
 
 if __name__ == '__main__':
-    # Ha bennhagyjuk, a rögzített bejegyzések újraindításkor törlődnek
-    fileIO().filetrunc()
-
     try:
         config = init_config(sys.argv[1])
 
         port = int(config['server']['port'])
         
         if port < 1000:
-            colorPrint().lowPortNumberWarn()
+            lowPortNumberWarn()
 
         localIp = getlocalIp()
 
     except IndexError:  # nincs port
         try:  # van internet, nincs port
-            colorPrint().startPrint(getlocalIp() + ':5000')
+            startPrint(getlocalIp() + ':5000')
             app.run(host='0.0.0.0')
         except OSError:  # nincs internet, nincs port
-            colorPrint().startPrintNoIP()
-            colorPrint().okPrint('Szerver elérhető az 5000-s porton')
+            startPrintNoIP()
+            okPrint('Szerver elérhető az 5000-s porton')
             app.run(host='0.0.0.0')
 
     except ValueError:  # ha a felhasználó nem érvényes portszámot adott meg
-        colorPrint().notValidPortNumberErr()
+        notValidPortNumberErr()
 
     except OSError:  # nincs internet, van port
-        colorPrint().startPrintNoIP()
-        colorPrint().okPrint('Szerver elérhető a %s-s porton' % (str(port)))
+        startPrintNoIP()
+        okPrint('Szerver elérhető a %s-s porton' % (str(port)))
         app.run(host='0.0.0.0', port=port)
 
     else:  # van internet, van port
-        colorPrint().startPrint('%s:%s' % (localIp, str(port)))
+        startPrint('%s:%s' % (localIp, str(port)))
         app.run(host='0.0.0.0', port=port)
