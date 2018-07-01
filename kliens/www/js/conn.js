@@ -8,6 +8,18 @@ window.onload = function() {
 
 }
 
+function success(message) {
+    var successAlert = document.createElement("DIV");
+    successAlert.innerHTML = '<div class="alert alert-sm alert-success">' + message + '</div>';
+    document.getElementById('statusDiv').appendChild(successAlert);
+}
+
+function error() {
+    var errAlert = document.createElement("DIV");
+    errAlert.innerHTML = '<div class="alert alert-sm alert-danger">Hiba történt a kapcsolat közben.</div>';
+    document.getElementById('statusDiv').appendChild(errAlert);
+}
+
 function getWeek() {
     // Hét száma az évben
     Date.prototype.getWeekNumber = function() {
@@ -140,9 +152,11 @@ function AnyagBeallitas() {
         data: JSON.stringify(sendingJSON),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        success: function(responseData, textStatus, jqXHR) {},
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert("Hiba a kapcsolat létesítésekor. (lásd konzol)");
+        success: function(responseData, textStatus, jqXHR) {
+            success('A bejegyzést sikeresen elküldted');
+        },
+            error: function(jqXHR, textStatus, errorThrown) {
+            error();
         }
     });
 }
@@ -151,9 +165,11 @@ function BejegyzTorlese() {
     $.ajax({
         type: "delete",
         url: getUrl() + "/delete/" + document.getElementById('deleteObj').value,
-        success: function(responseData, textStatus, jqXHR) {},
+        success: function(responseData, textStatus, jqXHR) {
+            success('A bejegyzést sikeresen törölted');
+        },
         error: function(jqXHR, textStatus, errorThrown) {
-            alert("Hiba a kapcsolat létesítésekor. (lásd konzol)");
+            error();
         }
     });
 }

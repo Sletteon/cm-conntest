@@ -14,6 +14,17 @@ window.onload = function() {
     }
 }
 
+function success(message) {
+    var successAlert = document.createElement("DIV");
+    successAlert.innerHTML = '<div class="alert alert-sm alert-success">' + message + '</div>';
+    document.getElementById('statusDiv').appendChild(successAlert);
+}
+
+function error() {
+    var errAlert = document.createElement("DIV");
+    errAlert.innerHTML = '<div class="alert alert-sm alert-danger">Hiba történt a kapcsolat közben.</div>';
+    document.getElementById('statusDiv').appendChild(errAlert);
+}
 function getUrl /*hardCoded*/ () {
     var IPaddress = '46.139.116.9'; /*document.getElementById("IP").value;*/
     /*var IPaddress = '46.139.116.9';*/
@@ -97,7 +108,7 @@ function AnyagLekeres() {
             console.log(JSON.stringify(responseJSON))
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            alert("Hiba a kapcsolat létesítésekor. (lásd konzol)");
+            error();
         }
     });
 }
