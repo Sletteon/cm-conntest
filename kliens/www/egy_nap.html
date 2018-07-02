@@ -15,6 +15,9 @@
     <title>Hello World</title>
 </head>
 <script type="text/javascript">
+    window.onload = function(){ 
+        egyNapAnyagai();
+    }
     function settings() {
         goToUrl('settings.html')
     }
@@ -54,10 +57,13 @@
 
         </div>
     </nav>
-    <div id="socket2" class="ServerResp"></div>
+
+    <div class='container-fluid'>
+        <div id='status'></div>
+        <div id="socket" class="ServerResp"></div>
+    </div>
 
 </body>
-<script type="text/javascript" src="js/get.js"></script>
 <script type="text/javascript" src="js/get.js"></script>
 <script src="js/jquery.min.js"></script>
 
