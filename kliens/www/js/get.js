@@ -182,8 +182,8 @@ function egyNapAnyagai() {
                     /*console.log(clickedButton);*/
                     console.log(responseJSON[i].nap);
                     document.getElementById("socket").innerHTML += '<div class="well" id="' + i + '"></div>'
-                    document.getElementById(i).innerHTML += '<h2>Tantárgy: ' + responseJSON[i].tant + '</h2>'
-                    document.getElementById(i).innerHTML += '<h2>Anyag: ' + responseJSON[i].anyag + '</h2>'
+                    document.getElementById(i).innerHTML += '<h2 style="overflow-wrap: break-word;">Tantárgy: ' + responseJSON[i].tant + '</h2>'
+                    document.getElementById(i).innerHTML += '<h2 style="overflow-wrap: break-word;">Anyag: ' + responseJSON[i].anyag + '</h2>'
                 }
             }
             console.log(JSON.stringify(responseJSON))
