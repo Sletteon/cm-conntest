@@ -17,6 +17,12 @@ function success(message) {
     document.getElementById('statusDiv').appendChild(successAlert);
 }
 
+function info(message) {
+    var infoAlert = document.createElement("DIV");
+    infoAlert.innerHTML = '<div class="alert alert-sm alert-info">' + message + '</div>';
+    document.getElementById('statusDiv').appendChild(infoAlert);
+}
+
 function error() {
     var errAlert = document.createElement("DIV");
     errAlert.innerHTML = '<div class="alert alert-sm alert-danger">Hiba történt a kapcsolat közben.</div>';
@@ -99,6 +105,8 @@ function ezAHetLekerese() {
 }
 
 function AnyagLekeres() {
+    document.getElementById('socket').innerHTML = '';
+    info('Mindegyik hét mutatása');
     $.ajax({
         type: "get",
         url: getUrl(),
@@ -146,7 +154,7 @@ function AnyagLekeres() {
             var adottNap
             for (i = 0; i < napok.length; i++) {
                 adottNap = napok[i];
-                document.getElementById('socket').innerHTML += '<button class="btn btn-primary teljesKepernyoBootstrapPrimary" onclick=navigate(' + adottNap + ')>' + DayDict[adottNap] + '</button><br><br>'
+                document.getElementById('socket').innerHTML += '<button class="btn btn-primary teljesKepernyoBootstrapPrimary" onclick="navigate(' + adottNap + ', true)">' + DayDict[adottNap] + '</button><br><br>'
             }
             // Ne az összes napot írja ki, hanem mindenből csak egyet (ha van legalább arra a napra bejegyzés)
             console.log('Összes JSON napja: ' + '\n' + pufferNap.unique() + '\n -----');
@@ -161,16 +169,15 @@ function AnyagLekeres() {
 var clickedButton;
 var url = new URL(window.location.href.replace("index.html", "egy_nap.html")); //URL query param
 
-function navigate(x) {
+function navigate(nap, mindegyikHet) {
     console.log(clickedButton);
-    url.searchParams.append('day', x); //URL query param
+    if (mindegyikHet) {
+        url.searchParams.append('mindegyikHet', true); //URL query param
+    }
+    url.searchParams.append('day', nap); //URL query param
     location.href = url; //URL query param
-
 }
-
-function egyNapAnyagai() {
-    var param = new URLSearchParams(window.location.search);
-    clickedButton = param.get('day');
+function egyNapAnyagaiMindegyikHet() {
     $.ajax({
         type: "get",
         url: getUrl(),
@@ -182,6 +189,7 @@ function egyNapAnyagai() {
                     /*console.log(clickedButton);*/
                     console.log(responseJSON[i].nap);
                     document.getElementById("socket").innerHTML += '<div class="well" id="' + i + '"></div>'
+                    document.getElementById(i).innerHTML += '<h2 style="overflow-wrap: break-word;">' + responseJSON[i].het + '. hét</h2>'
                     document.getElementById(i).innerHTML += '<h2 style="overflow-wrap: break-word;">Tantárgy: ' + responseJSON[i].tant + '</h2>'
                     document.getElementById(i).innerHTML += '<h2 style="overflow-wrap: break-word;">Anyag: ' + responseJSON[i].anyag + '</h2>'
                 }
@@ -192,4 +200,36 @@ function egyNapAnyagai() {
             error();
         }
     });
+}
+
+function egyNapAnyagai() {
+    var param = new URLSearchParams(window.location.search);
+    clickedButton = param.get('day');
+    if (param.get('mindegyikHet') == 'true') {
+        egyNapAnyagaiMindegyikHet();
+    }
+    else {
+        $.ajax({
+            type: "get",
+            url: getUrl() + '/het/' + getWeek(),
+            success: function(responseData, textStatus, jqXHR) {
+                responseJSON = JSON.parse(responseData)
+
+                for (i = 0; i < responseJSON.length; i++) {
+                    if (responseJSON[i].nap == clickedButton) {
+                        /*console.log(clickedButton);*/
+                        console.log(responseJSON[i].nap);
+                        document.getElementById("socket").innerHTML += '<div class="well" id="' + i + '"></div>'
+                        document.getElementById(i).innerHTML += '<h2 style="overflow-wrap: break-word;">' + responseJSON[i].het + '. hét</h2>'
+                        document.getElementById(i).innerHTML += '<h2 style="overflow-wrap: break-word;">Tantárgy: ' + responseJSON[i].tant + '</h2>'
+                        document.getElementById(i).innerHTML += '<h2 style="overflow-wrap: break-word;">Anyag: ' + responseJSON[i].anyag + '</h2>'
+                    }
+                }
+                console.log(JSON.stringify(responseJSON))
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                error();
+            }
+        });
+    }
 }
