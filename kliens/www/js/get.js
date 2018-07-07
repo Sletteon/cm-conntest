@@ -11,22 +11,45 @@ window.onload = function() {
     }
 }
 
+function removePreviousStatus() {
+    try {
+    document.getElementById('statusDiv').innerHTML = ''; 
+    } catch(err) {}
+}
+
 function success(message) {
+    removePreviousStatus(); 
     var successAlert = document.createElement("DIV");
     successAlert.innerHTML = '<div class="alert alert-sm alert-success">' + message + '</div>';
     document.getElementById('statusDiv').appendChild(successAlert);
 }
 
 function info(message) {
+    removePreviousStatus(); 
     var infoAlert = document.createElement("DIV");
     infoAlert.innerHTML = '<div class="alert alert-sm alert-info">' + message + '</div>';
     document.getElementById('statusDiv').appendChild(infoAlert);
 }
 
 function error() {
+    removePreviousStatus(); 
     var errAlert = document.createElement("DIV");
-    errAlert.innerHTML = '<div class="alert alert-sm alert-danger">Hiba történt a kapcsolat közben.</div>';
+    errAlert.innerHTML = '<div class="alert alert-sm alert-danger">Ez a hibaüzi a net hiányáról szól.</div>';
     document.getElementById('statusDiv').appendChild(errAlert);
+}
+
+function BejegyzTorlese(bejegyzId, bejegyzDiv) {
+    $.ajax({
+        type: "delete",
+        url: getUrl() + "/delete/" + bejegyzId,
+        success: function(responseData, textStatus, jqXHR) {
+            success('A bejegyzést sikeresen törölted');
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            error();
+        }
+    });
+    document.getElementById(bejegyzDiv).remove()
 }
 
 function getWeek() {
@@ -69,7 +92,7 @@ function ezAHetLekerese() {
             for (i = 0; i < responseJSON.length; i++) {
                 pufferAnyag.push(responseJSON[i].anyag);
             }
-            console.log('Összes JSON anyaga: ' + '\n' + pufferAnyag + '\n -----');
+            //console.log('Összes JSON anyaga: ' + '\n' + pufferAnyag + '\n -----');
             /*document.getElementById("socket").innerHTML += '<h2>' + pufferAnyag + '<h2>';*/
 
             // Összes JSON napja
@@ -94,9 +117,9 @@ function ezAHetLekerese() {
                 document.getElementById('socket').innerHTML += '<button class="btn btn-primary teljesKepernyoBootstrapPrimary" onclick=navigate(' + adottNap + ')>' + DayDict[adottNap] + '</button><br><br>'
             }
             // Ne az összes napot írja ki, hanem mindenből csak egyet (ha van legalább arra a napra bejegyzés)
-            console.log('Összes JSON napja: ' + '\n' + pufferNap.unique() + '\n -----');
+            //console.log('Összes JSON napja: ' + '\n' + pufferNap.unique() + '\n -----');
 
-            console.log(JSON.stringify(responseJSON))
+            //console.log(JSON.stringify(responseJSON))
         },
         error: function(jqXHR, textStatus, errorThrown) {
             error();
@@ -125,14 +148,14 @@ function AnyagLekeres() {
             // JSON-ban a tantárgy elérése: responseJSON.tant
 
             /*document.getElementById("socket").innerHTML = '<h2>' + responseData + '<h2>';
-            console.log('Első bejegyzés szerkesztője: ' + '\n' + responseJSON[0].uname + '\n -----');*/
+            //console.log('Első bejegyzés szerkesztője: ' + '\n' + responseJSON[0].uname + '\n -----');*/
 
             // Összes JSON anyaga
             pufferAnyag = []
             for (i = 0; i < responseJSON.length; i++) {
                 pufferAnyag.push(responseJSON[i].anyag);
             }
-            console.log('Összes JSON anyaga: ' + '\n' + pufferAnyag + '\n -----');
+            //console.log('Összes JSON anyaga: ' + '\n' + pufferAnyag + '\n -----');
             /*document.getElementById("socket").innerHTML += '<h2>' + pufferAnyag + '<h2>';*/
 
             // Összes JSON napja
@@ -157,9 +180,9 @@ function AnyagLekeres() {
                 document.getElementById('socket').innerHTML += '<button class="btn btn-primary teljesKepernyoBootstrapPrimary" onclick="navigate(' + adottNap + ', true)">' + DayDict[adottNap] + '</button><br><br>'
             }
             // Ne az összes napot írja ki, hanem mindenből csak egyet (ha van legalább arra a napra bejegyzés)
-            console.log('Összes JSON napja: ' + '\n' + pufferNap.unique() + '\n -----');
+            //console.log('Összes JSON napja: ' + '\n' + pufferNap.unique() + '\n -----');
 
-            console.log(JSON.stringify(responseJSON))
+            //console.log(JSON.stringify(responseJSON))
         },
         error: function(jqXHR, textStatus, errorThrown) {
             error();
@@ -170,7 +193,7 @@ var clickedButton;
 var url = new URL(window.location.href.replace("index.html", "egy_nap.html")); //URL query param
 
 function navigate(nap, mindegyikHet) {
-    console.log(clickedButton);
+    //console.log(clickedButton);
     if (mindegyikHet) {
         url.searchParams.append('mindegyikHet', true); //URL query param
     }
@@ -187,14 +210,15 @@ function egyNapAnyagaiMindegyikHet() {
             for (i = 0; i < responseJSON.length; i++) {
                 if (responseJSON[i].nap == clickedButton) {
                     /*console.log(clickedButton);*/
-                    console.log(responseJSON[i].nap);
+                    //console.log(responseJSON[i].nap);
                     document.getElementById("socket").innerHTML += '<div class="well" id="' + i + '"></div>'
+                    document.getElementById(i).innerHTML += '<div class="pull-right"><button class="btn btn-danger" onclick="BejegyzTorlese(\'' + responseJSON[i]._id.$oid + '\', ' + i + ')"><span class="glyphicon glyphicon-trash"></span></button></div>'
                     document.getElementById(i).innerHTML += '<h2 style="overflow-wrap: break-word;">' + responseJSON[i].het + '. hét</h2>'
                     document.getElementById(i).innerHTML += '<h2 style="overflow-wrap: break-word;">Tantárgy: ' + responseJSON[i].tant + '</h2>'
                     document.getElementById(i).innerHTML += '<h2 style="overflow-wrap: break-word;">Anyag: ' + responseJSON[i].anyag + '</h2>'
                 }
             }
-            console.log(JSON.stringify(responseJSON))
+            //console.log(JSON.stringify(responseJSON))
         },
         error: function(jqXHR, textStatus, errorThrown) {
             error();
@@ -217,13 +241,14 @@ function egyNapAnyagai() {
                 for (i = 0; i < responseJSON.length; i++) {
                     if (responseJSON[i].nap == clickedButton) {
                         /*console.log(clickedButton);*/
-                        console.log(responseJSON[i].nap);
+                        //console.log(responseJSON[i].nap);
                         document.getElementById("socket").innerHTML += '<div class="well" id="' + i + '"></div>'
+                        document.getElementById(i).innerHTML += '<div class="pull-right"><button class="btn btn-danger" onclick="BejegyzTorlese(\'' + responseJSON[i]._id.$oid + '\', ' + i + ')"><span class="glyphicon glyphicon-trash"></span></button></div>'
                         document.getElementById(i).innerHTML += '<h2 style="overflow-wrap: break-word;">Tantárgy: ' + responseJSON[i].tant + '</h2>'
                         document.getElementById(i).innerHTML += '<h2 style="overflow-wrap: break-word;">Anyag: ' + responseJSON[i].anyag + '</h2>'
                     }
                 }
-                console.log(JSON.stringify(responseJSON))
+                //console.log(JSON.stringify(responseJSON))
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 error();

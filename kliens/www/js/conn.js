@@ -8,15 +8,23 @@ window.onload = function() {
 
 }
 
+function removePreviousStatus() {
+    try {
+    document.getElementById('statusDiv').innerHTML = ''; 
+    } catch(err) {}
+}
+
 function success(message) {
+    removePreviousStatus()
     var successAlert = document.createElement("DIV");
     successAlert.innerHTML = '<div class="alert alert-sm alert-success">' + message + '</div>';
     document.getElementById('statusDiv').appendChild(successAlert);
 }
 
 function error() {
+    removePreviousStatus()
     var errAlert = document.createElement("DIV");
-    errAlert.innerHTML = '<div class="alert alert-sm alert-danger">Hiba történt a kapcsolat közben.</div>';
+    errAlert.innerHTML = '<div class="alert alert-sm alert-danger">Ez a hibaüzi a net hiányáról szól.</div>';
     document.getElementById('statusDiv').appendChild(errAlert);
 }
 
@@ -69,14 +77,14 @@ function AnyagLekeres() {
             // JSON-ban a tantárgy elérése: responseJSON.tant
 
             document.getElementById("socket").innerHTML = '<h2>' + responseData + '<h2>';
-            console.log('Első bejegyzés szerkesztője: ' + '\n' + responseJSON[0].uname + '\n -----');
+            //console.log('Első bejegyzés szerkesztője: ' + '\n' + responseJSON[0].uname + '\n -----');
 
             // Összes JSON anyaga
             pufferAnyag = []
             for (i = 0; i < responseJSON.length; i++) {
                 pufferAnyag.push(responseJSON[i].anyag);
             }
-            console.log('Összes JSON anyaga: ' + '\n' + pufferAnyag + '\n -----');
+            //console.log('Összes JSON anyaga: ' + '\n' + pufferAnyag + '\n -----');
 
             // Összes JSON napja
             pufferNap = []
@@ -84,10 +92,10 @@ function AnyagLekeres() {
                 pufferNap.push(responseJSON[i].nap);
             }
             // Ne az összes napot írja ki, hanem mindenből csak egyet (ha van legalább arra a napra bejegyzés)
-            console.log('Összes JSON napja: ' + '\n' + pufferNap.unique() + '\n -----');
+            //console.log('Összes JSON napja: ' + '\n' + pufferNap.unique() + '\n -----');
             document.getElementById('socket').innerHTML = '<h2>Napok: </h2>' + pufferNap.unique()
 
-            console.log(JSON.stringify(responseJSON))
+            //console.log(JSON.stringify(responseJSON))
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert("Hiba a kapcsolat létesítésekor. (lásd konzol)");
@@ -118,7 +126,7 @@ function convertDayTextToNumbers(text) {
             break;
 
         default:
-            console.log(text);
+            //console.log(text);
             return 1;
             break;
     }
@@ -144,7 +152,7 @@ function AnyagBeallitas() {
         "anyag": document.getElementById("anyag").value,
         "pic": getImage()
     };
-    console.log('Küldendő: ' + '\n' + JSON.stringify(sendingJSON) + '\n -----');
+    //console.log('Küldendő: ' + '\n' + JSON.stringify(sendingJSON) + '\n -----');
 
     $.ajax({
         type: "post",
