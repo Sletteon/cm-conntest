@@ -4,6 +4,8 @@ window.onload = function() {
     if (UName == null) {
         UName = prompt("Add meg a beceneved:");
         window.localStorage.setItem("UName", UName);
+        var UName = window.localStorage.getItem("UName");
+        success('Új beceneved: ' + UName + '.');
     }
 
 }
@@ -222,17 +224,12 @@ function getImage() {
   AnyagLekeres();
   };*/
 
-document.getElementById("connButton").onclick = function() {
-    AnyagBeallitas();
-};
-
 document.getElementById("objDelButton").onclick = function() {
     BejegyzTorlese();
 };
 
-// ha a gombok alatti szövegre kattintanak, törölje a felhasználónevet,
-// és frissítse az oldalt
-/*document.getElementById("unameDel").onclick = function() {
-    window.localStorage.removeItem("UName");
-    location.reload(false);
-};*/
+document.getElementById("connButton").onclick = function() {
+    AnyagBeallitas();
+};
+
+

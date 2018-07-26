@@ -1,3 +1,8 @@
+/*
+*    A probléma az egyNapAnyagai() függvénynél található, ott még részletesebbel leírom, mi a helyzet.
+*    Tudom, csomó helyen szükség van egy erős refaktorra, de elsősorban az a célom, hogy működjön.
+*/
+
 var got_to_day = false;
 var locat = window.location.href;
 var AnyagResponse;
@@ -13,43 +18,29 @@ window.onload = function() {
 
 function removePreviousStatus() {
     try {
-    document.getElementById('statusDiv').innerHTML = ''; 
+    document.getElementById('statusDiv').innerHTML = '';
     } catch(err) {}
 }
 
 function success(message) {
-    removePreviousStatus(); 
+    removePreviousStatus();
     var successAlert = document.createElement("DIV");
     successAlert.innerHTML = '<div class="alert alert-sm alert-success">' + message + '</div>';
     document.getElementById('statusDiv').appendChild(successAlert);
 }
 
 function info(message) {
-    removePreviousStatus(); 
+    removePreviousStatus();
     var infoAlert = document.createElement("DIV");
     infoAlert.innerHTML = '<div class="alert alert-sm alert-info">' + message + '</div>';
     document.getElementById('statusDiv').appendChild(infoAlert);
 }
 
 function error() {
-    removePreviousStatus(); 
+    removePreviousStatus();
     var errAlert = document.createElement("DIV");
     errAlert.innerHTML = '<div class="alert alert-sm alert-danger">Ez a hibaüzi a net hiányáról szól.</div>';
     document.getElementById('statusDiv').appendChild(errAlert);
-}
-
-function BejegyzTorlese(bejegyzId, bejegyzDiv) {
-    $.ajax({
-        type: "delete",
-        url: getUrl() + "/delete/" + bejegyzId,
-        success: function(responseData, textStatus, jqXHR) {
-            success('A bejegyzést sikeresen törölted');
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            error();
-        }
-    });
-    document.getElementById(bejegyzDiv).remove()
 }
 
 function getWeek() {
@@ -200,30 +191,94 @@ function navigate(nap, mindegyikHet) {
     url.searchParams.append('day', nap); //URL query param
     location.href = url; //URL query param
 }
-function egyNapAnyagaiMindegyikHet() {
-    $.ajax({
-        type: "get",
-        url: getUrl(),
-        success: function(responseData, textStatus, jqXHR) {
-            responseJSON = JSON.parse(responseData)
 
-            for (i = 0; i < responseJSON.length; i++) {
-                if (responseJSON[i].nap == clickedButton) {
-                    /*console.log(clickedButton);*/
-                    //console.log(responseJSON[i].nap);
-                    document.getElementById("socket").innerHTML += '<div class="well" id="' + i + '"></div>'
-                    document.getElementById(i).innerHTML += '<div class="pull-right"><button class="btn btn-danger" onclick="BejegyzTorlese(\'' + responseJSON[i]._id.$oid + '\', ' + i + ')"><span class="glyphicon glyphicon-trash"></span></button></div>'
-                    document.getElementById(i).innerHTML += '<h2 style="overflow-wrap: break-word;">' + responseJSON[i].het + '. hét</h2>'
-                    document.getElementById(i).innerHTML += '<h2 style="overflow-wrap: break-word;">Tantárgy: ' + responseJSON[i].tant + '</h2>'
-                    document.getElementById(i).innerHTML += '<h2 style="overflow-wrap: break-word;">Anyag: ' + responseJSON[i].anyag + '</h2>'
+
+function bejegyzesDoboztKreal(divId) {
+        document.getElementById("socket").innerHTML += '<div class="well" id="' + divId + '"></div>'
+        document.getElementById(divId).innerHTML += '<h2 class="text-muted" style="overflow-wrap: break-word;">' + divId + '</h2>'
+}
+
+function bejegyzestKiegeszit(divId, jsonElem) {
+        document.getElementById(divId).innerHTML += '<div class="row"><h2 class="col-xs-10" style="overflow-wrap: break-word;">' + jsonElem.anyag + '</h2><br><button class="btn btn-danger col-xs-2" onclick="BejegyzTorlese(\'' + jsonElem._id.$oid + '\', ' + divId + ')"><span class="glyphicon glyphicon-trash"></span></button></div>'
+}
+
+
+function anyagokLekereseEsMegjelenitese(mindegyikHet) {
+    if (mindegyikHet == true) {
+        $.ajax({
+            type: "get",
+            url: getUrl(),
+            success: function(responseData, textStatus, jqXHR) {
+
+                // parseoljuk a jsont
+                responseJSON = JSON.parse(responseData)
+
+                // itt tárolódnak a megjelenítendő adatok (tantárgyakat a divek id-jének használom)
+                anyagTantDict = {tantok:[], anyagok:[], jsonok:[]}
+        
+                // válogassa ki, melyik bejegyzés szól erre a napra
+                for (i=0; i<responseJSON.length; i++) {
+                    if (responseJSON[i].nap == clickedButton) {
+                        anyagTantDict.tantok.push(responseJSON[i].tant)
+                        anyagTantDict.anyagok.push(responseJSON[i].anyag)
+                        anyagTantDict.jsonok.push(responseJSON[i])
+                    }
                 }
+
+                // készítse el a tantárgydobozt a tantárgy címével
+                for (i=0; i<anyagTantDict.tantok.unique().length; i++) {
+                    bejegyzesDoboztKreal(anyagTantDict.tantok.unique()[i], anyagTantDict.tantok.unique()[i])
+                }
+
+                // töltse ki a dobozokat az anyagokkal
+                for (i=0; i<anyagTantDict.anyagok.length; i++) {
+                    bejegyzestKiegeszit(anyagTantDict.tantok[i], anyagTantDict.jsonok[i])
+                }
+           },
+            error: function(jqXHR, textStatus, errorThrown) {
+                error();
             }
-            //console.log(JSON.stringify(responseJSON))
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            error();
-        }
-    });
+        });
+    } else {
+        $.ajax({
+            type: "get",
+            url: getUrl() + '/het/' + getWeek(),
+            success: function(responseData, textStatus, jqXHR) {
+
+                // parseoljuk a jsont
+                responseJSON = JSON.parse(responseData)
+
+                // itt tárolódnak a megjelenítendő adatok (tantárgyakat a divek id-jének használom)
+                anyagTantDict = {tantok:[], anyagok:[], jsonok:[]}
+        
+                // válogassa ki, melyik bejegyzés szól erre a napra
+                for (i=0; i<responseJSON.length; i++) {
+                    if (responseJSON[i].nap == clickedButton) {
+                        anyagTantDict.tantok.push(responseJSON[i].tant)
+                        anyagTantDict.anyagok.push(responseJSON[i].anyag)
+                        anyagTantDict.jsonok.push(responseJSON[i])
+                    }
+                }
+
+                // készítse el a tantárgydobozt a tantárgy címével
+                for (i=0; i<anyagTantDict.tantok.unique().length; i++) {
+                    bejegyzesDoboztKreal(anyagTantDict.tantok.unique()[i], anyagTantDict.tantok.unique()[i])
+                }
+
+                // töltse ki a dobozokat az anyagokkal
+                for (i=0; i<anyagTantDict.anyagok.length; i++) {
+                    bejegyzestKiegeszit(anyagTantDict.tantok[i], anyagTantDict.jsonok[i])
+                }
+           },
+            error: function(jqXHR, textStatus, errorThrown) {
+                error();
+            }
+        });
+    }
+}
+
+function egyNapAnyagaiMindegyikHet() {
+    anyagokLekereseEsMegjelenitese(true);
 }
 
 function egyNapAnyagai() {
@@ -233,26 +288,6 @@ function egyNapAnyagai() {
         egyNapAnyagaiMindegyikHet();
     }
     else { // aktuális hét
-        $.ajax({
-            type: "get",
-            url: getUrl() + '/het/' + getWeek(),
-            success: function(responseData, textStatus, jqXHR) {
-                responseJSON = JSON.parse(responseData)
-                for (i = 0; i < responseJSON.length; i++) {
-                    if (responseJSON[i].nap == clickedButton) {
-                        /*console.log(clickedButton);*/
-                        //console.log(responseJSON[i].nap);
-                        document.getElementById("socket").innerHTML += '<div class="well" id="' + i + '"></div>'
-                        document.getElementById(i).innerHTML += '<div class="pull-right"><button class="btn btn-danger" onclick="BejegyzTorlese(\'' + responseJSON[i]._id.$oid + '\', ' + i + ')"><span class="glyphicon glyphicon-trash"></span></button></div>'
-                        document.getElementById(i).innerHTML += '<h2 style="overflow-wrap: break-word;">Tantárgy: ' + responseJSON[i].tant + '</h2>'
-                        document.getElementById(i).innerHTML += '<h2 style="overflow-wrap: break-word;">Anyag: ' + responseJSON[i].anyag + '</h2>'
-                    }
-                }
-                //console.log(JSON.stringify(responseJSON))
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                error();
-            }
-        });
+        anyagokLekereseEsMegjelenitese();
     }
 }
