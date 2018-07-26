@@ -43,20 +43,6 @@ function error() {
     document.getElementById('statusDiv').appendChild(errAlert);
 }
 
-function BejegyzTorlese(bejegyzId, bejegyzDiv) {
-    $.ajax({
-        type: "delete",
-        url: getUrl() + "/delete/" + bejegyzId,
-        success: function(responseData, textStatus, jqXHR) {
-            success('A bejegyzést sikeresen törölted');
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            error();
-        }
-    });
-    document.getElementById(bejegyzDiv).remove()
-}
-
 function getWeek() {
     // Hét száma az évben
     Date.prototype.getWeekNumber = function() {
