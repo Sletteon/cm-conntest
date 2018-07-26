@@ -209,12 +209,11 @@ function navigate(nap, mindegyikHet) {
 
 function bejegyzesDoboztKreal(divId) {
         document.getElementById("socket").innerHTML += '<div class="well" id="' + divId + '"></div>'
-        document.getElementById(divId).innerHTML += '<h2 style="overflow-wrap: break-word;">Tanárgy: ' + divId + '</h2>'
+        document.getElementById(divId).innerHTML += '<h2 class="text-muted" style="overflow-wrap: break-word;">' + divId + '</h2>'
 }
 
 function bejegyzestKiegeszit(divId, jsonElem) {
-        document.getElementById(divId).innerHTML += '<div class="pull-right"><button class="btn btn-danger" onclick="BejegyzTorlese(\'' + jsonElem._id.$oid + '\', ' + divId + ')"><span class="glyphicon glyphicon-trash"></span></button></div>'
-        document.getElementById(divId).innerHTML += '<h2 style="overflow-wrap: break-word;">' + jsonElem.anyag + '</h2>'
+        document.getElementById(divId).innerHTML += '<div class="row"><h2 class="col-xs-10" style="overflow-wrap: break-word;">' + jsonElem.anyag + '</h2><br><button class="btn btn-danger col-xs-2" onclick="BejegyzTorlese(\'' + jsonElem._id.$oid + '\', ' + divId + ')"><span class="glyphicon glyphicon-trash"></span></button></div>'
 }
 
 
