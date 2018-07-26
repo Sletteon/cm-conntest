@@ -206,77 +206,55 @@ function navigate(nap, mindegyikHet) {
     location.href = url; //URL query param
 }
 
-function egyNapAnyagaiMindegyikHet() {
-    $.ajax({
-        type: "get",
-        url: getUrl(),
-        success: function(responseData, textStatus, jqXHR) {
-            responseJSON = JSON.parse(responseData)
-
-            for (i = 0; i < responseJSON.length; i++) {
-                if (responseJSON[i].nap == clickedButton) {
-                    /*console.log(clickedButton);*/
-                    //console.log(responseJSON[i].nap);
-                    document.getElementById("socket").innerHTML += '<div class="well" id="' + i + '"></div>'
-                    document.getElementById(i).innerHTML += '<div class="pull-right"><button class="btn btn-danger" onclick="BejegyzTorlese(\'responseJSON[i]._id.$oid, ' + i + ')"><span class="glyphicon glyphicon-trash"></span></button></div>'
-                    document.getElementById(i).innerHTML += '<h2 style="overflow-wrap: break-word;">' + responseJSON[i].het + '. hét</h2>'
-                    document.getElementById(i).innerHTML += '<h2 style="overflow-wrap: break-word;">Tantárgy: ' + responseJSON[i].tant + '</h2>'
-                    document.getElementById(i).innerHTML += '<h2 style="overflow-wrap: break-word;">Anyag: ' + responseJSON[i].anyag + '</h2>'
-                }
-            }
-            //console.log(JSON.stringify(responseJSON))
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            error();
-        }
-    });
-}
-
-// leelenőrzi, hogy egy objektum megtalálható-e egy tömbben
-// nekem egy dict listájában kell utánanéznem, nem szimpla listában, így nem vagyok biztos, hogy megfelel-e erre a feladatra
-function containsObject(obj, list) {
-    var x;
-    for (x in list) {
-        if (list.hasOwnProperty(x) && list[x] === obj) {
-            return true;
-        }
-    }
-
-    return false;
-}
 
 function bejegyzesDoboztKreal(divId) {
-    document.getElementById("socket").innerHTML += '<div class="well" id="' + divId + '"></div>'
+        document.getElementById("socket").innerHTML += '<div class="well" id="' + divId + '"></div>'
+        document.getElementById(divId).innerHTML += '<h2 style="overflow-wrap: break-word;">Tanárgy: ' + divId + '</h2>'
 }
 
-// kiírja a bejegyzésdoboz tantárgyát (címét), valamint az első napot, ami ehhez a tantárgyhoz van rendelve
-function bejegyzestMegjelenit(divId, jsonElem, anyag) {
-    if (jsonElem.nap == clickedButton) {
-        document.getElementById(divId).innerHTML += '<div class="pull-right"><button class="btn btn-danger" onclick="BejegyzTorlese(\'' + jsonElem._id.$oid + '\', ' + i + ')"><span class="glyphicon glyphicon-trash"></span></button></div>'
-        document.getElementById(divId).innerHTML += '<h2 style="overflow-wrap: break-word;">Tanárgy: ' + jsonElem.tant + '</h2>'
-        document.getElementById(divId).innerHTML += '<h2 style="overflow-wrap: break-word;">Anyag: ' + jsonElem.anyag + '</h2>'
-    }
-}
-
-// ha esetleg több nap jár 1 tantárgyhoz, írja a dobozának végébe, természetesen a törlés gombbal
 function bejegyzestKiegeszit(divId, jsonElem) {
-    if (jsonElem.nap == clickedButton) {
-        document.getElementById(divId).innerHTML += '<div class="pull-right"><button class="btn btn-danger" onclick="BejegyzTorlese(\'' + jsonElem._id.$oid + '\', ' + i + ')"><span class="glyphicon glyphicon-trash"></span></button></div>'
+        document.getElementById(divId).innerHTML += '<div class="pull-right"><button class="btn btn-danger" onclick="BejegyzTorlese(\'' + jsonElem._id.$oid + '\', ' + divId + ')"><span class="glyphicon glyphicon-trash"></span></button></div>'
         document.getElementById(divId).innerHTML += '<h2 style="overflow-wrap: break-word;">' + jsonElem.anyag + '</h2>'
-    }
 }
 
-/*
-*   Az a célom, tantárgyak szerint rendszerezve legyenek a bejegyzések kiírva.
-*   Ha pl. hétfőre van 2 bejegyzésünk ami torire vonatkozik, akkor 1 div legyen, ahol fel vannak sorolva az anyagok.
-*/
-function egyNapAnyagai() {
-    var param = new URLSearchParams(window.location.search);
-    clickedButton = param.get('day');
-    if (param.get('mindegyikHet') == 'true') {
-        egyNapAnyagaiMindegyikHet();
-    }
-    else { // aktuális hét
+
+function anyagokLekereseEsMegjelenitese(mindegyikHet) {
+    if (mindegyikHet == true) {
+        $.ajax({
+            type: "get",
+            url: getUrl(),
+            success: function(responseData, textStatus, jqXHR) {
+
+                // parseoljuk a jsont
+                responseJSON = JSON.parse(responseData)
+
+                // itt tárolódnak a megjelenítendő adatok (tantárgyakat a divek id-jének használom)
+                anyagTantDict = {tantok:[], anyagok:[], jsonok:[]}
+        
+                // válogassa ki, melyik bejegyzés szól erre a napra
+                for (i=0; i<responseJSON.length; i++) {
+                    if (responseJSON[i].nap == clickedButton) {
+                        anyagTantDict.tantok.push(responseJSON[i].tant)
+                        anyagTantDict.anyagok.push(responseJSON[i].anyag)
+                        anyagTantDict.jsonok.push(responseJSON[i])
+                    }
+                }
+
+                // készítse el a tantárgydobozt a tantárgy címével
+                for (i=0; i<anyagTantDict.tantok.unique().length; i++) {
+                    bejegyzesDoboztKreal(anyagTantDict.tantok.unique()[i], anyagTantDict.tantok.unique()[i])
+                }
+
+                // töltse ki a dobozokat az anyagokkal
+                for (i=0; i<anyagTantDict.anyagok.length; i++) {
+                    bejegyzestKiegeszit(anyagTantDict.tantok[i], anyagTantDict.jsonok[i])
+                }
+           },
+            error: function(jqXHR, textStatus, errorThrown) {
+                error();
+            }
+        });
+    } else {
         $.ajax({
             type: "get",
             url: getUrl() + '/het/' + getWeek(),
@@ -285,33 +263,46 @@ function egyNapAnyagai() {
                 // parseoljuk a jsont
                 responseJSON = JSON.parse(responseData)
 
-                // egy lista, ami dictionary-kat fog tartani, így összekötünk 1 tantárgyat 1 divvel
-                tantDivDict = [];
-
-                // végigmegyünk a kapott json-on, hogy ellenőrizzük, be van-e már írva ez a tantárgy
-                for (i = 0; i < responseJSON.length; i++) {
-                    console.log(i)
-
-                    // ha nincs még beírva, csinálja meg ezt a divet és írja be a bejegyzést
-                    // PROBLÉMA 1: hogyan lehet ellenőrizni, hogy egy string benne van-e egy listának elemének elemében
-                    // (szerepel-e az éppen ellenőrizendő tantárgy a tantDivDict bármelyik dictjében)
-                    if (!responseJSON[i].tant in tantDivDict) {
-                           tantDivDict.push({tant:responseJSON[i].tant, div:i})
-                           bejegyzesDoboztKreal(i)
-                           bejegyzestMegjelenit(i, responseJSON[i], responseJSON[i].anyag)
-                    } else {
-
-                        // ha már be van írva a listánkba ez a tantárgy, nézzük meg, milyen ID-vel rendelkezik a tantárgy és írjuk be
-                        console.log('tantárgy nincs a tantDivDictben')
-                        // PROBLÉMA 2: hogyan tudom megnézni egy bizonyos tantárgyhoz rendelt div id-jét
-                        //bejegyzestKiegeszit(tantDivDict, responseJSON[i]);
+                // itt tárolódnak a megjelenítendő adatok (tantárgyakat a divek id-jének használom)
+                anyagTantDict = {tantok:[], anyagok:[], jsonok:[]}
+        
+                // válogassa ki, melyik bejegyzés szól erre a napra
+                for (i=0; i<responseJSON.length; i++) {
+                    if (responseJSON[i].nap == clickedButton) {
+                        anyagTantDict.tantok.push(responseJSON[i].tant)
+                        anyagTantDict.anyagok.push(responseJSON[i].anyag)
+                        anyagTantDict.jsonok.push(responseJSON[i])
                     }
                 }
 
-            },
+                // készítse el a tantárgydobozt a tantárgy címével
+                for (i=0; i<anyagTantDict.tantok.unique().length; i++) {
+                    bejegyzesDoboztKreal(anyagTantDict.tantok.unique()[i], anyagTantDict.tantok.unique()[i])
+                }
+
+                // töltse ki a dobozokat az anyagokkal
+                for (i=0; i<anyagTantDict.anyagok.length; i++) {
+                    bejegyzestKiegeszit(anyagTantDict.tantok[i], anyagTantDict.jsonok[i])
+                }
+           },
             error: function(jqXHR, textStatus, errorThrown) {
                 error();
             }
         });
+    }
+}
+
+function egyNapAnyagaiMindegyikHet() {
+    anyagokLekereseEsMegjelenitese(true);
+}
+
+function egyNapAnyagai() {
+    var param = new URLSearchParams(window.location.search);
+    clickedButton = param.get('day');
+    if (param.get('mindegyikHet') == 'true') {
+        egyNapAnyagaiMindegyikHet();
+    }
+    else { // aktuális hét
+        anyagokLekereseEsMegjelenitese();
     }
 }
