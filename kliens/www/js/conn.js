@@ -171,18 +171,6 @@ function AnyagBeallitas() {
     });
 }
 
-function BejegyzTorlese() {
-    $.ajax({
-        type: "delete",
-        url: getUrl() + "/delete/" + document.getElementById('deleteObj').value,
-        success: function(responseData, textStatus, jqXHR) {
-            success('A bejegyzést sikeresen törölted');
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            error();
-        }
-    });
-}
 
 // kiralzolja a picSelectben kiválasztott képet
 function draw() {
@@ -224,12 +212,16 @@ function getImage() {
   AnyagLekeres();
   };*/
 
-document.getElementById("objDelButton").onclick = function() {
-    BejegyzTorlese();
-};
+try{
+    document.getElementById("objDelButton").onclick = function() {
+        BejegyzTorlese();
+    };
+} catch(e){}
 
-document.getElementById("connButton").onclick = function() {
-    AnyagBeallitas();
-};
+try{
+    document.getElementById("connButton").onclick = function() {
+        AnyagBeallitas();
+    };
+} catch(e){}
 
 

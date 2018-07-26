@@ -52,7 +52,7 @@
         <h3 class="text-muted">Bejegyzés törlése</h3>
         <input class="form-control" type="text" id="deleteObj" placeholder="Törlendő bejegyzés ID-ja">
         <br>
-        <button class="btn btn-danger teljesKepernyoBootstrapPrimary" id="objDelButton">Bejegyzés törlése</button>
+        <button class="btn btn-danger teljesKepernyoBootstrapPrimary" id="objDelButton" onclick="BejegyzTorleseId()" >Bejegyzés törlése</button>
 
         <!--<hr>
         <h3 class="text-muted">Képfeltöltés</h3>
@@ -74,6 +74,11 @@ document.getElementById("unameDel").onclick = function() {
     window.localStorage.removeItem("UName");
     window.localStorage.setItem("UName", document.getElementById("unameField").value);
     success('Új beceneved: ' + window.localStorage.getItem("UName"));
+}
+
+document.getElementById("objDelButton").onclick = function() {
+    BejegyzTorleseId();
+
 }
 </script>
 </html>
