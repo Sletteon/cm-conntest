@@ -227,7 +227,7 @@ function bejegyzesDoboztKreal(divId) {
 }
 
 function bejegyzestKiegeszit(divId, jsonElem) {
-        document.getElementById(divId).innerHTML += '<div class="row"><h2 class="col-xs-10" style="overflow-wrap: break-word;">' + jsonElem.anyag + '</h2><br><button class="btn btn-danger col-xs-2" onclick="BejegyzTorlese(\'' + jsonElem._id.$oid + '\', ' + divId + ')"><span class="glyphicon glyphicon-trash"></span></button></div>'
+        document.getElementById(divId).innerHTML += '<div class="row"><h2 class="col-xs-10" style="overflow-wrap: break-word;">' + jsonElem.anyag + '<span class="badge badge-pill badge-primary">' + jsonElem.uname + '</span></h2><br><button class="btn btn-danger col-xs-2" onclick="BejegyzTorlese(\'' + jsonElem._id.$oid + '\', ' + divId + ')"><span class="glyphicon glyphicon-trash"></span></button></div>'
 }
 
 
