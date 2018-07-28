@@ -44,8 +44,13 @@ function info(message) {
 function motd(message) {
     var infoAlert = document.createElement("DIV");
     // bezárható, kisebb 'info' típusú well, ami footerként a képernyő alján marad
-    infoAlert.innerHTML = '<div class="navbar navbar-fixed-bottom"><div class="alert alert-sm alert-info fade in"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' + message + '</div></div>';
+    // bezárást követően meghívásra kerül a motdDismiss függvény
+    infoAlert.innerHTML = '<div class="navbar navbar-fixed-bottom"><div class="alert alert-sm alert-info fade in"><a href="#" onclick="motdDismiss(\'' + message + '\')" class="close" data-dismiss="alert" aria-label="close">&times;</a>' + message + '</div></div>';
     document.getElementById('body').appendChild(infoAlert);
+}
+
+function motdDismiss(motdMessage) {
+    window.localStorage.setItem('motdDismissed', motdMessage)
 }
 
 function error() {
@@ -56,11 +61,14 @@ function error() {
 }
 
 function NapiUzenetLekerese() {
+    var motdDismissed = window.localStorage.getItem('motdDismissed')
     $.ajax({
         type: "get",
         url: getUrl() + "/motd",
         success: function(responseData, textStatus, jqXHR) {
-            motd(responseData);
+            if (responseData != motdDismissed) {
+                motd(responseData);
+            }
         },
 
         error: function(jqXHR, textStatus, errorThrown) {
