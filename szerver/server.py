@@ -38,10 +38,10 @@ app = Flask(__name__, static_folder=os.path.join(os.environ['PWD'], 'kliens'))
 # Kell, ha nincs akkor kliens hibát kap
 CORS(app, resources={r'/*': {'origins': '*'}})
 
-
-@app.errorhandler(404)
-def badRequest(e):
-    return Response(RequestError(request, 404), status=404, mimetype='application/json')
+# kikommenteltem, mert sok esetben ok nélkül írja ki a hibát, valamint úgy sem közvetlenül használjuk az API-t (nem lehet sok emberi hiba url beírásakor)
+#@app.errorhandler(404)
+#def badRequest(e):
+#    return Response(RequestError(request, 404), status=404, mimetype='application/json')
 
 
 @app.errorhandler(400)
@@ -82,6 +82,10 @@ def adatSzama():
 def megadottBejegyzesTorlese(objectIdToDelete):
     clientIP = request.remote_addr
     return onReceiveDelete(clientIP, objectIdToDelete)
+
+@app.route('/motd', methods=['GET'])
+def napiUzenet():
+    return onReceiveMotd(request.remote_addr)
 
 
 # Lokális Ip-t (hálózaton belülit) ad vissza

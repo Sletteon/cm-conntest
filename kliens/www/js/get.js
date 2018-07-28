@@ -43,6 +43,21 @@ function error() {
     document.getElementById('statusDiv').appendChild(errAlert);
 }
 
+function NapiUzenetLekerese() {
+    $.ajax({
+        type: "get",
+        url: getUrl() + "/motd",
+        success: function(responseData, textStatus, jqXHR) {
+            info(responseData);
+        },
+
+        error: function(jqXHR, textStatus, errorThrown) {
+            error();
+        }
+
+    });
+}
+
 // bejegyzés törlése a kuka gombbal a bejegyzés mellett
 function BejegyzTorlese(bejegyzId, bejegyzDiv) {
     $.ajax({

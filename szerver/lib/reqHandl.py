@@ -12,6 +12,10 @@ from lib.errorHandl import *
 from lib.colorPrint import *
 from lib.dbIO import *
 
+def onReceiveMotd(clientIP):
+    # csak az első sort adjuk vissza
+    with open('motd.txt', 'r', encoding='utf-8') as file:
+        return file.readline().strip()   
 
 def onReceiveDelete(clientIP, objectIdToDelete):
 
