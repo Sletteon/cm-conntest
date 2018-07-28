@@ -14,6 +14,11 @@ window.onload = function() {
     if (/egy_nap.html/.test(locat) && got_to_day == false) {
         egyNapAnyagai();
     }
+
+    var fileName = location.pathname.split("/").slice(-1)
+    if (fileName == 'index.html') {
+        NapiUzenetLekerese();
+    }
 }
 
 function removePreviousStatus() {
@@ -36,6 +41,13 @@ function info(message) {
     document.getElementById('statusDiv').appendChild(infoAlert);
 }
 
+function motd(message) {
+    var infoAlert = document.createElement("DIV");
+    // bezárható, kisebb 'info' típusú well, ami footerként a képernyő alján marad
+    infoAlert.innerHTML = '<div class="navbar navbar-fixed-bottom"><div class="alert alert-sm alert-info fade in"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' + message + '</div></div>';
+    document.getElementById('body').appendChild(infoAlert);
+}
+
 function error() {
     removePreviousStatus();
     var errAlert = document.createElement("DIV");
@@ -48,7 +60,7 @@ function NapiUzenetLekerese() {
         type: "get",
         url: getUrl() + "/motd",
         success: function(responseData, textStatus, jqXHR) {
-            info(responseData);
+            motd(responseData);
         },
 
         error: function(jqXHR, textStatus, errorThrown) {
