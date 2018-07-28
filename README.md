@@ -1,73 +1,54 @@
-**Szerver-kliens kapcsolatteszt**<br>
+**ClassMate, egy mobil app, ahol meg tudod nézni a leckéket, amiket az osztálytársaid küldtek be**<br>
 
  **Hasznos linkek**<br>
-[PhoneGap dokumentáció](http://docs.phonegap.com/)<br>
-[Cordova dokumentáció](https://cordova.apache.org/docs/en/latest/)<br>
-[Legstabilabb kliens apk](https://build.phonegap.com/apps/2934479/download/android)<br><hr>
-**Függőségek (szerver):**
+[Legstabilabb kliens (android)](https://build.phonegap.com/apps/2934479/download/android)<br><hr>
 
-requirements.txt-ben minden megvan (```pip3 install -r szerver/requirements.txt```)<br><br>
-**Szerver:**
+**Hogyan futtatsd**<br>
 
-Amikor a szerverre csatlakozik valaki, megnézi, amennyiben GET eljárást használ a kliens, valószínűleg le szeretné kérni az elmentett adatokat, így azokat JSON formátumban elküldi a szerver. Ha viszont a kliens küldi el az adatokat, azt a szervernek POST metódusával teszi, szintén JSON-ban.
+*Kliens*<br>
+Én buildelem az appot, így azzal nincs sok teendő.<br>
 
-Példa az anyagbeállításra:
+*Szerver*<br>
+FONTOS: ugyanabban a mappában kell lenni, amiben a server.py megtalálható.
 
-_Utf-8-as karakterkódolást a HTML megoldja_
+Függőségek telepítése:
+```# pip3 install -r requirements.txt```
 
-```
-[{
-    "_id": {
-        "$oid": "5a79f0329805160771b1bbe7"
-    },
-    "uname": "misiCHR",
-    "het": 6,
-    "nap": "K",
-    "tant": "t\u00f6ri",
-    "anyag": "frankreichische Reich"
-}, {
-    "_id": {
-        "$oid": "5a79f0449805160771b1bbea"
-    },
-    "uname": "misiCHR",
-    "het": 6,
-    "nap": "K",
-    "tant": "matek",
-    "anyag": "trigonometrie"
-}]
-```
+Indítás:
+```$ python3 szerver.py ../config/production.ini```
 
+ERRE FIGYELJ:
 
+Néhány Linux rendszeren a 3-s szám elhagyható, csak arra kell ügyelni, hogy a Python 3-s verziójával indítsuk el a szervert.<br>
 
-Jelen esetünkben 2 bejegyzést tárolunk el, ahol a misiCHR nevű felhasználó töriből, illetve matekból írt be [K]eddre, a 6\. hétre.
+Ha a MongoDB telepítve van és létre van hozva a `cm` n. adatbázis benne `posts` collection-nel, akkor a production.ini helyett a local.ini fájlt adjuk meg.<br>
 
-Napok: [H]étfő | [K]edd | [S]zerda | [C]sütörtök | [P]éntek<br>
+Valamiért a Debian virtuális gépemben néha nem szokott válaszolni a szerver, így azt tmux alatt futtatom. Még egy előnye a programnak, hogy amellett, hogy fut a szerver, szerkezteni tudom a modt.txt-t is.<br> 
 
-**Szerver admin-parancsok:**
+*autoTestClient.py*<br>
+Arra való, hogy a szerver teljesítményét/működését teszteljük.<br>
+Függőségek: csak a `requests` Python modul.<br>
+Használat: <br>
+```$ python3 autoTestClient.py <szerverIP>:<opcionális, szerver port> <opcionális, egy kép útvonala> ```<br>
 
-Shell-hozzáférés nélkül lehet a szerveren bizonyos funkciókat végrehajtani, debuggolást könnyítve. (lista bővűl)
-Használat: tantárgy helyében kell ezeket a parancsokat beírni.
+Megintcsak, Linux disztófüggő, hogy kell-e 3-s a `python3`-ba.<br>
 
-* \* - eddigi adatokat törli ki (csak a teszt-szerveren lesz elérhető)
+**Fejlesztés**<br>
 
-<hr>
+Mindent a Github Projects fülében dokumentálunk, így mindig tudjuk, hogy a másik (forever alone) min dolgozik.<br>
 
-**Kliens:**
+*Kliens*<br>
 
-A klienst a PhoneGap programmal, HTML, JS illetve CSS nyelveken írjuk.
-A program ezt a weboldalt (index.html) mobil alkalmazásra fogja fordítani [ezen](https://build.phonegap.com) az oldalon.
-Debuggolás folyamata a böngészőben történik a fejlesztői eszközök miatt.
-index.html helye: /kliens/www/index.html
-A felhasználó be tud adni adatot, le tud kérni adatot, mindezeket külön gombokkal.
-Valamint a gombok alatt, egy link, megnyomása a felhasználónév törlésével, illetve a weboldal újratöltésével jár.
+A kliens mappája, amin mi, emberek, dolgozunk, nem más, mint, a `kliens/www`.
+A többi kliens fájlhoz a PhoneGap szokott hozzányúlni, így én nem is nagyon piszkáltam bele.
+Említeni sem érdemes, hogy az index.html a főoldal, azt látja először a kedves felhasználó.<br>
 
-**Teszt szkript**
+*Szerver*<br>
 
-A tesztszript alapértelmezetten 1000 random adatbeküldést és egy lekérést szimulál, így a szkript szolgálhat stress-teszként és szerver-benchmarkként is.
-Használat:
-```python3 autoTestClient.py <hostname vagy IP-cím>:<port> <útvonal egy képhez>```
-
-Ha nincs port megadva, automatikusan az 5000-s lesz használatban.
-A képpel való tesztelés csak opcionális.
-A szkript leméri, mennyi időbe telik a szervernek feldolgoznia az 1000 beküldést, így lehet internetkapcsolatot vagy szervert "benchmarkolni".
-_AMD FX-8350 (8 mag, 4 Ghz) CPUval a gépem (Arch Linux) 17.81 mp alatt dolgozta fel, míg a Xeon E5506 (4 mag, 2 Ghz) processzorral felszerelt virtuális szerverem (Debian 9) 14.02 mp alatt végezte el az 1000 beküldést ugyanazzal az adatbázissal, ugyanazon a hálózaton._
+A szerver mappaszerkezete egyszerűbb, mivel azt csak emberi kézzel építettem. (ezért olyan ronda a kód :joy:)
+A debug mappában most már semmit nem tárolunk, csak régebben, amikor fájlokkal szenvedtem, és nem adatbázissal.
+A lib mappában a server.py futtatásához szükséges fájlok találhatóak. Feljeszés során itt telik el az idő legtöbb része.
+A log fájljainak célja szerintem egyértelmű. Ha a távollétünkben valamilyen hiba történt, akkor vissza lehessen keresni a hiba okát.
+testPics mappa csak pár képet tartalmaz, amivel a képbeküldést teszteltem.
+Az autoTestClient.py használatát már leírtam, csak úgy, mint a requirements.txt-ét.
+motd.txt-be kerülnek a napi üzenetek, míg a szerver.py fájllal indítjuk el a cirkuszt.
