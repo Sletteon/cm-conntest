@@ -26,7 +26,7 @@ function success(message) {
 function error() {
     removePreviousStatus()
     var errAlert = document.createElement("DIV");
-    errAlert.innerHTML = '<div class="alert alert-sm alert-danger">Ez a hibaüzi a net hiányáról szól.</div>';
+    errAlert.innerHTML = '<div class="alert alert-sm alert-danger">Biztos, hogy van neted?</div>';
     document.getElementById('statusDiv').appendChild(errAlert);
 }
 

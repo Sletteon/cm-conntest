@@ -1,8 +1,3 @@
-/*
-*    A probléma az egyNapAnyagai() függvénynél található, ott még részletesebbel leírom, mi a helyzet.
-*    Tudom, csomó helyen szükség van egy erős refaktorra, de elsősorban az a célom, hogy működjön.
-*/
-
 var got_to_day = false;
 var locat = window.location.href;
 var AnyagResponse;
@@ -41,6 +36,13 @@ function info(message) {
     document.getElementById('statusDiv').appendChild(infoAlert);
 }
 
+function noInternetMessage() {
+    removePreviousStatus();
+    var infoAlert = document.createElement("DIV");
+    infoAlert.innerHTML = '<div class="alert alert-sm alert-info">Offline vagy. Csak a heti bejegyzéseket tudod megnézni és nem tudsz törölni.</div>';
+    document.getElementById('statusDiv').appendChild(infoAlert);
+}
+
 function motd(message) {
     var infoAlert = document.createElement("DIV");
     // bezárható, kisebb 'info' típusú well, ami footerként a képernyő alján marad
@@ -56,7 +58,7 @@ function motdDismiss(motdMessage) {
 function error() {
     removePreviousStatus();
     var errAlert = document.createElement("DIV");
-    errAlert.innerHTML = '<div class="alert alert-sm alert-danger">Ez a hibaüzi a net hiányáról szól.</div>';
+    errAlert.innerHTML = '<div class="alert alert-sm alert-danger">Biztos, hogy van neted?</div>';
     document.getElementById('statusDiv').appendChild(errAlert);
 }
 
@@ -72,7 +74,6 @@ function NapiUzenetLekerese() {
         },
 
         error: function(jqXHR, textStatus, errorThrown) {
-            error();
         }
 
     });
@@ -135,48 +136,53 @@ Array.prototype.unique = function() {
     });
 }
 
+function indexNapiGombokMegjelenitese(responseJSON, mindegyikHet) {
+      pufferAnyag = []
+      for (i = 0; i < responseJSON.length; i++) {
+          pufferAnyag.push(responseJSON[i].anyag);
+      }
+ 
+      pufferNap = []
+      for (i = 0; i < responseJSON.length; i++) {
+          pufferNap.push(responseJSON[i].nap);
+      }
+ 
+    napok = pufferNap.unique()
+    napok.sort()
+    DayDict = {
+        0: "Hétfő",
+        1: "Kedd",
+        2: "Szerda",
+        3: "Csütörtök",
+        4: "Péntek",
+        5: "Szombat",
+        6: "Vasárnap"
+    }
+    var adottNap
+    for (i = 0; i < napok.length; i++) {
+        adottNap = napok[i];
+        document.getElementById('socket').innerHTML += '<button class="btn btn-primary teljesKepernyoBootstrapPrimary" onclick="navigate(' + adottNap + ', ' + mindegyikHet + ')">' + DayDict[adottNap] + '</button><br><br>'
+    }
+}
+
+// index.html-ben a napok gombjainak megjelenítése
 function ezAHetLekerese() {
     $.ajax({
         type: "get",
         url: getUrl() + '/het/' + getWeek(),
         success: function(responseData, textStatus, jqXHR) {
             responseJSON = JSON.parse(responseData)
-            // Összes JSON anyaga
-            pufferAnyag = []
-            for (i = 0; i < responseJSON.length; i++) {
-                pufferAnyag.push(responseJSON[i].anyag);
-            }
-            //console.log('Összes JSON anyaga: ' + '\n' + pufferAnyag + '\n -----');
-            /*document.getElementById("socket").innerHTML += '<h2>' + pufferAnyag + '<h2>';*/
-
-            // Összes JSON napja
-            pufferNap = []
-            for (i = 0; i < responseJSON.length; i++) {
-                pufferNap.push(responseJSON[i].nap);
-            }
-            napok = pufferNap.unique()
-            napok.sort()
-            DayDict = {
-                0: "Hétfő",
-                1: "Kedd",
-                2: "Szerda",
-                3: "Csütörtök",
-                4: "Péntek",
-                5: "Szombat",
-                6: "Vasárnap"
-            }
-            var adottNap
-            for (i = 0; i < napok.length; i++) {
-                adottNap = napok[i];
-                document.getElementById('socket').innerHTML += '<button class="btn btn-primary teljesKepernyoBootstrapPrimary" onclick=navigate(' + adottNap + ')>' + DayDict[adottNap] + '</button><br><br>'
-            }
-            // Ne az összes napot írja ki, hanem mindenből csak egyet (ha van legalább arra a napra bejegyzés)
-            //console.log('Összes JSON napja: ' + '\n' + pufferNap.unique() + '\n -----');
-
-            //console.log(JSON.stringify(responseJSON))
+            window.localStorage.setItem('thisWeekData', responseData)
+            indexNapiGombokMegjelenitese(responseJSON, false);
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            error();
+            noInternetMessage();
+            var thisWeekData = window.localStorage.getItem('thisWeekData')
+            if(thisWeekData != null){
+                indexNapiGombokMegjelenitese(JSON.parse(thisWeekData), false);
+            } else{
+                error();
+            }
         }
     });
 }
@@ -189,54 +195,9 @@ function AnyagLekeres() {
         url: getUrl(),
         success: function(responseData, textStatus, jqXHR) {
             responseJSON = JSON.parse(responseData)
+            window.localStorage.setItem('allWeekData', responseData)
+            indexNapiGombokMegjelenitese(responseJSON, true);
 
-            // JSON KIBONTÁS
-
-            // uname: felhasználónév (string)
-            // het: hét (integer)
-            // nap: nap (char) (JS szerint a char is string)
-            // tant: tantárgy (string)
-            // anyag: anyag (string)
-
-            // JSON-lista első JSON-jának elérése: responseJSON[0]
-            // JSON-ban a tantárgy elérése: responseJSON.tant
-
-            /*document.getElementById("socket").innerHTML = '<h2>' + responseData + '<h2>';
-            //console.log('Első bejegyzés szerkesztője: ' + '\n' + responseJSON[0].uname + '\n -----');*/
-
-            // Összes JSON anyaga
-            pufferAnyag = []
-            for (i = 0; i < responseJSON.length; i++) {
-                pufferAnyag.push(responseJSON[i].anyag);
-            }
-            //console.log('Összes JSON anyaga: ' + '\n' + pufferAnyag + '\n -----');
-            /*document.getElementById("socket").innerHTML += '<h2>' + pufferAnyag + '<h2>';*/
-
-            // Összes JSON napja
-            pufferNap = []
-            for (i = 0; i < responseJSON.length; i++) {
-                pufferNap.push(responseJSON[i].nap);
-            }
-            napok = pufferNap.unique()
-            napok.sort()
-            DayDict = {
-                0: "Hétfő",
-                1: "Kedd",
-                2: "Szerda",
-                3: "Csütörtök",
-                4: "Péntek",
-                5: "Szombat",
-                6: "Vasárnap"
-            }
-            var adottNap
-            for (i = 0; i < napok.length; i++) {
-                adottNap = napok[i];
-                document.getElementById('socket').innerHTML += '<button class="btn btn-primary teljesKepernyoBootstrapPrimary" onclick="navigate(' + adottNap + ', true)">' + DayDict[adottNap] + '</button><br><br>'
-            }
-            // Ne az összes napot írja ki, hanem mindenből csak egyet (ha van legalább arra a napra bejegyzés)
-            //console.log('Összes JSON napja: ' + '\n' + pufferNap.unique() + '\n -----');
-
-            //console.log(JSON.stringify(responseJSON))
         },
         error: function(jqXHR, textStatus, errorThrown) {
             error();
@@ -262,41 +223,41 @@ function bejegyzesDoboztKreal(divId) {
 }
 
 function bejegyzestKiegeszit(divId, jsonElem) {
-        document.getElementById(divId).innerHTML += '<div class="row"><h2 class="col-xs-10" style="overflow-wrap: break-word;">' + jsonElem.anyag + '<span class="badge badge-pill badge-primary">' + jsonElem.uname + '</span></h2><br><button class="btn btn-danger col-xs-2" onclick="BejegyzTorlese(\'' + jsonElem._id.$oid + '\', ' + divId + ')"><span class="glyphicon glyphicon-trash"></span></button></div>'
+        document.getElementById(divId).innerHTML += '<div class="row"><h3 class="col-xs-10" style="overflow-wrap: break-word;"><span class="badge badge-pill badge-primary">' + jsonElem.uname + '</span>' + jsonElem.anyag + '</h3><br><button class="btn btn-danger col-xs-2" onclick="BejegyzTorlese(\'' + jsonElem._id.$oid + '\', ' + divId + ')"><span class="glyphicon glyphicon-trash"></span></button></div>'
 }
 
+function anyagokMegjelenitese(responseJSON) {
+    // itt tárolódnak a megjelenítendő adatok (tantárgyakat a divek id-jének használom)
+    anyagTantDict = {tantok:[], anyagok:[], jsonok:[]}
+    
+    // válogassa ki, melyik bejegyzés szól erre a napra
+    for (i=0; i<responseJSON.length; i++) {
+        if (responseJSON[i].nap == clickedButton) {
+            anyagTantDict.tantok.push(responseJSON[i].tant)
+            anyagTantDict.anyagok.push(responseJSON[i].anyag)
+            anyagTantDict.jsonok.push(responseJSON[i])
+        }
+    }
+    
+    // készítse el a tantárgydobozt a tantárgy címével
+    for (i=0; i<anyagTantDict.tantok.unique().length; i++) {
+        bejegyzesDoboztKreal(anyagTantDict.tantok.unique()[i], anyagTantDict.tantok.unique()[i])
+    }
+    
+    // töltse ki a dobozokat az anyagokkal
+    for (i=0; i<anyagTantDict.anyagok.length; i++) {
+        bejegyzestKiegeszit(anyagTantDict.tantok[i], anyagTantDict.jsonok[i])
+    }
 
+}
 function anyagokLekereseEsMegjelenitese(mindegyikHet) {
     if (mindegyikHet == true) {
         $.ajax({
             type: "get",
             url: getUrl(),
             success: function(responseData, textStatus, jqXHR) {
-
-                // parseoljuk a jsont
                 responseJSON = JSON.parse(responseData)
-
-                // itt tárolódnak a megjelenítendő adatok (tantárgyakat a divek id-jének használom)
-                anyagTantDict = {tantok:[], anyagok:[], jsonok:[]}
-        
-                // válogassa ki, melyik bejegyzés szól erre a napra
-                for (i=0; i<responseJSON.length; i++) {
-                    if (responseJSON[i].nap == clickedButton) {
-                        anyagTantDict.tantok.push(responseJSON[i].tant)
-                        anyagTantDict.anyagok.push(responseJSON[i].anyag)
-                        anyagTantDict.jsonok.push(responseJSON[i])
-                    }
-                }
-
-                // készítse el a tantárgydobozt a tantárgy címével
-                for (i=0; i<anyagTantDict.tantok.unique().length; i++) {
-                    bejegyzesDoboztKreal(anyagTantDict.tantok.unique()[i], anyagTantDict.tantok.unique()[i])
-                }
-
-                // töltse ki a dobozokat az anyagokkal
-                for (i=0; i<anyagTantDict.anyagok.length; i++) {
-                    bejegyzestKiegeszit(anyagTantDict.tantok[i], anyagTantDict.jsonok[i])
-                }
+                anyagokMegjelenitese(responseJSON)
            },
             error: function(jqXHR, textStatus, errorThrown) {
                 error();
@@ -305,52 +266,31 @@ function anyagokLekereseEsMegjelenitese(mindegyikHet) {
     } else {
         $.ajax({
             type: "get",
-            url: getUrl() + '/het/' + getWeek(),
+            url: getUrl(),
             success: function(responseData, textStatus, jqXHR) {
-
-                // parseoljuk a jsont
                 responseJSON = JSON.parse(responseData)
-
-                // itt tárolódnak a megjelenítendő adatok (tantárgyakat a divek id-jének használom)
-                anyagTantDict = {tantok:[], anyagok:[], jsonok:[]}
-        
-                // válogassa ki, melyik bejegyzés szól erre a napra
-                for (i=0; i<responseJSON.length; i++) {
-                    if (responseJSON[i].nap == clickedButton) {
-                        anyagTantDict.tantok.push(responseJSON[i].tant)
-                        anyagTantDict.anyagok.push(responseJSON[i].anyag)
-                        anyagTantDict.jsonok.push(responseJSON[i])
-                    }
-                }
-
-                // készítse el a tantárgydobozt a tantárgy címével
-                for (i=0; i<anyagTantDict.tantok.unique().length; i++) {
-                    bejegyzesDoboztKreal(anyagTantDict.tantok.unique()[i], anyagTantDict.tantok.unique()[i])
-                }
-
-                // töltse ki a dobozokat az anyagokkal
-                for (i=0; i<anyagTantDict.anyagok.length; i++) {
-                    bejegyzestKiegeszit(anyagTantDict.tantok[i], anyagTantDict.jsonok[i])
-                }
+                anyagokMegjelenitese(responseJSON)
            },
             error: function(jqXHR, textStatus, errorThrown) {
-                error();
+                noInternetMessage();
+                var thisWeekData = window.localStorage.getItem('thisWeekData')
+                if(thisWeekData != null){
+                   anyagokMegjelenitese(JSON.parse(thisWeekData));
+                } else{
+                    error();
+                }
             }
         });
     }
-}
-
-function egyNapAnyagaiMindegyikHet() {
-    anyagokLekereseEsMegjelenitese(true);
 }
 
 function egyNapAnyagai() {
     var param = new URLSearchParams(window.location.search);
     clickedButton = param.get('day');
     if (param.get('mindegyikHet') == 'true') {
-        egyNapAnyagaiMindegyikHet();
+        anyagokLekereseEsMegjelenitese(true);
     }
     else { // aktuális hét
-        anyagokLekereseEsMegjelenitese();
+        anyagokLekereseEsMegjelenitese(false);
     }
 }
