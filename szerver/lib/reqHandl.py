@@ -46,6 +46,11 @@ def onReceiveRecordNumberGet(clientIP):
 def onReceivePost(clientIP):
 
     gotJSON = request.get_json()
+    if gotJSON.length() > 1:
+        finePrint('%s (%s) bejegyzéseket (%s db) küldött' %
+                                (str(gotJSON['uname'][0]), clientIP, gotJSON.length()))
+        sendJSONToDB(gotJSON)
+        
     try:
          finePrint('%s (%s) bejegyzést küldött' %
                                 (str(gotJSON['uname']), clientIP))
