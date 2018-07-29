@@ -71,7 +71,15 @@
         <input class="form-control" type="text" id="anyag" placeholder="Anyag">
         <br>
         <button class="btn btn-primary teljesKepernyoBootstrapPrimary" id="connButton">Beküldés</button>
+        <hr>
+        <h3 class="text-muted">Mentett bejegyzések opciói</h3>
         <br>
+        <center>
+            <div class="row btn-group">
+                <button class="col-xs-6 btn btn-primary" onclick="offlineAnyagBeallitas()">Mentettek küldése</button>
+                <button class="col-xs-6 btn btn-danger" onclick="offlineAnyagTorles()">Mentettek törlése</button>
+            </div>
+        </center>
         <div id="socket" class="ServerResp"></div>
         <!--<hr>
         <h3 class="text-muted">Képfeltöltés</h3>
@@ -90,4 +98,5 @@
     });
 </script>
 <script type="text/javascript" src="js/conn.js"></script>
+<script type="text/javascript" src="js/get.js"></script>
 </html>

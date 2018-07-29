@@ -20,6 +20,14 @@ def sendJSONToDB(Json):
 # Nem kell adatbázis-szöveget írni, ha az ID ki van íratva, az már sikert jelent
     IdPrint(objectId)
 
+def sendMultipleJSONsToDB(Json):
+    for i in Json:
+        try:
+            dbCollection().insert(Json)
+        except:
+            # pymongoban létező hiba, nem befolyásolja az adatok beküldését
+            pass
+
 def deleteAllData():
     dbCollection().remove({})
     dbPrint('Adatok sikeresen törölve', newline = False)

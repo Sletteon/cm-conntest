@@ -4,8 +4,9 @@
 import socket
 import datetime
 import hashlib
+import json
 
-from flask import Flask, request, Response, json
+from flask import Flask, request, Response
 from flask_cors import CORS
 
 from lib.errorHandl import *
@@ -46,11 +47,14 @@ def onReceiveRecordNumberGet(clientIP):
 def onReceivePost(clientIP):
 
     gotJSON = request.get_json()
-    if gotJSON.length() > 1:
+
+    # stringet kapunk, ha több bejegyzés érkezik
+    if type(gotJSON).__name__ == 'str':
+        gotJSONList = json.loads(gotJSON)
         finePrint('%s (%s) bejegyzéseket (%s db) küldött' %
-                                (str(gotJSON['uname'][0]), clientIP, gotJSON.length()))
-        sendJSONToDB(gotJSON)
-        
+                                (str(gotJSONList[0]['uname']), clientIP, len(gotJSONList)))
+        sendMultipleJSONsToDB(gotJSONList)
+        return Response(json.dumps({'SUCCESS': 'SUCCESS'}), mimetype='application/json')
     try:
          finePrint('%s (%s) bejegyzést küldött' %
                                 (str(gotJSON['uname']), clientIP))

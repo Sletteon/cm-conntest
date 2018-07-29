@@ -8,26 +8,16 @@ window.onload = function() {
         success('Új beceneved: ' + UName + '.');
     }
 
+    if (navigator.onLine == false) {
+        noInternetMessage();
+    }
+
 }
 
 function removePreviousStatus() {
     try {
     document.getElementById('statusDiv').innerHTML = ''; 
     } catch(err) {}
-}
-
-function success(message) {
-    removePreviousStatus()
-    var successAlert = document.createElement("DIV");
-    successAlert.innerHTML = '<div class="alert alert-sm alert-success">' + message + '</div>';
-    document.getElementById('statusDiv').appendChild(successAlert);
-}
-
-function error() {
-    removePreviousStatus()
-    var errAlert = document.createElement("DIV");
-    errAlert.innerHTML = '<div class="alert alert-sm alert-danger">Biztos, hogy van neted?</div>';
-    document.getElementById('statusDiv').appendChild(errAlert);
 }
 
 function getWeek() {
@@ -135,6 +125,33 @@ function convertDayTextToNumbers(text) {
 
 }
 
+function AnyagKuldes(sendingJSON) {
+    $.ajax({
+        type: "post",
+        url: getUrl(),
+        data: sendingJSON,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function(responseData, textStatus, jqXHR) {
+            success('A bejegyzést sikeresen elküldted');
+        },
+            error: function(jqXHR, textStatus, errorThrown) {
+            error();
+        }
+    });
+
+}
+function offlineAnyagBeallitas() {
+    var sendingJSON = JSON.stringify(window.localStorage.getItem('storedJSONs'))
+    console.log(JSON.stringify(sendingJSON))
+    AnyagKuldes(sendingJSON)
+    offlineAnyagTorles()
+}
+
+function offlineAnyagTorles() {
+    window.localStorage.removeItem('storedJSONs')
+}
+
 function AnyagBeallitas() {
 
     var napSelect = document.getElementById("nap");
@@ -154,21 +171,20 @@ function AnyagBeallitas() {
         "anyag": document.getElementById("anyag").value,
         "pic": getImage()
     };
-    //console.log('Küldendő: ' + '\n' + JSON.stringify(sendingJSON) + '\n -----');
-
-    $.ajax({
-        type: "post",
-        url: getUrl(),
-        data: JSON.stringify(sendingJSON),
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function(responseData, textStatus, jqXHR) {
-            success('A bejegyzést sikeresen elküldted');
-        },
-            error: function(jqXHR, textStatus, errorThrown) {
-            error();
+    if (navigator.onLine == true) {
+        AnyagKuldes(JSON.stringify(sendingJSON));
+    } else {
+        noInternetMessage();
+        if (window.localStorage.getItem('storedJSONs') == null) {
+            var tempJSON = [];
+            window.localStorage.setItem('storedJSONs', JSON.stringify(tempJSON))
         }
-    });
+        var storedJSONs = [] 
+        storedJSONs = JSON.parse(window.localStorage.getItem('storedJSONs'))
+        storedJSONs.push(sendingJSON)
+        console.log(JSON.stringify(storedJSONs))
+        window.localStorage.setItem('storedJSONs', JSON.stringify(storedJSONs))
+    }
 }
 
 
