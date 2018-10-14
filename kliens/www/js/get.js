@@ -266,7 +266,7 @@ function anyagokLekereseEsMegjelenitese(mindegyikHet) {
     } else {
         $.ajax({
             type: "get",
-            url: getUrl(),
+            url: getUrl() + '/het/' + getWeek(),
             success: function(responseData, textStatus, jqXHR) {
                 responseJSON = JSON.parse(responseData)
                 anyagokMegjelenitese(responseJSON)
