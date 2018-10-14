@@ -21,6 +21,8 @@
     function goToUrl(val) {
         location.href = val;
     }
+
+
 </script>
 
 <body>
@@ -73,8 +75,8 @@
         <button class="btn btn-primary teljesKepernyoBootstrapPrimary" id="connButton">Beküldés</button>
         <hr>
         <h3 class="text-muted">Mentett bejegyzések opciói</h3>
-        <br>
         <center>
+            <div id="savedDataDiv" class="alert alert-info"></div>
             <div class="row btn-group">
                 <button class="col-xs-6 btn btn-primary" onclick="offlineAnyagBeallitas()">Mentettek küldése</button>
                 <button class="col-xs-6 btn btn-danger" onclick="offlineAnyagTorles()">Mentettek törlése</button>
@@ -91,12 +93,17 @@
     </div>
 
 </body>
+<script type="text/javascript" src="js/conn.js"></script>
+<script type="text/javascript" src="js/get.js"></script>
+<script type="text/javascript" src="js/upload.js"></script>
 <script type="text/javascript">
     $('#nap li').on('click', function() {
         //console.log($(this).text())
         $('#napButton').prop('innerText', $(this).text().replace(' ', ''));
     });
+    window.onload = function() {
+        offlineAnyagMegjelenites();
+    }
 </script>
-<script type="text/javascript" src="js/conn.js"></script>
-<script type="text/javascript" src="js/get.js"></script>
+
 </html>

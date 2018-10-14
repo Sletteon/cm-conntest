@@ -152,6 +152,17 @@ function offlineAnyagTorles() {
     window.localStorage.removeItem('storedJSONs')
 }
 
+function offlineAnyagMegjelenites() {
+    storedJSONs = JSON.parse(window.localStorage.getItem('storedJSONs'));
+    storedJSONs.forEach(element => {
+
+        appendElem = document.createElement('H4');
+        appendElem.innerHTML = element['tant'] + ": " + element['anyag'];
+        document.getElementById('savedDataDiv').appendChild(appendElem);
+    });
+
+}
+
 function AnyagBeallitas() {
 
     var napSelect = document.getElementById("nap");
