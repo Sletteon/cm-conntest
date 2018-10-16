@@ -163,6 +163,23 @@ function offlineAnyagMegjelenites() {
 
 }
 
+// kér egy napot a hétből és ellenőrzi, elmúlt-e már
+function isThisDayOfWeekPastToday(dayOfWeek) {
+    var d = new Date();
+    today = d.getDay()
+
+    if(dayOfWeek<today) {
+        return true; // már elmúlt 
+    } else if(dayOfWeek==today) {
+        hours = d.getHours()
+        if(hours>16) { // délután 4-kor már biztos nem fog senk erre a napra dolgozatot beírni
+            return true; // már elmúlt 
+        }
+    } else {
+        return false; // még nem múlt el
+    }
+}
+
 function AnyagBeallitas() {
 
     var napSelect = document.getElementById("nap");
@@ -174,14 +191,23 @@ function AnyagBeallitas() {
     // var hetSelect = document.getElementById("het");
     // var het = hetSelect.options[hetSelect.selectedIndex].value;
 
+    if (isThisDayOfWeekPastToday(nap)) {
+        var het = getWeek() + 1;
+        info('Már elmúlt ez a nap; jövő hétbe írás')
+    } else {
+        var het = getWeek();
+    }
+
     var sendingJSON = {
         "uname": window.localStorage.getItem("UName"),
-        "het": getWeek(),
+        "het": het,
         "nap": nap,
         "tant": document.getElementById("tantargy").value,
         "anyag": document.getElementById("anyag").value,
         "pic": getImage()
     };
+
+
     if (navigator.onLine == true) {
         AnyagKuldes(JSON.stringify(sendingJSON));
     } else {

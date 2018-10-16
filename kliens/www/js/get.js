@@ -23,21 +23,21 @@ function removePreviousStatus() {
 }
 
 function success(message) {
-    removePreviousStatus();
+    // removePreviousStatus();
     var successAlert = document.createElement("DIV");
     successAlert.innerHTML = '<div class="alert alert-sm alert-success">' + message + '</div>';
     document.getElementById('statusDiv').appendChild(successAlert);
 }
 
 function info(message) {
-    removePreviousStatus();
+    // removePreviousStatus();
     var infoAlert = document.createElement("DIV");
     infoAlert.innerHTML = '<div class="alert alert-sm alert-info">' + message + '</div>';
     document.getElementById('statusDiv').appendChild(infoAlert);
 }
 
 function noInternetMessage() {
-    removePreviousStatus();
+    // removePreviousStatus();
     var infoAlert = document.createElement("DIV");
     infoAlert.innerHTML = '<div class="alert alert-sm alert-info">Offline vagy. Csak a heti bejegyzéseket tudod megnézni és nem tudsz törölni.</div>';
     document.getElementById('statusDiv').appendChild(infoAlert);
@@ -56,7 +56,7 @@ function motdDismiss(motdMessage) {
 }
 
 function error() {
-    removePreviousStatus();
+    // removePreviousStatus();
     var errAlert = document.createElement("DIV");
     errAlert.innerHTML = '<div class="alert alert-sm alert-danger">Biztos, hogy van neted?</div>';
     document.getElementById('statusDiv').appendChild(errAlert);
