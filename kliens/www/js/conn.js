@@ -170,17 +170,19 @@ function offlineAnyagMegjelenites() {
 
 // kér egy napot a hétből és ellenőrzi, elmúlt-e már
 function isThisDayOfWeekPastToday(dayOfWeek) {
+    dayOfWeek = dayOfWeek + 1;
     var d = new Date();
-    today = d.getDay()
-
+    today = d.getDay();
     if(dayOfWeek<today) {
         return true; // már elmúlt 
-    } else if(dayOfWeek==today) {
+    }
+    if(dayOfWeek==today) {
         hours = d.getHours()
         if(hours>16) { // délután 4-kor már biztos nem fog senk erre a napra dolgozatot beírni
             return true; // már elmúlt 
         }
-    } else {
+    }
+    if(dayOfWeek>today) {
         return false; // még nem múlt el
     }
 }
