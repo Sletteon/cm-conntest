@@ -80,5 +80,9 @@ document.getElementById("objDelButton").onclick = function() {
     BejegyzTorleseId();
 
 }
+
+var uname = window.localStorage.getItem("UName");
+document.getElementById('unameField').placeholder = uname;
+
 </script>
 </html>
