@@ -64,11 +64,31 @@
                 <li>Csütörtök</li>
                 <li>Péntek</li>
                 <li>Szombat</li>
-                </ul>
+            </ul>
         </div>
         <br>
 
-        <input class="form-control" type="text" id="tantargy" placeholder="Tantárgy">
+        <!-- <input class="form-control" type="text" id="tantargy" placeholder="Tantárgy"> -->
+        <div class="dropdown">
+            <button class="btn btn-primary teljesKepernyoBootstrapPrimary dropdown-toggle" data-toggle="dropdown" id="tantButton">Tantárgy<span class="caret"></span></button>
+            <ul id="tantargy" class="dropdown-menu">
+                <li>Angol</li>
+                <li>Biosz</li>
+                <li>Fizika</li>
+                <li>Föci</li>
+                <li>Infó</li>
+                <li>Irodalom</li>
+                <li>Kémia</li>
+                <li>Matek</li>
+                <li>Nyelvtan</li>
+                <li>Német Irodalom</li>
+                <li>Német</li>
+                <li>Népismeret</li>
+                <li>Tesi</li>
+                <li>Tánc</li>
+                <li>Töri</li>
+            </ul>
+        </div>
         <br>
         <input class="form-control" type="text" id="anyag" placeholder="Anyag">
         <br>
@@ -76,7 +96,9 @@
         <hr>
         <h3 class="text-muted">Mentett bejegyzések opciói</h3>
         <center>
-            <div id="savedDataDiv" class="alert alert-info"></div>
+            <div id="savedDataDiv" class="alert alert-info">
+                Nincs mentett bejegyzés.
+            </div>
             <div class="row btn-group">
                 <button class="col-xs-6 btn btn-primary" onclick="offlineAnyagBeallitas()">Mentettek küldése</button>
                 <button class="col-xs-6 btn btn-danger" onclick="offlineAnyagTorles()">Mentettek törlése</button>
@@ -98,11 +120,14 @@
 <script type="text/javascript" src="js/upload.js"></script>
 <script type="text/javascript">
     $('#nap li').on('click', function() {
-        //console.log($(this).text())
         $('#napButton').prop('innerText', $(this).text().replace(' ', ''));
+    });
+    $('#tantargy li').on('click', function() {
+        $('#tantButton').prop('innerText', $(this).text().replace(' ', ''));
     });
     window.onload = function() {
         offlineAnyagMegjelenites();
+        setSubjectDropdown();
     }
 </script>
 

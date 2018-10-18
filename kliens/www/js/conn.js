@@ -154,6 +154,11 @@ function offlineAnyagTorles() {
 
 function offlineAnyagMegjelenites() {
     storedJSONs = JSON.parse(window.localStorage.getItem('storedJSONs'));
+    if (storedJSONs==null) {
+        return;
+    } else {
+        document.getElementById('savedDataDiv').innerHTML="";
+    }
     storedJSONs.forEach(element => {
 
         appendElem = document.createElement('H4');
@@ -186,7 +191,7 @@ function AnyagBeallitas() {
     //var nap = napSelect.options[napSelect.selectedIndex].value;
 
     var napText = $('#napButton').text().replace('\n', '');
-    var nap = convertDayTextToNumbers(napText)
+    var nap = convertDayTextToNumbers(napText);
 
     // var hetSelect = document.getElementById("het");
     // var het = hetSelect.options[hetSelect.selectedIndex].value;
@@ -198,11 +203,14 @@ function AnyagBeallitas() {
         var het = getWeek();
     }
 
+    var tantText = $('#tantButton').text().replace('\n', '');
+    console.log(tantText)
+
     var sendingJSON = {
         "uname": window.localStorage.getItem("UName"),
         "het": het,
         "nap": nap,
-        "tant": document.getElementById("tantargy").value,
+        "tant": tantText,
         "anyag": document.getElementById("anyag").value,
         "pic": getImage()
     };
