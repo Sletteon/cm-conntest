@@ -92,7 +92,7 @@
         <br>
         <input class="form-control" type="text" id="anyag" placeholder="Anyag">
         <br>
-        <button class="btn btn-primary teljesKepernyoBootstrapPrimary" id="connButton">Beküldés</button>
+        <button class="btn btn-primary teljesKepernyoBootstrapPrimary" id="connButton" onclick="getAllDataAndSubmit()">Beküldés</button>
         <hr>
         <h3 class="text-muted">Mentett bejegyzések opciói</h3>
         <center>
@@ -100,7 +100,7 @@
                 Nincs mentett bejegyzés.
             </div>
             <div class="row btn-group">
-                <button class="col-xs-6 btn btn-primary" onclick="offlineAnyagBeallitas()">Mentettek küldése</button>
+                <button class="col-xs-6 btn btn-primary" onclick="submitSavedMaterial()">Mentettek küldése</button>
                 <button class="col-xs-6 btn btn-danger" onclick="offlineAnyagTorles()">Mentettek törlése</button>
             </div>
         </center>
@@ -116,19 +116,8 @@
 
 </body>
 <script type="text/javascript" src="js/conn.js"></script>
-<script type="text/javascript" src="js/get.js"></script>
+<script type="text/javascript" src="js/uname_check.js"></script>
+<script type="text/javascript" src="js/status_messages.js"></script>
 <script type="text/javascript" src="js/upload.js"></script>
-<script type="text/javascript">
-    $('#nap li').on('click', function() {
-        $('#napButton').prop('innerText', $(this).text().replace(' ', ''));
-    });
-    $('#tantargy li').on('click', function() {
-        $('#tantButton').prop('innerText', $(this).text().replace(' ', ''));
-    });
-    window.onload = function() {
-        offlineAnyagMegjelenites();
-        setSubjectDropdown();
-    }
-</script>
 
 </html>

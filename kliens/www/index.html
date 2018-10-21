@@ -14,19 +14,6 @@
 
 
     <title>Hello World</title>
-    <script type="text/javascript">
-        function settings() {
-            goToUrl('settings.html')
-        }
-
-        function upload() {
-            goToUrl('upload.html')
-        }
-
-        function goToUrl(url) {
-            location.href = url;
-        }
-    </script>
 </head>
 
 <body id="body">
@@ -56,11 +43,13 @@
         <div id='statusDiv'></div>
         <div id="socket"></div>
     </div>
-    <button class='btn btn-default' onclick='AnyagLekeres()'>Mindegyik hét</button>
+    <button class='btn btn-default' onclick='getAllMaterial()'>Mindegyik hét</button>
 </body>
 
     <script type="text/javascript" src="js/conn.js"></script>
-    <script type="text/javascript" src="js/get.js"></script>
+    <script type="text/javascript" src="js/uname_check.js"></script>
+    <script type="text/javascript" src="js/status_messages.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
     <script src="js/jquery.min.js"></script>
 
 </html>

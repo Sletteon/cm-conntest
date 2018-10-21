@@ -44,15 +44,15 @@
     <div class="container-fluid">
         <h3 class="text-muted">Becenév megváltoztatása</h3>
         <br>
-        <input class="form-control" type="text" id="unameField" placeholder="Új becenév">
+        <input class="form-control" type="text" id="unameField">
         <br>
-        <button class="btn btn-primary teljesKepernyoBootstrapPrimary" id="unameDel">Megújítás</button>
+        <button class="btn btn-primary teljesKepernyoBootstrapPrimary" id="unameDel" onclick="updateUsername()">Megújítás</button>
         <br>
         <hr>
         <h3 class="text-muted">Bejegyzés törlése</h3>
         <input class="form-control" type="text" id="deleteObj" placeholder="Törlendő bejegyzés ID-ja">
         <br>
-        <button class="btn btn-danger teljesKepernyoBootstrapPrimary" id="objDelButton" onclick="BejegyzTorleseId()" >Bejegyzés törlése</button>
+        <button class="btn btn-danger teljesKepernyoBootstrapPrimary" id="objDelButton" onclick="getIdAndDeleteMaterial()" >Bejegyzés törlése</button>
 
         <!--<hr>
         <h3 class="text-muted">Képfeltöltés</h3>
@@ -65,24 +65,14 @@
 
 </body>
 <script type="text/javascript" src="js/conn.js"></script>
-<script type="text/javascript" src="js/get.js"></script>
+<script type="text/javascript" src="js/uname_check.js"></script>
+<script type="text/javascript" src="js/status_messages.js"></script>
+<script type="text/javascript" src="js/settings.js"></script>
 <script type="text/javascript">
 
 // ha a gombok alatti szövegre kattintanak, törölje a felhasználónevet
 // és frissítse az oldalt
-document.getElementById("unameDel").onclick = function() {
-    window.localStorage.removeItem("UName");
-    window.localStorage.setItem("UName", document.getElementById("unameField").value);
-    success('Új beceneved: ' + window.localStorage.getItem("UName"));
-}
 
-document.getElementById("objDelButton").onclick = function() {
-    BejegyzTorleseId();
-
-}
-
-var uname = window.localStorage.getItem("UName");
-document.getElementById('unameField').placeholder = uname;
 
 </script>
 </html>
