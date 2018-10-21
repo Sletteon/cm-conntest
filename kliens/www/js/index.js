@@ -1,3 +1,5 @@
+// INDEX.JS - index.html-ben használt függvények
+
 window.onload = function() {
     getMaterialOfThisWeek();
     getMotd();

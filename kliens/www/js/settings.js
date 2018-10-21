@@ -1,3 +1,5 @@
+// SETTINGS.JS - settings.html-ben használt függvények
+
 window.onload = function() {
     // beállítja az új felhasználónév mezőjének a helyébe a régi felhasználónevet
     var uname = window.localStorage.getItem("UName");

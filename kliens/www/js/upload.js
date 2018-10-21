@@ -1,3 +1,5 @@
+// UPLOAD.JS - uplaod.html-ben használt függvények
+
 window.onload = function() {
     offlineAnyagMegjelenites();
     $('#nap li').on('click', function() {

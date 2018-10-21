@@ -1,5 +1,7 @@
+// CONN.JS - hálózati operációk (lekérés/beküldés/törlés) függvényei
+
+// visszaadja a mostani hét számát az évben
 function getWeek() {
-    // Hét száma az évben
     Date.prototype.getWeekNumber = function() {
         var d = new Date(Date.UTC(this.getFullYear(), this.getMonth(), this.getDate()))
         var dayNum = d.getUTCDay() || 7;
@@ -10,7 +12,7 @@ function getWeek() {
     return new Date().getWeekNumber();
 }
 
-
+// visszaadja a megfelelő URL-t a hálózati operációkhoz
 function getUrl() {
     var IPaddress = '46.139.116.9';
     var Port = 5000;

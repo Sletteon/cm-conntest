@@ -1,3 +1,5 @@
+// EGY_NAP.JS - egy_nap.html-ben használt függvények
+
 window.onload = function() {
     // nézzük meg, melyik napot kell lekérnünk ill. melyik (egy megadott/az összes) hét napját kérjük le
     var param = new URLSearchParams(window.location.search);

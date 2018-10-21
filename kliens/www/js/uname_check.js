@@ -1,3 +1,5 @@
+// UNAME_CHECK.JS - felhasználónév ellenőrzése, felhasználónév hiányában gyorsan kérünk egyet
+
 window.onload = function() {
     var UName = window.localStorage.getItem("UName");
     // amennyiben nincs felhnév mentve, prompttal kérjen egyet

@@ -1,3 +1,5 @@
+// STATUS_MESSAGES.JS - siker/hiba/figyelmeztető jellegű üzenetek függvényei
+
 // kiüríti a státuszdobozt
 function removePreviousStatus() {
     try {
