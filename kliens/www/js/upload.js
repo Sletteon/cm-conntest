@@ -106,9 +106,11 @@ function getAllDataAndSubmit() {
 
 // elküldi a mentett bejegyzéseket
 function submitSavedMaterial() {
-    var sendingJSON = JSON.stringify(window.localStorage.getItem('storedJSONs'))
-    submitMaterial(sendingJSON)
-    offlineAnyagTorles()
+    var sendingJSON = JSON.stringify(window.localStorage.getItem('storedJSONs'));
+    submitMaterial(sendingJSON);
+    if (navigator.onLine == true) {
+        offlineAnyagTorles();
+    }
 }
 
 // eldobja a mentett bejegyzéseket
