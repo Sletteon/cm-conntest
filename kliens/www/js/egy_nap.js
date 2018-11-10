@@ -18,9 +18,15 @@ function createMaterialWell(divId) {
     document.getElementById(divId).innerHTML += '<h2 class="text-muted" style="overflow-wrap: break-word;">' + divId + '</h2>';
 }
 
+// törli az anyagot tartalmazó divet (conn.js-ben a deleteMaterial() függvényben lesz használva)
+function deleteMaterialFromServerAndUI(divId, matId) {
+    document.getElementById(divId).outerHTML='';
+    deleteMaterial(getUrl(), matId);
+}
+
 // kitölti a megadott id-jű dobozt a megadott bejegyzés jsonjával
 function fillMaterialWell(divId, jsonElem) {
-    document.getElementById(divId).innerHTML += '<div class="row"><h3 class="col-xs-10" style="overflow-wrap: break-word;"><span class="badge badge-pill badge-primary">' + jsonElem.uname + '</span>' + jsonElem.anyag + '</h3><br><button class="btn btn-danger col-xs-2" onclick="deleteMaterial(\'' + getUrl() + '\', \'' + jsonElem._id.$oid + '\')"><span class="glyphicon glyphicon-trash"></span></button></div>';
+    document.getElementById(divId).innerHTML += '<div class="row"><h3 class="col-xs-10" style="overflow-wrap: break-word;"><span class="badge badge-pill badge-primary">' + jsonElem.uname + '</span>' + jsonElem.anyag + '</h3><br><button class="btn btn-danger col-xs-2" onclick="deleteMaterialFromServerAndUI(\'' + divId + '\', \'' + jsonElem._id.$oid + '\')"><span class="glyphicon glyphicon-trash"></span></button></div>';
 }
 
 // egyesével hozza létre, majd töltse ki a bejegyzések dobozát

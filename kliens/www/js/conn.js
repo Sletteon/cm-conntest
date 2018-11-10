@@ -78,7 +78,7 @@ function getMaterial(url, week, successFunction) {
             url: url,
             success: successFunction,
             error: function(jqXHR, textStatus, errorThrown) {
-                error();
+                error(true);
             }
         });
     } else {
@@ -88,7 +88,7 @@ function getMaterial(url, week, successFunction) {
             url: url + '/het/' + week,
             success: successFunction,
             error: function(jqXHR, textStatus, errorThrown) {
-                error();
+                error(true);
             }
         });
     }
@@ -126,7 +126,7 @@ function submitMaterial(url, sendingJSON, successFunction) {
         dataType: "text",
         success: successFunction,
         error: function(jqXHR, textStatus, errorThrown) {
-            error();
+            error(true);
         }
     });
 }
@@ -138,10 +138,10 @@ function deleteMaterial(url, materialId) {
         type: "delete",
         url: url + "/delete/" + materialId,
         success: function(responseData, textStatus, jqXHR) {
-            success('A bejegyzést sikeresen törölted');
+            success('A bejegyzést sikeresen törölted', true);
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            error();
+            error(true);
         }
     });
 }

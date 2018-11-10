@@ -62,6 +62,7 @@ function showDays(responseJSON, allWeek) {
 // egy nap gomjára kattintva elvezet minket az adott nap egy_nap.html-jéhez
 function navigate(day, allWeek) {
     //console.log(clickedButton);
+    var url = new URL(window.location.href.replace("index.html", "egy_nap.html")); //URL query param
     if (allWeek) {
         url.searchParams.append('allWeek', true); //URL query param
     }
