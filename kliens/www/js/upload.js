@@ -59,18 +59,43 @@ function convertDayTextToNumbers(text) {
     }
 }
 
+// ugyan az, mint convertDayTextToNumbers(), csak számokat alakítunk napokká
+function convertNumbersToDayText(dayNumber) {
+    switch (dayNumber) {
+        case 0:
+            return 'Hétfő';
+            break;
+        case 1:
+            return 'Kedd';
+            break;
+        case 2:
+            return 'Szerda';
+            break;
+        case 3:
+            return 'Csütörtök';
+            break;
+        case 4:
+            return 'Péntek';
+            break;
+        case 5:
+            return 'Szombat';
+            break;
+        default:
+            return 1;
+            break;
+    }
+}
+
 // lekéri az upload.html elemeiből a szükséges adatot
 // és internetelérés állapotától függően küld el, vagy tárol el
 function getAllDataAndSubmit() {
-
-    var napSelect = document.getElementById("nap");
 
     var napText = $('#napButton').text().replace('\n', '');
     var nap = convertDayTextToNumbers(napText);
 
     if (isThisDayOfWeekPastToday(nap)) {
         var het = getWeek() + 1;
-        info('Már elmúlt ez a nap; jövő hétbe írás');
+        info('Már elmúlt ez a nap; jövő hétbe írás', true);
     } else {
         var het = getWeek();
     }
@@ -82,13 +107,13 @@ function getAllDataAndSubmit() {
         "nap": nap,
         "tant": tantText,
         "anyag": document.getElementById("anyag").value,
-        "pic": getImage()
+        "pic": ""
     };
 
 
     if (navigator.onLine == true) {
         submitMaterial(getUrl(), JSON.stringify(sendingJSON), function() {
-            success('Bejegyzés elküldve');
+            success('Bejegyzés elküldve', true);
         });
     } else {
         noInternetMessage();
@@ -101,6 +126,7 @@ function getAllDataAndSubmit() {
         storedJSONs.push(sendingJSON);
         console.log(JSON.stringify(storedJSONs));
         window.localStorage.setItem('storedJSONs', JSON.stringify(storedJSONs));
+        offlineAnyagMegjelenites();
     }
 }
 
@@ -118,18 +144,34 @@ function offlineAnyagTorles() {
     window.localStorage.removeItem('storedJSONs')
 }
 
+// egy mentett bejegyzést töröl
+function egyOfflineAnyagTorles(tant, anyag) {
+    storedJSONs = JSON.parse(window.localStorage.getItem('storedJSONs'));
+
+    storedJSONs.forEach( function(element, index){
+        if (element['tant'] == tant && element['anyag'] == anyag) {
+            storedJSONs.splice(index, 1);
+        }
+    });
+
+    window.localStorage.setItem('storedJSONs', JSON.stringify(storedJSONs));
+    offlineAnyagMegjelenites();
+}
+
 // megjeleníti a mentett adatokat a savedDataDiv-be
 function offlineAnyagMegjelenites() {
     storedJSONs = JSON.parse(window.localStorage.getItem('storedJSONs'));
-    if (storedJSONs==null) {
+    if (storedJSONs=="" || storedJSONs==null) {
         return;
     } else {
         document.getElementById('savedDataDiv').innerHTML="";
     }
     storedJSONs.forEach(element => {
-
-        appendElem = document.createElement('H4');
-        appendElem.innerHTML = element['tant'] + ": " + element['anyag'];
+        console.log(element)
+        appendElem = document.createElement('DIV');
+        appendElem.classList.add('row')
+        appendElem.innerHTML = '<h4 class="col-xs-8"> (' + convertNumbersToDayText(element['nap']) + ') ' + element['tant'] + ": " + element['anyag'] + "</h4>";
+        appendElem.innerHTML += '<button class="btn btn-danger col-xs-3" onclick="egyOfflineAnyagTorles(\'' + element['tant'] + '\',\'' + element['anyag'] + '\')"><span class="glyphicon glyphicon-trash"></span></button></div>'
         document.getElementById('savedDataDiv').appendChild(appendElem);
     });
 
