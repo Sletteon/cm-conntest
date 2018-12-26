@@ -14,8 +14,8 @@ function getWeek() {
 
 // visszaadja a megfelelő URL-t a hálózati operációkhoz
 function getUrl() {
-    var IPaddress = '46.139.116.9';
-    var Port = 5000;
+    var IPaddress = window.localStorage.getItem("serverIp");
+    var Port = window.localStorage.getItem("serverPort");
     return "http://" + IPaddress + ":" + Port;
 }
 
