@@ -11,18 +11,16 @@ window.onload = function() {
 function getAllMaterial() {
     info('Mindegyik hét mutatása');
     document.getElementById('socket').innerHTML='';
-    getMaterial(getUrl(), false, function(responseData, textStatus, jqXHR) {
-        responseJSON = JSON.parse(responseData);
-        window.localStorage.setItem('allWeekData', responseData);
+    getMaterial(getUrl(), false, function(responseJSON, textStatus, jqXHR) {
+        window.localStorage.setItem('allWeekData', responseJSON);
         showDays(responseJSON, true);
     });
 }
 
 // lekéri az e heti anyagot
 function getMaterialOfThisWeek() {
-    getMaterial(getUrl(), getWeek(), function(responseData, textStatus, jqXHR) {
-        responseJSON = JSON.parse(responseData);
-        window.localStorage.setItem('allWeekData', responseData);
+    getMaterial(getUrl(), getWeek(), function(responseJSON, textStatus, jqXHR) {
+        window.localStorage.setItem('allWeekData', responseJSON);
         showDays(responseJSON, true);
     });
 }

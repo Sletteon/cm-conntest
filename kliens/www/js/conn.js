@@ -75,17 +75,17 @@ function getMaterial(url, week, successFunction) {
         console.log('GET: ' + url + '/')
         $.ajax({
             type: "get",
-            url: url,
+            url: url + '/',
             success: successFunction,
             error: function(jqXHR, textStatus, errorThrown) {
                 error(true);
             }
         });
     } else {
-        console.log('GET: ' + url + '/het/' + week)
+        console.log('GET: ' + url + '/het/' + week + '/')
         $.ajax({
             type: "get",
-            url: url + '/het/' + week,
+            url: url + '/het/' + week + '/',
             success: successFunction,
             error: function(jqXHR, textStatus, errorThrown) {
                 error(true);
@@ -100,15 +100,15 @@ function getMaterialCustomError(url, week, successFunction, errorFunction) {
         console.log('GET: ' + url + '/')
         $.ajax({
             type: "get",
-            url: url,
+            url: url + '/',
             success: successFunction,
             error: errorFunction
         });
     } else {
-        console.log('GET: ' + url + '/het/' + week)
+        console.log('GET: ' + url + '/het/' + week + '/')
         $.ajax({
             type: "get",
-            url: url + '/het/' + week,
+            url: url + '/het/' + week + '/',
             success: successFunction,
             error: errorFunction
         });
@@ -133,10 +133,10 @@ function submitMaterial(url, sendingJSON, successFunction) {
 
 // beállítások menüben történő, id alapú bejegyzéstörlés
 function deleteMaterial(url, materialId) {
-    console.log('DELETE: ' + url + '\tmaterialId: ' + materialId)
+    console.log('DELETE: ' + url + '\tmaterialId: ' + materialId + '/')
     $.ajax({
         type: "delete",
-        url: url + "/delete/" + materialId,
+        url: url + "/delete/" + materialId + '/',
         success: function(responseData, textStatus, jqXHR) {
             success('A bejegyzést sikeresen törölted', true);
         },

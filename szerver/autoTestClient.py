@@ -6,6 +6,7 @@ import sys
 import time
 import base64
 import os
+from tqdm import tqdm
 
 from random import randint
 
@@ -46,7 +47,7 @@ print('[*] Beállítás-teszt\n')
 nap = ('0', '1', '2', '3', '4', '5')
 
 start = time.time()
-for i in range(1001):
+for i in tqdm(range(1001)):
     try:
         generatedHet = randint(0, 52)
         generatedNap = randint(0, len(nap) - 1)
@@ -67,14 +68,6 @@ for i in range(1001):
     except requests.exceptions.RequestException as e:
         print('<!> ' + str(e))
         exit(1)
-
-    if not r.json() == {'SUCCESS': 'SUCCESS'} and not i == 0:
-        raise EnvironmentError('<!> Szerver rossz választ adott')
-        exit(1)
-    else:
-        if not r.json() == {'SUCCESS': 'SUCCESS'}:
-            raise EnvironmentError('<!> Hibás beállítás')
-            exit(1)
 
 if i == 1000:
     print('[+] Sikeres beállítás-teszt\n')
