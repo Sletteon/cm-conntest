@@ -1,1 +1,0 @@
-ide kerülnek a logfájlok

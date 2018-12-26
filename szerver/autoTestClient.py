@@ -15,7 +15,7 @@ def fileToBase64(filePath):
     with open(filePath, 'rb') as fileObj:
         return base64.b64encode(fileObj.read())
 
-# Mindenesetben egy 'http://{}:5000'-t kérünk, ha nincs így megadva, akkor egészítsük ki
+# Mindenesetben egy 'http://{}:8000'-t kérünk, ha nincs így megadva, akkor egészítsük ki
 try:
     ServerIp = sys.argv[1]
     if {":", "."}.issubset(ServerIp):
@@ -25,7 +25,7 @@ try:
         if "." not in ServerIp and 'localhost' not in ServerIp:
             print('<!> Hibás hostname vagy IP-cím')
             exit()
-        fullServerAddr = 'http://{}:5000'.format(ServerIp)
+        fullServerAddr = 'http://{}:8000'.format(ServerIp)
 
 except IndexError:
     print('<!> Nincs IP-cím szolgáltatva, kilépés')

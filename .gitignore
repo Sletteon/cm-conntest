@@ -5,3 +5,4 @@
 *.pyc
 */log/2*
 */.idea
+*.sqlite3/*

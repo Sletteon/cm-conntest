@@ -1,6 +1,7 @@
-flask
-flask_cors
-pymongo
-colorama
+Django
+django-cors-headers
+django-rest-framework
+djangorestframework
+pytz
+tqdm
 requests
-configparser
