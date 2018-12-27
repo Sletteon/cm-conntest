@@ -1,6 +1,6 @@
 language: python
 python:
-  - "3.6"
+  - "3.6" # python 3.5 és alatta nem tudja futtatni a teszteket
 install:
   - pip install -r szerver/requirements.txt
 script:
