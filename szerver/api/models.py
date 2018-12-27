@@ -28,7 +28,7 @@ class Bejegyzes(models.Model):
             bejegyzes_name += 'Múlt hét '
 
         elif abs(datetime.date.today().isocalendar()[1] - self.het) == 1 and datetime.date.today().isocalendar()[1] < self.het:
-            bejegyzes_name += 'Jövő hét '
+            bejegyzes_name += 'Következő hét '
 
         else:
             bejegyzes_name += str(self.het) + '. hét '
