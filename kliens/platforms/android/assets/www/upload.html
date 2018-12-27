@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <script src="js/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+    <title>Hello World</title>
+</head>
+<script type="text/javascript">
+    function back() {
+        goToUrl('index.html')
+    }
+
+    function goToUrl(val) {
+        location.href = val;
+    }
+</script>
+
+<body>
+    <nav class="navbar navbar-inverse" id="navbar">
+        <div class="container-fluid">
+
+            <!-- Logo -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mainNavBar">
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+</button>
+                <a href="#" class="navbar-brand" id="classmate">Classmate</a>
+            </div>
+
+            <!-- Menu Items -->
+            <div class="collapse navbar-collapse" id="mainNavBar">
+                <ul class="nav navbar-nav">
+                    <li><a href="index.html">Anyag lekérése</a></li>
+                    <li class="active"><a href="upload.html">Anyag feltöltése</a></li>
+                    <li><a href="settings.html">Beállítások</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <h2 class="text-muted">Bejegyzés feltöltése</h2>
+
+    <div id='statusDiv'></div>
+
+    <div class="container-fluid">
+        <br>
+        <div class="dropdown">
+            <button class="btn btn-primary teljesKepernyoBootstrapPrimary dropdown-toggle" data-toggle="dropdown" id="napButton">Nap<span class="caret"></span></button>
+            <ul id="nap" class="dropdown-menu">
+                <li>Hétfő</li>
+                <li>Kedd</li>
+                <li>Szerda</li>
+                <li>Csütörtök</li>
+                <li>Péntek</li>
+                <li>Szombat</li>
+                </ul>
+        </div>
+        <br>
+
+        <input class="form-control" type="text" id="tantargy" placeholder="Tantárgy">
+        <br>
+        <input class="form-control" type="text" id="anyag" placeholder="Anyag">
+        <br>
+        <button class="btn btn-primary teljesKepernyoBootstrapPrimary" id="connButton">Beküldés</button>
+        <br>
+        <div id="socket" class="ServerResp"></div>
+        <!--<hr>
+        <h3 class="text-muted">Képfeltöltés</h3>
+        <input class="btn btn-primary" type="file" id="picSelect" />
+        <br>
+        <canvas id="picCanvas"></canvas>
+        -->
+
+    </div>
+
+</body>
+<script type="text/javascript">
+    $('#nap li').on('click', function() {
+        //console.log($(this).text())
+        $('#napButton').prop('innerText', $(this).text().replace(' ', ''));
+    });
+</script>
+<script type="text/javascript" src="js/conn.js"></script>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <script src="js/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+    <title>Hello World</title>
+</head>
+<script type="text/javascript">
+    function back() {
+        goToUrl('index.html')
+    }
+
+    function goToUrl(val) {
+        location.href = val;
+    }
+
+
+</script>
+
+<body>
+    <nav class="navbar navbar-inverse" id="navbar">
+        <div class="container-fluid">
+
+            <!-- Logo -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mainNavBar">
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+</button>
+                <a href="#" class="navbar-brand" id="classmate">Classmate</a>
+            </div>
+
+            <!-- Menu Items -->
+            <div class="collapse navbar-collapse" id="mainNavBar">
+                <ul class="nav navbar-nav">
+                    <li><a href="index.html">Anyag lekérése</a></li>
+                    <li class="active"><a href="upload.html">Anyag feltöltése</a></li>
+                    <li><a href="settings.html">Beállítások</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <h2 class="text-muted">Bejegyzés feltöltése</h2>
+
+    <div id='statusDiv'></div>
+
+    <div class="container-fluid">
+        <br>
+        <div class="dropdown">
+            <button class="btn btn-primary teljesKepernyoBootstrapPrimary dropdown-toggle" data-toggle="dropdown" id="napButton">Nap<span class="caret"></span></button>
+            <ul id="nap" class="dropdown-menu dropdown-menu-right">
+                <li>Hétfő</li>
+                <li>Kedd</li>
+                <li>Szerda</li>
+                <li>Csütörtök</li>
+                <li>Péntek</li>
+                <li>Szombat</li>
+            </ul>
+        </div>
+        <br>
+
+        <!-- <input class="form-control" type="text" id="tantargy" placeholder="Tantárgy"> -->
+        <div class="dropdown">
+            <button class="btn btn-primary teljesKepernyoBootstrapPrimary dropdown-toggle" data-toggle="dropdown" id="tantButton">Tantárgy<span class="caret"></span></button>
+            <ul id="tantargy" class="dropdown-menu dropdown-menu-right">
+                <li>Angol</li>
+                <li>Biosz</li>
+                <li>Fizika</li>
+                <li>Föci</li>
+                <li>Infó</li>
+                <li>Irodalom</li>
+                <li>Kémia</li>
+                <li>Matek</li>
+                <li>Nyelvtan</li>
+                <li>Német Irodalom</li>
+                <li>Német</li>
+                <li>Népismeret</li>
+                <li>Tesi</li>
+                <li>Tánc</li>
+                <li>Töri</li>
+            </ul>
+        </div>
+        <br>
+        <input class="form-control" type="text" id="anyag" placeholder="Anyag">
+        <br>
+        <button class="btn btn-primary teljesKepernyoBootstrapPrimary" id="connButton" onclick="getAllDataAndSubmit()">Beküldés</button>
+        <hr>
+        <h3 class="text-muted">Mentett bejegyzések opciói</h3>
+        <center>
+            <div id="savedDataDiv" class="alert alert-info">
+                Nincs mentett bejegyzés.
+            </div>
+            <div class="row btn-group">
+                <button class="col-xs-6 btn btn-primary" onclick="submitSavedMaterial()">Mentettek küldése</button>
+                <button class="col-xs-6 btn btn-danger" onclick="offlineAnyagTorles()">Mentettek törlése</button>
+            </div>
+        </center>
+        <div id="socket" class="ServerResp"></div>
+        <!--<hr>
+        <h3 class="text-muted">Képfeltöltés</h3>
+        <input class="btn btn-primary" type="file" id="picSelect" />
+        <br>
+        <canvas id="picCanvas"></canvas>
+        -->
+
+    </div>
+
+</body>
+<script type="text/javascript" src="js/conn.js"></script>
+<script type="text/javascript" src="js/status_messages.js"></script>
+<script type="text/javascript" src="js/upload.js"></script>
+<script type="text/javascript" src="js/uname_check.js"></script>
+</html>

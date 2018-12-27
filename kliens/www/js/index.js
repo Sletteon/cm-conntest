@@ -1,49 +1,101 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-var app = {
-    // Application Constructor
-    initialize: function() {
-        this.bindEvents();
-    },
-    // Bind Event Listeners
-    //
-    // Bind any events that are required on startup. Common events are:
-    // 'load', 'deviceready', 'offline', and 'online'.
-    bindEvents: function() {
-        document.addEventListener('deviceready', this.onDeviceReady, false);
-    },
-    // deviceready Event Handler
-    //
-    // The scope of 'this' is the event. In order to call the 'receivedEvent'
-    // function, we must explicitly call 'app.receivedEvent(...);'
-    onDeviceReady: function() {
-        app.receivedEvent('deviceready');
-    },
-    // Update DOM on a Received Event
-    receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
+// INDEX.JS - index.html-ben használt függvények
 
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
+window.onload = function() {
+    getMaterialOfThisWeek();
+    getMotd();
+}
 
-        console.log('Received Event: ' + id);
+
+
+// lekéri minden hét anyagát
+function getAllMaterial() {
+    info('Mindegyik hét mutatása');
+    document.getElementById('socket').innerHTML='';
+    getMaterial(getUrl(), false, function(responseJSON, textStatus, jqXHR) {
+        window.localStorage.setItem('allWeekData', responseJSON);
+        showDays(responseJSON, true);
+    });
+}
+
+// lekéri az e heti anyagot
+function getMaterialOfThisWeek() {
+    getMaterial(getUrl(), getWeek(), function(responseJSON, textStatus, jqXHR) {
+        window.localStorage.setItem('allWeekData', responseJSON);
+        showDays(responseJSON, true);
+    });
+}
+
+
+
+// megjeleníti a HTML-ben a kapott anyag napjait
+function showDays(responseJSON, allWeek) {
+    pufferedMaterial = []
+    for (i = 0; i < responseJSON.length; i++) {
+        pufferedMaterial.push(responseJSON[i].anyag);
     }
-};
+
+    pufferedDay = []
+    for (i = 0; i < responseJSON.length; i++) {
+        pufferedDay.push(responseJSON[i].nap);
+    }
+
+  days = pufferedDay.unique()
+  days.sort()
+  DayDict = {
+      0: "Hétfő",
+      1: "Kedd",
+      2: "Szerda",
+      3: "Csütörtök",
+      4: "Péntek",
+      5: "Szombat",
+      6: "Vasárnap"
+  }
+  var existingDays;
+  for (i = 0; i < days.length; i++) {
+      existingDays = days[i];
+      document.getElementById('socket').innerHTML += '<button class="btn btn-primary teljesKepernyoBootstrapPrimary" onclick="navigate(' + existingDays + ', ' + allWeek + ')">' + DayDict[existingDays] + '</button><br><br>'
+  }
+}
+
+// egy nap gomjára kattintva elvezet minket az adott nap egy_nap.html-jéhez
+function navigate(day, allWeek) {
+    //console.log(clickedButton);
+    var url = new URL(window.location.href.replace("index.html", "egy_nap.html")); //URL query param
+    if (allWeek) {
+        url.searchParams.append('allWeek', true); //URL query param
+    }
+    url.searchParams.append('day', day); //URL query param
+    location.href = url; //URL query param
+}
+
+// lekéri a napi üzenetet és meghívja a showMotd() függvényt az eredménnyel
+// ha a legutóbbi mentett napi üzenetet már bezártuk (motdDismiss()), ne jelenítsük meg újra
+function getMotd() {
+    var motdDismissed = window.localStorage.getItem('motdDismissed')
+    $.ajax({
+        type: "get",
+        url: getUrl() + "/motd",
+        success: function(responseData, textStatus, jqXHR) {
+            if (responseData != motdDismissed) {
+                showMotd(responseData);
+            }
+        },
+
+        /* ha nincs internet hozzáférés, már úgy is kiírtuk, mivel az anyagok sem töltenek be */
+        error: function(jqXHR, textStatus, errorThrown) {
+        }
+
+    });
+}
+
+// megjeleníti a paraméterben megadott napi üzenetet a HTML-ben
+function showMotd(message) {
+    var infoAlert = document.createElement("DIV");
+    infoAlert.innerHTML = '<div class="navbar navbar-fixed-bottom"><div class="alert alert-sm alert-info fade in"><a href="#" onclick="motdDismiss(\'' + message + '\')" class="close" data-dismiss="alert" aria-label="close">&times;</a>' + message + '</div></div>';
+    document.getElementById('body').appendChild(infoAlert);
+}
+
+// ha bezárták a napi üzenetet, ne jelenítsük meg újra
+function motdDismiss(motdMessage) {
+    window.localStorage.setItem('motdDismissed', motdMessage)
+}
