@@ -2,6 +2,7 @@
 
  **Hasznos linkek**<br>
 [Legstabilabb kliens (android)](https://build.phonegap.com/apps/2934479/download/android)<br><hr>
+[![Build Status](https://travis-ci.org/Sletteon/cm-conntest.svg?branch=master)](https://travis-ci.org/Sletteon/cm-conntest)
 
 **Hogyan futtatsd**<br>
 
